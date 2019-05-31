@@ -3,13 +3,28 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from '@/store/index.js';
+import { sync } from 'vuex-router-sync';
+import 'base/js/axios.js';
+import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css';
+import 'iview/dist/styles/iview.css';
+import { Sider, Steps, Step } from 'iview';
+Vue.component('Sider', Sider);
+Vue.component('Steps', Steps);
+Vue.component('Step', Step);
 
 Vue.config.productionTip = false
+Vue.use(ElementUI);
+
+sync(store, router);
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
 })
