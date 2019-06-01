@@ -221,7 +221,6 @@ export default {
         }
       })
     },
-    handleClick() {},
     saveFollow() {
       this.followform['pid']=this.$store.state.patientid;
       infoentry.saveFollowUp(this.followform).then((res)=>{
@@ -251,12 +250,12 @@ export default {
     },
   },
   created() {
-    if(this.$store.state.entryState!=null){
-      if(this.$store.state.entryState>11){
-        this.fsave=false;
-        this.followUpInfo()
+    if(this.$store.state.edit){
+      this.entry=this.$store.state.entryState;
+        if(this.entry>=11){
+          this.followUpInfo()
+        }
       }
-    }
   }
 };
 </script>

@@ -1588,11 +1588,6 @@ export default {
           disabled:true
         }
       ],
-      ssave:true,
-      msave:true,
-      bsave:true,
-      psave:true,
-      esave:true,
       edisabled:true,
       adisabled:true,
       pdisabled:true,
@@ -1656,7 +1651,59 @@ export default {
       MRIsignlist:[],
       BIRADSlist:[],
       multipe:false,  
+      entry:0
     };
+  },
+  watch:{
+    entry(val){
+      if(this.cancertype=='colorectal'){
+        this.coltablist.forEach((item,index)=>{
+        if(index<val-3){
+          item.disabled=false;
+        }
+      })
+      }else if(this.cancertype=='breast'){
+       this.bretablist.forEach((item,index)=>{
+        if(index<val-3){
+          item.disabled=false;
+        }
+      })
+      }
+      
+    }
+  },
+  computed:{
+    bsave(){
+      if(this.$store.state.entryState>=5){
+        return false
+      }
+      return true
+    },
+    esave(){
+      if(this.$store.state.entryState>6){
+        return false
+      }
+      return true
+    },
+    ssave(){
+      if(this.$store.state.entryState>6){
+        return false
+      }
+      return true
+    }
+    ,
+    msave(){
+      if(this.$store.state.entryState>7){
+        return false
+      }
+      return true
+    },
+    psave(){
+      if(this.$store.state.entryState>8){
+        return false
+      }
+      return true
+    }
   },
   methods: {
     searchItem(name,type=null) {
@@ -1852,22 +1899,17 @@ export default {
     },
     handleClick() {
       if(this.$store.state.entryState>=4 && this.activeName=='basic'){
-        this.bsave=false;
         this.basicCheckInfo()
       }else if(this.$store.state.entryState>=5 && (this.activeName=='endoscope'|| this.activeName=='assist')){
         if(this.activeName=='endoscope'){
-          this.esave=false;
           this.introscopeInfo()
         }
         if(this.activeName=='assist'){
-          this.asave=false;
           this.introscopeInfo()
         }
       }else if(this.$store.state.entryState>=6 && this.activeName=='pathology'){
-        this.psave=false;
         this.pathologicInfo()
       }else if(this.$store.state.entryState>=7 && this.activeName=='molecule'){
-        this.msave=false;
         this.molDetectionInfo()
       }
     },
@@ -1883,6 +1925,7 @@ export default {
             this.activeName = "assist";
           }
           this.$store.state.entryState=5;
+          this.entry=this.$store.state.entryState;
         }
       });
     },
@@ -1898,6 +1941,7 @@ export default {
     },
     saveAssist() {
       this.$store.state.entryState=6;
+      this.entry=this.$store.state.entryState;
       this.pdisabled=false;
       this.activeName = "pathology";
     },
@@ -1907,6 +1951,7 @@ export default {
         if (res.returnCode == 0) {
           this.$store.state.entryState=6;
           this.pdisabled=false;
+          this.entry=this.$store.state.entryState;
           this.activeName = "pathology";
         }
       });
@@ -1927,6 +1972,7 @@ export default {
         if (res.returnCode == 0) {
           this.$store.state.entryState=7;
           this.mdisabled=false;
+          this.entry=this.$store.state.entryState;
           this.activeName = "molecule";
         }
       });
@@ -1970,35 +2016,12 @@ export default {
   },
   created() {
     // this.cancertype='breast';
-    if(this.$store.state.entryState!=null){
-      if(this.$store.state.entryState>=7){
-        // this.ssave=false
-        this.msave=false
-        // this.bsave=false
-        // this.psave=false
-        // this.esave=false
-        this.edisabled=false
-        this.adisabled=false
-        this.pdisabled=false
-        this.mdisabled=false
-      }else if(this.$store.state.entryState>=6){
-        // this.ssave=false
-        // this.bsave=false
-        this.psave=false
-        // this.esave=false
-        this.edisabled=false
-        this.adisabled=false
-        this.pdisabled=false
-      }else if(this.$store.state.entryState>=5){
-        // this.ssave=false
-        // this.bsave=false
-        this.esave=false
-        this.edisabled=false
-        this.adisabled=false
-      }else if(this.$store.state.entryState>4){
-        this.bsave=false
+    this.entry=this.$store.state.entryState;
+    if(this.$store.state.edit){
+        if(this.entry>=5){
+          this.basicCheckInfo()
+        }
       }
-    }
   }
 };
 </script>

@@ -215,8 +215,6 @@ export default {
       btypelist:[],
       nationalitylist:[],
       nationlist:[],
-      bsave:true,
-      fsave:true,
       disabled:true,
       entry:0,
     };
@@ -224,10 +222,30 @@ export default {
   watch:{
     entry(val){
       this.tablist.forEach((item,index)=>{
-        if(index<val){
+        if(index<=val){
           item.disabled=false;
         }
       })
+      if(val>=1 && this.activeName=='basic'){
+        this.getBasicInfo()
+      }else if(val>2){
+        this.getDocotorInfo()
+      }
+    }
+  },
+  computed:{
+    bsave(){
+      if(this.$store.state.entryState>=1){
+        return false
+      }
+      return true
+    },
+    fsave(){
+      console.log(this.$store.state.entryState)
+      if(this.$store.state.entryState>2){
+        return false
+      }
+      return true
     }
   },
   methods: {
@@ -355,18 +373,16 @@ export default {
     },
   },
   created() {
-      // if(this.$store.state.entryState>=1){
-      //   this.disabled=false;
-      //   this.bsave=false;
-      //   this.fsave=false;
-      // }
-      // if(this.$store.state.entryState==1){
-      //   this.fsave=true;
-      //   this.activeName='doctor';
-      // }
-      this.entry=this.$store.state.entryState;
-      console.log(this.entry)
-    
+      this.searchItem("sex",0);
+      this.searchItem("nationality",0);
+      this.searchItem("nation",0);
+      this.searchItem("btype",0);
+      let _this=this;
+      setTimeout(function(){
+        _this.entry=_this.$store.state.entryState;
+      },0)
+      
+      
   }
 };
 </script>

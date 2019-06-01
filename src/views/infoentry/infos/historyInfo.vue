@@ -46,8 +46,7 @@
     <div class="basic-inner">
       <div class="basic-tab">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="现病史" name="present"></el-tab-pane>
-          <el-tab-pane label="家族史" name="family" :disabled="disabled"></el-tab-pane>
+          <el-tab-pane v-for='(item,index) in tablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
       </div>
       <div class="basic-main">
@@ -339,6 +338,17 @@ import sortRule from "../../../base/js/common.js";
 export default {
   data() {
     return {
+      tablist:[
+        {
+          name:'present',
+          label:'现病史',
+          disabled:false
+        },{
+          name:'family',
+          label:'家族史',
+          disabled:true
+        }
+      ],
       activeName: "present",
       presentform: {},
       familyform: {},
@@ -363,9 +373,31 @@ export default {
       rtgoallist:[],
       drugnamelist:[],
       disabled:true,
-      bsave:true,
-      fsave:true,
+      entry:0
     };
+  },
+  watch:{
+    entry(val){
+      this.tablist.forEach((item,index)=>{
+        if(index<val-1){
+          item.disabled=false;
+        }
+      })
+    }
+  },
+  computed:{
+    bsave(){
+      if(this.$store.state.entryState>=3){
+        return false
+      }
+      return true
+    },
+    fsave(){
+      if(this.$store.state.entryState>4){
+        return false
+      }
+      return true
+    }
   },
   methods: {
     searchItem(name,type=null) {
@@ -455,7 +487,7 @@ export default {
         if (res.returnCode == 0) {
           this.$store.state.entryState=3;
           this.disabled=false;
-          this.bsave=false;
+          this.entry=this.$store.state.entryState;
           this.activeName = "family";
         }
       });
@@ -522,15 +554,12 @@ export default {
   },
   mounted() {
     // this.cancertype='breast';
-    if(this.$store.state.entryState!=null){
-      if(this.$store.state.entryState>=3){
-        this.disabled=false;
-        this.bsave=false;
-        this.fsave=false;
-      }else if(this.$store.state.entryState>2){
-        this.bsave=false;
+    this.entry=this.$store.state.entryState;
+    if(this.$store.state.edit){
+        if(this.entry>=3){
+          this.getDesHistoryInfo()
+        }
       }
-    }
   }
 };
 </script>

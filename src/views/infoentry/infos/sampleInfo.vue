@@ -131,12 +131,13 @@ export default {
     },
   },
   created() {
-    if(this.$store.state.entryState!=null){
-      if(this.$store.state.entryState>12){
-        this.ssave=false;
-        this.bankInfo()
+    if(this.$store.state.edit){
+      this.entry=this.$store.state.entryState;
+        if(this.entry>=12){
+          this.ssave=false;
+          this.bankInfo()
+        }
       }
-    }
   }
 };
 </script>

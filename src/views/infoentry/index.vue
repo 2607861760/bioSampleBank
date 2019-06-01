@@ -353,13 +353,13 @@ export default {
     handleDelete(index, row) {},
     addPatient() {
       this.choiceCarcinoma = true;
-      this.$store.state.edit=false;
     },
     choice() {
       this.choiceCarcinoma = false;
       this.$store.state.cancerid=this.cancerid;
       this.$store.state.entryState=1;
       this.$store.state.tabState=1;
+      this.$store.state.edit=false;
       this.$router.push("/infoentry/addpatient?type=basicInfo");
     },
     inputInfo() {

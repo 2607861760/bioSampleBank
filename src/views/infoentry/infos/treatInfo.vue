@@ -55,9 +55,7 @@
     <div class="basic-inner">
       <div class="basic-tab">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="药物治疗" name="therapy"></el-tab-pane>
-          <el-tab-pane label="疗效评估" name="evaluation" :disabled="edisabled"></el-tab-pane>
-          <el-tab-pane label="临床症状" name="symptoms" :disabled="sdisabled"></el-tab-pane>
+          <el-tab-pane v-for='(item,index) in coltablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
       </div>
       <div class="basic-main">
@@ -404,9 +402,21 @@ import sortRule from "../../../base/js/common.js";
 export default {
   data() {
     return {
-      tsave:true,
-      esave:true,
-      ssave:true,
+      coltablist:[
+        {
+          name:'therapy',
+          label:'药物治疗',
+          disabled:false
+        },{
+          name:'evaluation',
+          label:'疗效评估',
+          disabled:true
+        },{
+          name:'symptoms',
+          label:'临床症状',
+          disabled:true
+        }
+      ],
       sdisabled:true,
       edisabled:true,
       imnowtarget:false,
@@ -428,8 +438,39 @@ export default {
       reactsourcelist:[],
       stoxiclist:[],
       changeslist:[],
-      badeventlist:[]
+      badeventlist:[],
+      entry:0
     };
+  },
+  watch:{
+    entry(val){
+        this.coltablist.forEach((item,index)=>{
+        if(index<val-7){
+          item.disabled=false;
+        }
+      })
+      
+    }
+  },
+  computed:{
+    tsave(){
+      if(this.$store.state.entryState>=9){
+        return false
+      }
+      return true
+    },
+    esave(){
+      if(this.$store.state.entryState>10){
+        return false
+      }
+      return true
+    },
+    ssave(){
+      if(this.$store.state.entryState>11){
+        return false
+      }
+      return true
+    }
   },
   methods: {
     searchItem(name,type=null) {
@@ -484,13 +525,10 @@ export default {
     },
     handleClick() {
       if(this.$store.state.entryState>=8 && this.activeName=='therapy'){
-        this.tsave=false;
         this.medicationInfo()
       }else if(this.$store.state.entryState>=9 && this.activeName=='evaluation'){
-          this.esave=false;
           this.assessInfo()
       }else if(this.$store.state.entryState>=10 && this.activeName=='symptoms'){
-        this.ssave=false;
         this.clinicalInfo()
       }
     },
@@ -501,7 +539,7 @@ export default {
       infoentry.saveMedication(this.therapyform).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.entryState=9;
-          this.edisabled=false;
+          this.entry=this.$store.state.entryState;
           this.activeName = "evaluation";
         }
       })
@@ -521,7 +559,7 @@ export default {
       infoentry.saveAssess(this.evaluationform).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.entryState=10;
-          this.sdisabled=false;
+          this.entry=this.$store.state.entryState;
           this.activeName = "symptoms";
         }
       })
@@ -566,30 +604,12 @@ export default {
   },
   mounted() {
     // this.cancertype='breast'
-    if(this.$store.state.entryState!=null){
-      if(this.$store.state.entryState>=10){
-        this.ssave=false
-        this.tsave=false
-        this.esave=false
-        this.edisabled=false
-        this.sdisabled=false
-      }else if(this.$store.state.entryState>=9){
-        this.tsave=false
-        this.esave=false
-        this.edisabled=false
-      }else if(this.$store.state.entryState>8){
-        this.tsave=false
+    this.entry=this.$store.state.entryState;
+    if(this.$store.state.edit){
+        if(this.entry>=9){
+          this.medicationInfo()
+        }
       }
-      if(this.$store.state.entryState==9){
-        this.esave=true;
-        this.activeName='evaluation';
-      }
-      if(this.$store.state.entryState==10){
-        this.ssave=true;
-        this.activeName='symptoms';
-      }
-    }
-    
   }
 };
 </script>
