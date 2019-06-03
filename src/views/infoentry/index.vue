@@ -357,6 +357,7 @@ export default {
     choice() {
       this.choiceCarcinoma = false;
       this.$store.state.cancerid=this.cancerid;
+      this.$store.state.patientid=null;
       this.$store.state.entryState=1;
       this.$store.state.tabState=1;
       this.$store.state.edit=false;

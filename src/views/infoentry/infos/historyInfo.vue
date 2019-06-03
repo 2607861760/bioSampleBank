@@ -342,11 +342,13 @@ export default {
         {
           name:'present',
           label:'现病史',
-          disabled:false
+          disabled:false,
+          num:3
         },{
           name:'family',
           label:'家族史',
-          disabled:true
+          disabled:true,
+          num:4
         }
       ],
       activeName: "present",
@@ -382,12 +384,15 @@ export default {
         if(index<val-1){
           item.disabled=false;
         }
+        if(val+1==item.num){
+          this.activeName=item.name;
+        }
       })
     }
   },
   computed:{
     bsave(){
-      if(this.$store.state.entryState>=3){
+      if(this.$store.state.entryState>3){
         return false
       }
       return true

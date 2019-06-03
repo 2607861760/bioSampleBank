@@ -406,15 +406,18 @@ export default {
         {
           name:'therapy',
           label:'药物治疗',
-          disabled:false
+          disabled:false,
+          num:9
         },{
           name:'evaluation',
           label:'疗效评估',
-          disabled:true
+          disabled:true,
+          num:10
         },{
           name:'symptoms',
           label:'临床症状',
-          disabled:true
+          disabled:true,
+          num:11
         }
       ],
       sdisabled:true,
@@ -447,6 +450,9 @@ export default {
         this.coltablist.forEach((item,index)=>{
         if(index<val-7){
           item.disabled=false;
+        }
+        if(val+1==item.num){
+          this.activeName=item.name;
         }
       })
       

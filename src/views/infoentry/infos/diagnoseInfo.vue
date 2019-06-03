@@ -1554,19 +1554,23 @@ export default {
         {
           name:'basic',
           label:'基本检查',
-          disabled:false
+          disabled:false,
+          num:5
         },{
           name:'endoscope',
           label:'内镜检查',
-          disabled:true
+          disabled:true,
+          num:6
         },{
           name:'pathology',
           label:'病理检查',
-          disabled:true
+          disabled:true,
+          num:7
         },{
           name:'molecule',
           label:'分子检测',
-          disabled:true
+          disabled:true,
+          num:8
         }
       ],
       bretablist:[
@@ -1660,6 +1664,9 @@ export default {
         this.coltablist.forEach((item,index)=>{
         if(index<val-3){
           item.disabled=false;
+        }
+        if(val+1==item.num){
+          this.activeName=item.name;
         }
       })
       }else if(this.cancertype=='breast'){

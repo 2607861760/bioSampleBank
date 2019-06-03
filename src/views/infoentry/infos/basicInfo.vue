@@ -55,7 +55,7 @@
     <div class="basic-inner">
       <div class="basic-tab">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane v-for='(item,index) in tablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
+          <el-tab-pane v-for='(item,index) in tablist' :num='item.num' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
       </div>
       <div class="basic-main">
@@ -190,11 +190,13 @@ export default {
         {
           name:'basic',
           label:'基本信息',
-          disabled:false
+          disabled:false,
+          num:1
         },{
           name:'doctor',
           label:'就诊信息',
-          disabled:true
+          disabled:false,
+          num:2
         }
       ],
       activeName: "basic",
@@ -215,33 +217,44 @@ export default {
       btypelist:[],
       nationalitylist:[],
       nationlist:[],
-      disabled:true,
+      // disabled:true,
       entry:0,
     };
   },
   watch:{
     entry(val){
       this.tablist.forEach((item,index)=>{
-        if(index<=val){
+        if(index+1<=val){
           item.disabled=false;
         }
+        //if(this.$store.state.edit){
+        if(val==item.num){
+          this.activeName=item.name;
+        }
       })
-      if(val>=1 && this.activeName=='basic'){
+      console.log(this.tablist)
+      if(this.$store.state.edit){
+        if(val>=1 && this.activeName=='basic'){
         this.getBasicInfo()
       }else if(val>2){
         this.getDocotorInfo()
       }
+
+      }
+      
     }
   },
   computed:{
     bsave(){
-      if(this.$store.state.entryState>=1){
+      console.log(this.$store.state.entryState)
+      if(this.$store.state.entryState>1){
         return false
+      }else{
+        return true
       }
-      return true
+      
     },
     fsave(){
-      console.log(this.$store.state.entryState)
       if(this.$store.state.entryState>2){
         return false
       }
@@ -250,12 +263,13 @@ export default {
   },
   methods: {
     handleClick(val) {
-      if(this.activeName=='basic'){
+      if(this.activeName=='basic' && val.index<=this.$store.state.entryState-1){
         this.getBasicInfo()
       }
-      if(this.activeName=='doctor'){
+      if(this.activeName=='doctor' && val.index<=this.$store.state.entryState-1){
         this.getDocotorInfo()
       }
+
     },
     saveBasic() {
       this.$refs["basicform"].validate(valid => {
@@ -267,7 +281,6 @@ export default {
               this.$store.state.patientid = res.data.id;
               this.$store.state.entryState=2;
               this.entry=this.$store.state.entryState;
-              this.activeName = "doctor";
             }
           });
         } else {
