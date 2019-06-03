@@ -398,7 +398,7 @@
 </template>
 <script>
 import {infoentry,dict} from 'api/index.js';
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState} from "../../../base/js/common.js";
 export default {
   data() {
     return {
@@ -438,19 +438,8 @@ export default {
       reactsourcelist:[],
       stoxiclist:[],
       changeslist:[],
-      badeventlist:[],
-      entry:0
+      badeventlist:[]
     };
-  },
-  watch:{
-    entry(val){
-        this.coltablist.forEach((item,index)=>{
-        if(index<val-7){
-          item.disabled=false;
-        }
-      })
-      
-    }
   },
   computed:{
     tsave(){
@@ -604,7 +593,6 @@ export default {
   },
   mounted() {
     // this.cancertype='breast'
-    this.entry=this.$store.state.entryState;
     if(this.$store.state.edit){
         if(this.entry>=9){
           this.medicationInfo()

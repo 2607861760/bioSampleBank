@@ -334,7 +334,7 @@
 </template>
 <script>
 import { infoentry,dict } from "api/index.js";
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
 export default {
   data() {
     return {
@@ -372,18 +372,8 @@ export default {
       chevaluationlist:[],
       rtgoallist:[],
       drugnamelist:[],
-      disabled:true,
-      entry:0
+      disabled:true
     };
-  },
-  watch:{
-    entry(val){
-      this.tablist.forEach((item,index)=>{
-        if(index<val-1){
-          item.disabled=false;
-        }
-      })
-    }
   },
   computed:{
     bsave(){
@@ -554,12 +544,22 @@ export default {
   },
   mounted() {
     // this.cancertype='breast';
-    this.entry=this.$store.state.entryState;
     if(this.$store.state.edit){
-        if(this.entry>=3){
-          this.getDesHistoryInfo()
-        }
+      if(this.entry>=3){
+        this.getDesHistoryInfo()
       }
+    }
+    let state = this.$store.state.entryState;
+    this.tablist = getTabListByState(1,state);
+    this.activeName = getActiveName(1,state);
+  },
+  watch:{
+    "$store.state.entryState":function(){
+      debugger;
+      let state = this.$store.state.entryState;
+      this.tablist = getTabListByState(1,state);
+      this.activeName = getActiveName(1,state);
+    }
   }
 };
 </script>

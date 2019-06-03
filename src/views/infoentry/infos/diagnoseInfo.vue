@@ -1546,7 +1546,7 @@
 </template>
 <script>
 import { infoentry,dict } from "api/index.js";
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
 export default {
   data() {
     return {
@@ -1650,27 +1650,8 @@ export default {
       massedgelist:[],
       MRIsignlist:[],
       BIRADSlist:[],
-      multipe:false,  
-      entry:0
+      multipe:false
     };
-  },
-  watch:{
-    entry(val){
-      if(this.cancertype=='colorectal'){
-        this.coltablist.forEach((item,index)=>{
-        if(index<val-3){
-          item.disabled=false;
-        }
-      })
-      }else if(this.cancertype=='breast'){
-       this.bretablist.forEach((item,index)=>{
-        if(index<val-3){
-          item.disabled=false;
-        }
-      })
-      }
-      
-    }
   },
   computed:{
     bsave(){
@@ -2016,12 +1997,16 @@ export default {
   },
   created() {
     // this.cancertype='breast';
-    this.entry=this.$store.state.entryState;
     if(this.$store.state.edit){
         if(this.entry>=5){
           this.basicCheckInfo()
         }
       }
+  },
+  mounted(){
+    let state = this.$store.state.entryState;
+    this.coltablist = getTabListByState(2,state);
+    this.activeName = getActiveName(2,state);
   }
 };
 </script>

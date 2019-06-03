@@ -173,7 +173,7 @@
 </template>
 <script>
 import { infoentry, dict } from "api/index.js";
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
 export default {
   data() {
     var poneAvailable = (rule, value, callback) => {
@@ -215,23 +215,8 @@ export default {
       btypelist:[],
       nationalitylist:[],
       nationlist:[],
-      disabled:true,
-      entry:0,
+      disabled:true
     };
-  },
-  watch:{
-    entry(val){
-      this.tablist.forEach((item,index)=>{
-        if(index<=val){
-          item.disabled=false;
-        }
-      })
-      if(val>=1 && this.activeName=='basic'){
-        this.getBasicInfo()
-      }else if(val>2){
-        this.getDocotorInfo()
-      }
-    }
   },
   computed:{
     bsave(){
@@ -377,12 +362,19 @@ export default {
       this.searchItem("nationality",0);
       this.searchItem("nation",0);
       this.searchItem("btype",0);
-      let _this=this;
-      setTimeout(function(){
-        _this.entry=_this.$store.state.entryState;
-      },0)
-      
-      
+  },
+  mounted(){
+    let state = this.$store.state.entryState;
+    this.tablist = getTabListByState(0,state);
+    this.activeName = getActiveName(0,state);
+  },
+  watch:{
+    "$store.state.entryState":function(){
+      debugger;
+      let state = this.$store.state.entryState;
+      this.tablist = getTabListByState(0,state);
+      this.activeName = getActiveName(0,state);
+    }
   }
 };
 </script>

@@ -125,7 +125,7 @@ export default {
         type:'',
         num:0
       };
-      if(num==1 || num==14){
+      if(num==1 || num==14 || num==0){
         obj.type='basicInfo';
         obj.num=1;
       }else if(num>=2 && 4>num){
