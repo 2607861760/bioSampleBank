@@ -442,24 +442,8 @@ export default {
       stoxiclist:[],
       changeslist:[],
       badeventlist:[]
-    };
-  },
-<<<<<<< HEAD
-  watch:{
-    entry(val){
-        this.coltablist.forEach((item,index)=>{
-        if(index<val-7){
-          item.disabled=false;
-        }
-        if(val+1==item.num){
-          this.activeName=item.name;
-        }
-      })
-      
     }
   },
-=======
->>>>>>> 7a9bb7f7caadb5644e6e4a69bd82905b312ff71a
   computed:{
     tsave(){
       if(this.$store.state.entryState>=9){

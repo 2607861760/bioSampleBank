@@ -55,7 +55,7 @@
     <div class="basic-inner">
       <div class="basic-tab">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane v-for='(item,index) in tablist' :num='item.num' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
+          <el-tab-pane v-for='(item,index) in tablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
       </div>
       <div class="basic-main">
@@ -173,7 +173,7 @@
 </template>
 <script>
 import { infoentry, dict } from "api/index.js";
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
 export default {
   data() {
     var poneAvailable = (rule, value, callback) => {
@@ -190,13 +190,11 @@ export default {
         {
           name:'basic',
           label:'基本信息',
-          disabled:false,
-          num:1
+          disabled:false
         },{
           name:'doctor',
           label:'就诊信息',
-          disabled:true,
-          num:2
+          disabled:true
         }
       ],
       activeName: "basic",
@@ -217,8 +215,7 @@ export default {
       btypelist:[],
       nationalitylist:[],
       nationlist:[],
-      disabled:true,
-      entry:0,
+      disabled:true
     };
   },
   computed:{
@@ -229,6 +226,7 @@ export default {
       return true
     },
     fsave(){
+      console.log(this.$store.state.entryState)
       if(this.$store.state.entryState>2){
         return false
       }
@@ -237,13 +235,12 @@ export default {
   },
   methods: {
     handleClick(val) {
-      if(this.activeName=='basic' && val.index<=this.$store.state.entryState-1){
+      if(this.activeName=='basic'){
         this.getBasicInfo()
       }
-      if(this.activeName=='doctor' && val.index<=this.$store.state.entryState-1){
+      if(this.activeName=='doctor'){
         this.getDocotorInfo()
       }
-
     },
     saveBasic() {
       this.$refs["basicform"].validate(valid => {
@@ -255,6 +252,7 @@ export default {
               this.$store.state.patientid = res.data.id;
               this.$store.state.entryState=2;
               this.entry=this.$store.state.entryState;
+              this.activeName = "doctor";
             }
           });
         } else {
@@ -364,12 +362,19 @@ export default {
       this.searchItem("nationality",0);
       this.searchItem("nation",0);
       this.searchItem("btype",0);
-      let _this=this;
-      setTimeout(function(){
-        _this.entry=_this.$store.state.entryState;
-      },0)
-      
-      
+  },
+  mounted(){
+    let state = this.$store.state.entryState;
+    this.tablist = getTabListByState(0,state);
+    this.activeName = getActiveName(0,state);
+  },
+  watch:{
+    "$store.state.entryState":function(){
+      debugger;
+      let state = this.$store.state.entryState;
+      this.tablist = getTabListByState(0,state);
+      this.activeName = getActiveName(0,state);
+    }
   }
 };
 </script>
