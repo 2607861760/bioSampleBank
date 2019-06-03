@@ -95,6 +95,7 @@
 </template>
 <script>
 import {infoentry} from 'api/index.js';
+import {sortRule,getTabListByState} from "../../../base/js/common.js";
 export default {
   data() {
     return {

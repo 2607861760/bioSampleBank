@@ -195,7 +195,7 @@ export default {
         },{
           name:'doctor',
           label:'就诊信息',
-          disabled:false,
+          disabled:true,
           num:2
         }
       ],
@@ -217,42 +217,16 @@ export default {
       btypelist:[],
       nationalitylist:[],
       nationlist:[],
-      // disabled:true,
+      disabled:true,
       entry:0,
     };
   },
-  watch:{
-    entry(val){
-      this.tablist.forEach((item,index)=>{
-        if(index+1<=val){
-          item.disabled=false;
-        }
-        //if(this.$store.state.edit){
-        if(val==item.num){
-          this.activeName=item.name;
-        }
-      })
-      console.log(this.tablist)
-      if(this.$store.state.edit){
-        if(val>=1 && this.activeName=='basic'){
-        this.getBasicInfo()
-      }else if(val>2){
-        this.getDocotorInfo()
-      }
-
-      }
-      
-    }
-  },
   computed:{
     bsave(){
-      console.log(this.$store.state.entryState)
-      if(this.$store.state.entryState>1){
+      if(this.$store.state.entryState>=1){
         return false
-      }else{
-        return true
       }
-      
+      return true
     },
     fsave(){
       if(this.$store.state.entryState>2){

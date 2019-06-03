@@ -357,8 +357,12 @@ export default {
     choice() {
       this.choiceCarcinoma = false;
       this.$store.state.cancerid=this.cancerid;
+<<<<<<< HEAD
       this.$store.state.patientid=null;
       this.$store.state.entryState=1;
+=======
+      this.$store.state.entryState=0;
+>>>>>>> 7a9bb7f7caadb5644e6e4a69bd82905b312ff71a
       this.$store.state.tabState=1;
       this.$store.state.edit=false;
       this.$router.push("/infoentry/addpatient?type=basicInfo");

@@ -163,7 +163,7 @@
 </template>
 <script>
 import {infoentry,dict} from 'api/index.js';
-import sortRule from "../../../base/js/common.js";
+import {sortRule,getTabListByState} from "../../../base/js/common.js";
 export default {
   data() {
     return {
