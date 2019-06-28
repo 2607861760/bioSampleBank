@@ -274,17 +274,17 @@ export default {
       ],
       lineList: [
         {
-          name: "去年同期",
+          name: "近一年",
           number: 328,
           trend: false
         },
         {
-          name: "近三个月",
+          name: "近六个月",
           number: 780,
           trend: true
         },
         {
-          name: "近一个月",
+          name: "近三个月",
           number: 256,
           trend: true
         }

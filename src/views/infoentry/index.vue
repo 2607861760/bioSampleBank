@@ -132,7 +132,7 @@
           size="medium"
           @click="addPatient"
         >新建</el-button>
-        <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button>
+        <!-- <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button> -->
       </div>
       <div class="btn-right">
         <div>

@@ -51,7 +51,7 @@
         <span>查询系统</span>
       </div>
       <div class="search">
-        <el-input placeholder="请输入基因、癌种...信息查询" suffix-icon="iconfont el-icon-biosearch"></el-input>
+        <!-- <el-input placeholder="请输入基因、癌种...信息查询" suffix-icon="iconfont el-icon-biosearch"></el-input> -->
       </div>
       <div class="process-inner" v-if="filtrateState">
         <el-form ref="form" :model="basicform" label-width="100px" label-position="left">

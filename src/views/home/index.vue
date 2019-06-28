@@ -191,9 +191,9 @@
       <el-header
         style="text-align: right; font-size: 12px;height: 65px;background: #fff;border:1px solid #e9ebee;"
       >
-        <div class="menucol" @click="colchange">
+        <!-- <div class="menucol" @click="colchange">
           <i class="iconfont el-icon-biomenu"></i>
-        </div>
+        </div> -->
         <div class="userinfo">
           <div>
             <i class="iconfont el-icon-biouserinfo" style="font-size:26px;line-height: 65px;"></i>

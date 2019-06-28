@@ -123,10 +123,11 @@ export default {
       }
       infoentry.submitPatient(obj).then((res)=>{
         if(res.returnCode==0){
-          this.$message({
-            message: '提交成功！',
-            type: 'success'
-          });
+          // this.$message({
+          //   message: '提交成功！',
+          //   type: 'success'
+          // });
+          this.$router.push('/infoentry')
         }else{
           this.$message.error(res.msg);
         }

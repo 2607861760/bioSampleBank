@@ -101,7 +101,7 @@
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['vmetastatic']" :key="index"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="原发灶位置：">
+            <el-form-item label="原发灶位置：" v-if='cancerid==2'>
               <el-select v-model="presentform.dprimary" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dprimary']" :key="index"></el-option>
               </el-select>
@@ -164,7 +164,7 @@
               <el-date-picker type="date" placeholder="开始时间" v-model="presentform.drugdate"></el-date-picker>
             </el-form-item>
             <el-form-item v-if="presentform.isdrug=='0'">
-              <el-select v-model="presentform.drugname" placeholder="目的">
+              <el-select v-model="presentform.drugname" placeholder="用药名称">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['drugname']" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -594,6 +594,7 @@ export default {
     this.cancerid=this.$store.state.cancerid;
     let selectlist=["symptom","shbltype","vmetastatic","dprimary","chprogramme","chgoal","chevaluation","rtgoal","drugname","fttype","cpartandtype"];
     this.optionlist=getOption(this.$store.state.zdlist,selectlist,this.cancerid);
+    console.log(this.optionlist)
   },
   mounted() {
     // this.cancertype='breast';

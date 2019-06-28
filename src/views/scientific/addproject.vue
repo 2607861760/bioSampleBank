@@ -536,7 +536,8 @@ export default {
       this.tableData.splice(index, 1);
     },
     saveProject(){
-      this.$refs['form'].validate((valid) => {
+      
+        this.$refs['form'].validate((valid) => {
         if(valid){
           let obj={
             createUserId:this.$store.state.userId
@@ -544,7 +545,17 @@ export default {
           for(let key in this.infoform){
             obj[key]=this.infoform[key]
           }
-          project.saveProject(obj).then((res)=>{
+          if(this.$store.state.edit){
+            project.updateProject(obj).then((res)=>{
+            if(res.returnCode==0){
+              
+              this.current += 1;
+            }else{
+              this.$message.error(res.msg)
+            }
+            })
+          }else{
+            project.saveProject(obj).then((res)=>{
             if(res.returnCode==0){
               this.$store.state.projectid=res.data.id;
               this.current += 1;
@@ -552,11 +563,14 @@ export default {
               this.$message.error(res.msg)
             }
         })
+          }
+          
         }else{
           return false
         }
         
       })
+      
     },
     getAll(){
       dict.getAll().then((res)=>{
@@ -564,10 +578,23 @@ export default {
           this.zdlist=res.data;
         } 
       })
+    },
+    infoProject(){
+      let obj={
+        id:this.$store.state.projectid
+      }
+      project.infoProject(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.infoform=res.data;
+        }
+      })
     }
   },
   mounted(){
-    this.getAll()
+    this.getAll();
+    if(this.$store.state.edit){
+      this.infoProject()
+    }
   }
 };
 </script>

@@ -211,8 +211,8 @@
         <div class="main-info" v-if="checkState.present">
           <div>
             <div>
-              <span class="info-label" v-if="cancertype=='colorectal'">肠癌相关症状：</span>
-              <span class="info-label" v-if="cancertype=='breast'">乳腺癌相关症状：</span>
+              <span class="info-label" v-if="cancerid==2">肠癌相关症状：</span>
+              <span class="info-label" v-if="cancerid==3">乳腺癌相关症状：</span>
               <span class="info-text">{{presentform.symptom}}</span>
             </div>
             <div>
@@ -220,8 +220,8 @@
               <span class="info-text">{{presentform.vmetastatic}}</span>
             </div>
             <div>
-              <span class="info-label" v-if="cancertype=='colorectal'">原发灶位置：</span>
-              <span class="info-text" v-if="cancertype=='colorectal'">{{presentform.dprimary}}</span>
+              <span class="info-label" v-if="cancerid==2">原发灶位置：</span>
+              <span class="info-text" v-if="cancerid==2">{{presentform.dprimary}}</span>
             </div>
             <div>
               <span class="info-label"></span>
@@ -295,11 +295,11 @@
               <span class="info-label">放疗目的：</span>
               <span class="info-text">{{presentform.rtgoal}}</span>
             </div>
-            <div v-if="cancertype=='breast'">
+            <div v-if="cancerid==3">
               <span class="info-label">放疗疗效评价：</span>
               <span class="info-text">{{presentform.rtevaluation}}</span>
             </div>
-            <div v-if="cancertype=='colorectal'"></div>
+            <div v-if="cancerid==2"></div>
           </div>
         </div>
         <div class="main-title" v-if="checkState.family">家族史</div>
@@ -359,50 +359,50 @@
               <span class="info-text">{{checkform.bmi}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">乳房位置：</span>
-              <span class="info-text">{{checkform.breastdepart}}</span>
+              <span class="info-text">{{checkform.breastPos}}</span>
             </div>
             <div>
               <span class="info-label">皮肤表皮：</span>
-              <span class="info-text">{{checkform.epidermis}}</span>
+              <span class="info-text">{{checkform.skinEpi}}</span>
             </div>
             <div>
               <span class="info-label">是否有肿块：</span>
-              <span class="info-text">{{checkform.bossing | isftFilter}}</span>
+              <span class="info-text">{{checkform.lump | isftFilter}}</span>
             </div>
             <div>
               <span class="info-label">乳头情况：</span>
-              <span class="info-text">{{checkform.papilla}}</span>
+              <span class="info-text">{{checkform.nippleSit}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">是否溢液：</span>
-              <span class="info-text">{{checkform.discharge | isftFilter}}</span>
+              <span class="info-text">{{checkform.overflow | isftFilter}}</span>
             </div>
             <div>
               <span class="info-label">溢液方式：</span>
-              <span class="info-text">{{checkform.dischargeway}}</span>
+              <span class="info-text">{{checkform.overflow_pos}}</span>
             </div>
             <div>
               <span class="info-label">溢液范围：</span>
-              <span class="info-text">{{checkform.dischargerange}}</span>
+              <span class="info-text">{{checkform.overflow_range}}</span>
             </div>
             <div>
               <span class="info-label">乳晕颜色：</span>
-              <span class="info-text">{{checkform.mammary}}</span>
+              <span class="info-text">{{checkform.areolaColor}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">是否湿疹样改变：</span>
-              <span class="info-text">{{checkform.discharge | isftFilter}}</span>
+              <span class="info-text">{{checkform.eczemaLike | isftFilter}}</span>
             </div>
             <div>
               <span class="info-label">是否有区域淋巴结：</span>
-              <span class="info-text">{{checkform.discharge | isftFilter}}</span>
+              <span class="info-text">{{checkform.lymphNode | isftFilter}}</span>
             </div>
             <div>
               <span class="info-label"></span>
@@ -635,8 +635,8 @@
               <span class="info-text"></span>
             </div>
           </div>
-          <el-divider v-if="cancertype=='colorectal'"></el-divider>
-          <div class="image-box" v-if="cancertype=='colorectal'">
+          <el-divider v-if="cancerid==2"></el-divider>
+          <div class="image-box" v-if="cancerid==2">
             <div>
               <div class="stitle">CT图像：
                 <div style="width:160px;height:105px;margin-left: 55px;">
@@ -653,17 +653,17 @@
             </div>
           </div>
         </div>
-        <div class="main-title" v-if="checkState.assist && cancertype=='breast'">辅助检查</div>
-        <div class="main-info main-breast" v-if="checkState.assist && cancertype=='breast'">
+        <div class="main-title" v-if="checkState.assist && cancerid==3">辅助检查</div>
+        <div class="main-info main-breast" v-if="checkState.assist && cancerid==3">
           <h5 class='main-ver'>
             <p class="stitle" style="margin-top:0;">乳腺钼靶X线摄影检查：</p>
             <p>
               <span class="info-label">检查时间：</span>
-              <span class="info-text">{{assistform.xraydate}}</span>
+              <span class="info-text">{{assistform.mammoDate}}</span>
             </p>
             <p>
               <span class="info-label">有无异常情况：</span>
-              <span class="info-text">{{assistform.unusual | isftFilter}}</span>
+              <span class="info-text">{{assistform.abnormal | isftFilter}}</span>
             </p>
             <p>
               <span class="info-label">钙化：</span>
@@ -671,31 +671,31 @@
             </p>
             <p>
               <span class="info-label">肿物边缘：</span>
-              <span class="info-text">{{assistform.massedge}}</span>
+              <span class="info-text">{{assistform.massEdge}}</span>
             </p>
             <p>
               <span class="info-label">其他情况：</span>
-              <span class="info-text">{{assistform.othercondition}}</span>
+              <span class="info-text">{{assistform.other}}</span>
             </p>
           </h5>
           <h5 class='main-ver'>
             <p class="stitle">乳腺MRI检查：</p>
             <p>
               <span class="info-label">检查时间：</span>
-              <span class="info-text">{{assistform.MRIdate}}</span>
+              <span class="info-text">{{assistform.mriDate}}</span>
             </p>
             <p>
               <span class="info-label">乳腺MRI征象：</span>
-              <span class="info-text">{{assistform.MRIsign}}</span>
+              <span class="info-text">{{assistform.mriSign}}</span>
             </p>
             <p>
               <span class="info-label">BI-RADS分类：</span>
-              <span class="info-text">{{assistform.BIRADS}}</span>
+              <span class="info-text">{{assistform.biRads}}</span>
             </p>
           </h5>
         </div>
-        <div class="main-title" v-if="checkState.endoscope && cancertype=='colorectal'">内镜检查</div>
-        <div class="main-info" v-if="checkState.endoscope && cancertype=='colorectal'">
+        <div class="main-title" v-if="checkState.endoscope && cancerid==2">内镜检查</div>
+        <div class="main-info" v-if="checkState.endoscope && cancerid==2">
           <div>
             <div>
               <span class="info-label">检查名称：</span>
@@ -774,11 +774,11 @@
             </div>
           </div>
           <div>
-            <div v-if="cancertype=='colorectal'">
+            <div v-if="cancerid==2">
               <span class="info-label">肿瘤部位：</span>
               <span class="info-text">{{pathologyform.tumloc}}</span>
             </div>
-            <div v-if="cancertype=='breast'">
+            <div v-if="cancerid==3">
               <span class="info-label">检测标本：</span>
               <span class="info-text">{{pathologyform.testSpecimen}}</span>
             </div>
@@ -808,16 +808,16 @@
               <span class="info-label">是否复发：</span>
               <span class="info-text">{{pathologyform.isrelapse | isftFilter}}</span>
             </div>
-            <div v-if="cancertype=='colorectal'">
+            <div v-if="cancerid==2">
               <span class="info-label">临床分期：</span>
               <span class="info-text">{{pathologyform.clinicalStage}}</span>
             </div>
-            <div v-if="cancertype=='breast'">
+            <div v-if="cancerid==3">
               <span class="info-label">脉管侵犯：</span>
               <span class="info-text">{{pathologyform.vasInvasion}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">pTNM：</span>
               <span class="info-text">{{pathologyform.ptnm}}</span>
@@ -835,7 +835,7 @@
               <span class="info-text">{{pathologyform.pm}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">合并原位癌：</span>
               <span class="info-text">{{pathologyform.combineCancer}}</span>
@@ -853,7 +853,7 @@
               <span class="info-text">{{pathologyform.t}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">cN分期：</span>
               <span class="info-text">{{pathologyform.cn}}</span>
@@ -871,7 +871,7 @@
               <span class="info-text">{{pathologyform.specialType}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">乳腺癌并发症（术前）：</span>
               <span class="info-text">{{pathologyform.complication }}</span>
@@ -883,7 +883,7 @@
           </div>
           <el-divider></el-divider>
           <div>免疫组化</div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">MLH1：</span>
               <span class="info-text">{{pathologyform.mlh1 | mFilter}}</span>
@@ -901,7 +901,7 @@
               <span class="info-text">{{pathologyform.msh6 | mFilter}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">PMS1：</span>
               <span class="info-text">{{pathologyform.pms1 | mFilter}}</span>
@@ -919,7 +919,7 @@
               <span class="info-text">{{pathologyform.axin2 | mFilter}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">STK11：</span>
               <span class="info-text">{{pathologyform.stk11 | mFilter}}</span>
@@ -937,7 +937,7 @@
               <span class="info-text">{{pathologyform.smad4 | mFilter}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">MUTYH：</span>
               <span class="info-text">{{pathologyform.mutyh | mFilter}}</span>
@@ -955,7 +955,7 @@
               <span class="info-text"></span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">ER：</span>
               <span class="info-text">{{pathologyform.ER}}</span>
@@ -973,7 +973,7 @@
               <span class="info-text">{{pathologyform.CK5}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">E-Card：</span>
               <span class="info-text">{{pathologyform.ECard}}</span>
@@ -1009,7 +1009,7 @@
             </div>
             <div>
               <span class="info-label">MLPA：</span>
-              <span class="info-text">{{moleculeform.mlpa | msiFilter}}</span>
+              <span class="info-text">{{moleculeform.mlpagene}}</span>
             </div>
           </div>
           <div>
@@ -1108,7 +1108,7 @@
           </div>
           <el-divider></el-divider>
           <div>其他代表性基因突变结果</div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">检测平台：</span>
               <span class="info-text">{{moleculeform.testp | testpFilter}}</span>
@@ -1126,7 +1126,7 @@
               <span class="info-text">{{moleculeform.braf | mFilter}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='colorectal'">
+          <div v-if="cancerid==2">
             <div>
               <span class="info-label">PIK3CA：</span>
               <span class="info-text">{{moleculeform.pik3ca | mFilter}}</span>
@@ -1144,7 +1144,7 @@
               <span class="info-text"></span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">检测平台：</span>
               <span class="info-text">{{moleculeform.testplatform}}</span>
@@ -1162,7 +1162,7 @@
               <span class="info-text">{{moleculeform.MSH6}}</span>
             </div>
           </div>
-          <div v-if="cancertype=='breast'">
+          <div v-if="cancerid==3">
             <div>
               <span class="info-label">MRE11A：</span>
               <span class="info-text">{{moleculeform.MRE11A}}</span>
@@ -2358,13 +2358,13 @@ export default {
   },
   mounted() {
     // this.cancertype = "breast";
-    if(this.cancertype=='breast'){
+    if(this.cancerid==3){
       this.collist.forEach((item,index)=>{
         if(item.prop=='endoscope'){
           this.collist.splice(index,1); 
         }
       })
-    }else if(this.cancertype=='colorectal'){
+    }else if(this.cancerid==2){
       this.collist.forEach((item,index)=>{
         if(item.prop=='assist'){
           this.collist.splice(index,1); 

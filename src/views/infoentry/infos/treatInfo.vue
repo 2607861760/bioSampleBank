@@ -116,7 +116,7 @@
             <el-form-item label="靶向药物"></el-form-item>
             <el-form-item label="靶点：">
               <el-checkbox-group v-model="targetlist">
-              <div v-if="cancertype=='colorectal'">
+              <div v-if="cancerid==2">
                 
               <p>
                 <el-checkbox label="EGFR" value='EGFR' :disabled="disEGFR">EGFR</el-checkbox>
@@ -126,7 +126,7 @@
               </p>
               
               </div>
-              <div v-if="cancertype=='breast'">
+              <div v-if="cancerid==3">
                 <p>
                   <el-checkbox label="HER2" value='HER2' :disabled="disHER2">HER2</el-checkbox>
                   <el-checkbox label="PARP" value='PARP' :disabled="disPARP">PARP</el-checkbox>
@@ -422,7 +422,7 @@ export default {
       ],
       imtargetlist:[],
       targetlist:[],
-      cancertype:'colorectal',
+      cancerid:0,
       activeName: "therapy",
       therapyform: {
       },
@@ -707,6 +707,7 @@ export default {
     if(state>=9){
       this.medicationInfo()
     }
+    this.cancerid=this.$store.state.cancerid;
   },
   watch:{
     "$store.state.entryState":function(){

@@ -236,6 +236,8 @@ export default {
       this.$router.push('/scientific/auditinfo')
     },
     handleEdit(index, row) {
+      this.$store.state.projectid=row.project.id;
+      this.$store.state.edit=true;
       this.$router.push('/scientific/addproject')
     },
     handleDelete(index, row) {
@@ -274,6 +276,10 @@ export default {
     },
     handleSizeChange(val){
       this.pageSize=val;
+      this.getProjectList()
+    },
+    handleCurrentChange(val){
+      this.current=val;
       this.getProjectList()
     },
     getProjectList(){

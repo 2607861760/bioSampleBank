@@ -61,16 +61,16 @@
     </div>
     <div class="basic-inner">
       <div class="basic-tab">
-        <div v-if='cancerid==2'>
+        <div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane v-for='(item,index) in coltablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
         </div>
-        <div v-if='cancerid==3'>
+        <!-- <div v-if='cancerid==3'>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane v-for='(item,index) in bretablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
-        </div>
+        </div> -->
       </div>
       <div class="basic-main">
         <div v-if="activeName=='basic'">
@@ -104,57 +104,57 @@
             </el-form-item>
             <div v-if="cancerid==3">
               <el-form-item label="乳房位置：">
-                <el-radio-group v-model="basicform.breastdepart">
+                <el-radio-group v-model="basicform.breastPos">
                   <el-radio label="对称" :value="1"></el-radio>
                   <el-radio label="不对称" :value="0"></el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="皮肤表皮：">
-                <el-select v-model="basicform.epidermis" placeholder="请选择...">
+                <el-select v-model="basicform.skinEpi" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['epidermis']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="是否有肿块：">
-                <el-radio-group v-model="basicform.bossing">
+                <el-radio-group v-model="basicform.lump">
                   <el-radio :label="0" :value="0">是</el-radio>
                   <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="乳头情况：">
-                <el-select v-model="basicform.papilla" placeholder="请选择...">
+                <el-select v-model="basicform.nippleSit" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['papilla']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="是否溢液：">
-                <el-radio-group v-model="basicform.discharge">
+                <el-radio-group v-model="basicform.overflow">
                   <el-radio :label="0" :value="0">是</el-radio>
                   <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item>
-                <el-select v-model="basicform.dischargeway" placeholder="溢液方式">
+              <el-form-item v-if='basicform.overflow==0'>
+                <el-select v-model="basicform.overflow_pos" placeholder="溢液方式">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargeway']" :key="index"></el-option>
               </el-select>
               </el-form-item>
-              <el-form-item>
-                <el-select v-model="basicform.dischargerange" placeholder="溢液范围">
+              <el-form-item v-if='basicform.overflow==0'>
+                <el-select v-model="basicform.overflow_range" placeholder="溢液范围">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargerange']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="乳晕颜色：">
-                <el-radio-group v-model="basicform.mammary">
+                <el-radio-group v-model="basicform.areolaColor">
                   <el-radio label="正常" :value="1"></el-radio>
                   <el-radio label="异常" :value="0"></el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否湿疹样改变：">
-                <el-radio-group v-model="basicform.discharge">
+                <el-radio-group v-model="basicform.eczemaLike">
                   <el-radio :label="0" :value="0">是</el-radio>
                   <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否有区域淋巴结：">
-                <el-radio-group v-model="basicform.discharge">
+                <el-radio-group v-model="basicform.lymphNode">
                   <el-radio :label="0" :value="0">是</el-radio>
                   <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
@@ -266,7 +266,8 @@
                 <template slot="suffix">fL</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="便常规"></el-form-item>
+            <template v-if="cancerid==2">
+            <el-form-item label="便常规" ></el-form-item>
             <el-form-item label="检查日期：">
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.bdate"></el-date-picker>
             </el-form-item>
@@ -306,6 +307,7 @@
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['parasite']" :key="index"></el-option>
               </el-select>
             </el-form-item>
+            </template>
             <el-form-item label="肿瘤标志物"></el-form-item>
             <el-form-item label="检查日期：">
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.tagdate"></el-date-picker>
@@ -1466,20 +1468,20 @@
         <div v-if="activeName=='assist'">
           <el-form ref="form" :model="assistform" label-width="100px" label-position="left">
             <el-form-item label="乳腺钼靶X线摄影检查：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="assistform.xraydate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="assistform.mammoDate"></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <!-- <el-upload
+              <el-upload
                 class="upload-demo"
                 action="/1.0/upload/upload"
                 multiple
-                :on-success='ctchoice'
+                :on-success='mammochoice'
                 list-type="picture"
-                :file-list="ctfile"
+                :file-list="mammofile"
                 :limit='2'
-              > -->
+              >
               <el-button size="small" type="primary">选择文件</el-button>
-              <!-- </el-upload> -->
+              </el-upload>
             </el-form-item>
             <el-form-item label="有无异常情况：">
               <el-radio-group v-model="assistform.unusual">
@@ -1487,44 +1489,44 @@
                 <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
+            <template v-if='assistform.unusual==0'>
             <el-form-item>
               <el-select v-model="assistform.calcification" placeholder="钙化">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['calcification']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="assistform.massedge" placeholder="肿物边缘">
+              <el-select v-model="assistform.massEdge" placeholder="肿物边缘">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['massedge']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-input v-model="assistform.othercondition" placeholder="其他"></el-input>
+              <el-input v-model="assistform.other" placeholder="其他"></el-input>
             </el-form-item>
+            </template>
             <el-form-item label="乳腺MRI检查：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="assistform.MRIdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="assistform.mriDate"></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <!-- <el-upload
+              <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
+                action="/1.0/upload/upload"
                 multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-              >-->
+                :on-success='mrichoice'
+                list-type="picture"
+                :file-list="mrifile"
+                :limit='2'
+              >
               <el-button size="small" type="primary">选择文件</el-button>
-              <!-- </el-upload> -->
+              </el-upload>
             </el-form-item>
             <el-form-item label="乳腺MRI征象：">
-              <el-select v-model="assistform.MRIsign" placeholder="请选择...">
+              <el-select v-model="assistform.mriSign" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['MRIsign']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="BI-RADS分类：">
-              <el-select v-model="assistform.BIRADS" placeholder="请选择...">
+              <el-select v-model="assistform.biRads" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['BIRADS']" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -1616,6 +1618,8 @@ export default {
       othereactioncheck:false,
       ctfile:[],
       petfile:[],
+      mrifile:[],
+      mammofile:[],
       isscanfile:[],
       imgurl:'http://42.123.125.101:82/',
       cancerid:0,
@@ -1666,6 +1670,12 @@ export default {
     },
     isscanchoice(res,file,fileList){
       this.isscanfile.push({url:this.imgurl+res.data})
+    },
+    mammochoice(res,file,fileList){
+      this.mammofile.push({url:this.imgurl+res.data})
+    },
+    mrichoice(res,file,fileList){
+      this.mrifile.push({url:this.imgurl+res.data})
     },
     handle(name,index, handle) {
       let n = 0;
@@ -1718,15 +1728,34 @@ export default {
     saveBasic() {
       this.basicform["pid"] = this.$store.state.patientid;
       let ct=[],
-        pet=[]
-      this.ctfile.map(item=>{
-        ct.push(item.url)
-      })
-      this.petfile.map(item=>{
+        pet=[],
+        mammo=[],
+        mri=[];
+        if(this.ctfile){
+          this.ctfile.map(item=>{
+            ct.push(item.url)
+          })
+        }
+      if(this.petfile){
+        this.petfile.map(item=>{
         pet.push(item.url)
       })
+      }
+      if(this.mammofile){
+        this.mammofile.map(item=>{
+        mammo.push(item.url)
+      })
+      }
+      if(this.mrifile){
+        this.mrifile.map(item=>{
+        mri.push(item.url)
+      })
+      }
+      
       this.basicform["ct"]=String(ct)
       this.basicform["pet"]=String(pet)
+      this.basicform["mammoPath"]=String(mammo)
+      this.basicform["mriPath"]=String(mri)
       infoentry.saveBasicCheck(this.basicform).then(res => {
         if (res.returnCode == 0) {
           this.$store.state.entryState=5;
@@ -1761,6 +1790,24 @@ export default {
               this.petfile.push({url:item})
             })
             }
+
+           if(this.basicform.mriPath && (this.basicform.mriPath!=null || this.basicform.mriPath!='')){
+              let mri=[];
+            mri=this.basicform.mriPath.split(',');
+            this.mrifile.length=0;
+            mri.map(item=>{
+              this.mrifile.push({url:item})
+            })
+            }
+
+            if(this.basicform.mammoPath && (this.basicform.mammoPath!=null || this.basicform.mammoPath!='')){
+              let mammo=[];
+            mammo=this.basicform.mammoPath.split(',');
+            this.mammofile.length=0;
+            mammo.map(item=>{
+              this.mammofile.push({url:item})
+            })
+            }
           }
         }else{
           this.$message.error(res.msg);
@@ -1769,15 +1816,33 @@ export default {
     },
     updateBasicCheck(){
       let ct=[],
-        pet=[]
-      this.ctfile.map(item=>{
-        ct.push(item.url)
-      })
-      this.petfile.map(item=>{
+        pet=[],
+        mammo=[],
+        mri=[];
+      if(this.ctfile){
+          this.ctfile.map(item=>{
+            ct.push(item.url)
+          })
+        }
+      if(this.petfile){
+        this.petfile.map(item=>{
         pet.push(item.url)
       })
+      }
+      if(this.mammofile){
+        this.mammofile.map(item=>{
+        mammo.push(item.url)
+      })
+      }
+      if(this.mrifile){
+        this.mrifile.map(item=>{
+        mri.push(item.url)
+      })
+      }
       this.basicform["ct"]=String(ct)
       this.basicform["pet"]=String(pet)
+      this.basicform["mammoPath"]=String(mammo)
+      this.basicform["mriPath"]=String(mri)
       infoentry.updateBasicCheck(this.basicform).then(res => {
         if (res.returnCode == 0) {
           this.$message({
@@ -2018,10 +2083,15 @@ export default {
       this.optionlist=getOption(this.$store.state.zdlist,selectlist,this.cancerid);
   },
   mounted(){
-    // let state = this.$store.state.entryState;
-    let state=6;
-    this.coltablist = getTabListByState(2,state);
+    let state = this.$store.state.entryState;
+    if(this.$store.state.cancerid==2){
+      this.coltablist = getTabListByState(2,state);
     this.activeName = getActiveName(2,state);
+    }else if(this.$store.state.cancerid==3){
+      this.coltablist = getTabListByState('2-1',state);
+    this.activeName = getActiveName('2-1',state);
+    }
+    console.log(this.coltablist)
     if(state>=5){
       this.basicCheckInfo()
     }
@@ -2029,8 +2099,13 @@ export default {
   watch:{
     "$store.state.entryState":function(){
       let state = this.$store.state.entryState;
+      if(this.$store.state.cancerid==2){
       this.tablist = getTabListByState(2,state);
-      this.activeName = getActiveName(2,state);
+    this.activeName = getActiveName(2,state);
+    }else if(this.$store.state.cancerid==3){
+      this.tablist = getTabListByState('2-1',state);
+    this.activeName = getActiveName('2-1',state);
+    }
     },
     "basicform.height":function(){
       if(this.basicform.height){
