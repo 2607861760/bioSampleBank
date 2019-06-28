@@ -48,7 +48,7 @@
       </div>
       <div class="process-inner">
         <span>找到相关信息</span>
-        <span class="infoNum">{{infoLen}}</span>
+        <span class="infoNum">{{total}}</span>
         <span>条</span>
         <div style="float:right;">
           <el-popover placement="bottom" width="299" trigger="click">
@@ -86,7 +86,7 @@
             :key="index"
           >
             <template slot-scope="scope">
-              <span v-if="item.prop=='registration'" class="registration" @click='toReport(scope.row)'>{{scope.row.registration}}</span>
+              <span v-if="item.prop=='number'" class="registration" @click='toReport(scope.row)'>{{scope.row.number}}</span>
               <span v-else>{{scope.row[item.prop]}}</span>
             </template>
           </el-table-column>
@@ -95,10 +95,11 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize"
+            :current-page="current"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+            :total="total"
           ></el-pagination>
         </div>
       </div>
@@ -106,17 +107,17 @@
   </div>
 </template>
 <script>
+import { infoentry } from "api/index.js";
 export default {
   data() {
     return {
-      infoLen: 0,
       checkedcol:[{
-          prop: "registration",
+          prop: "number",
           label: "登记号",
           checked:true
         },
         {
-          prop: "cancer",
+          prop: "ctype",
           label: "癌种",
           checked:true
         },{
@@ -127,7 +128,7 @@ export default {
     ],
       tablecol: [
         {
-          prop: "registration",
+          prop: "number",
           label: "登记号"
         },
         {
@@ -135,7 +136,7 @@ export default {
           label: "年龄"
         },
         {
-          prop: "cancer",
+          prop: "ctype",
           label: "癌种"
         },
         {
@@ -156,24 +157,24 @@ export default {
         }
       ],
       tableData: [
-        {
-          registration: "201901032578",
-          age: "30",
-          cancer: "乳腺癌",
-          histopathological: "浸润性癌",
-          stages: "ⅡA 期",
-          genename: "BRCA",
-          mutation: "p.R125T"
-        }
+        // {
+        //   registration: "201901032578",
+        //   age: "30",
+        //   cancer: "乳腺癌",
+        //   histopathological: "浸润性癌",
+        //   stages: "ⅡA 期",
+        //   genename: "BRCA",
+        //   mutation: "p.R125T"
+        // }
       ],
       collist:[
          {
-          prop: "registration",
+          prop: "number",
           label: "登记号",
           checked:true
         },
         {
-          prop: "cancer",
+          prop: "ctype",
           label: "癌种",
           checked:true
         },{
@@ -236,11 +237,14 @@ export default {
           checked:false
         }
       ],
-      checkNum: 0
+      checkNum: 0,
+      current:1,
+      pageSize:10
     };
   },
   methods: {
       toReport(row){
+        this.$store.state.patientid=row.id;
         this.$router.push('/query/report')
       },
       changecheck(){
@@ -254,9 +258,27 @@ export default {
           })
         //   console.log(tablecolumn)
           this.tablecol=tablecolumn
-      }
+      },
+      getPatient() {
+      //获取信息列表
+      let obj = {
+          userId: this.$store.state.userId
+        },
+        pagelist = {
+          offset: this.current,
+          size: this.pageSize
+        };
+      infoentry.getPatient(pagelist, obj).then(res => {
+        if (res.returnCode == 0) {
+          this.tableData = res.data.patientList;
+          this.total = res.data.total;
+        }
+      });
+    }
   },
-  created() {}
+  created() {
+    this.getPatient()
+  }
 };
 </script>
 

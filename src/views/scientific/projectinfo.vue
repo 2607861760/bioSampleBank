@@ -87,11 +87,11 @@
           <div>
             <div>
               <span class="info-label">项目名称：</span>
-              <span class="info-text">{{infoform.projectname}}</span>
+              <span class="info-text">{{infoform.projectName}}</span>
             </div>
             <div>
               <span class="info-label">项目负责人：</span>
-              <span class="info-text">{{infoform.leader}}</span>
+              <span class="info-text">{{infoform.projectPeople}}</span>
             </div>
             </div>
             <div>
@@ -101,23 +101,23 @@
             </div>
             <div>
               <span class="info-label">计划入组样本数：</span>
-              <span class="info-text">{{infoform.samplenum}}例</span>
+              <span class="info-text">{{infoform.sampleCount}}例</span>
             </div>
           </div>
           <div>
             <div>
               <span class="info-label">起始时间：</span>
-              <span class="info-text">{{infoform.startdate}}</span>
+              <span class="info-text">{{infoform.beginTime | dateFilter}}</span>
             </div>
             <div>
               <span class="info-label">截至时间：</span>
-              <span class="info-text">{{infoform.enddate}}</span>
+              <span class="info-text">{{infoform.endTime | dateFilter}}</span>
             </div>
             </div>
             <div>
             <div>
               <span class="info-label">计划经费：</span>
-              <span class="info-text">{{infoform.expenditure}}</span>
+              <span class="info-text">{{infoform.funds}}万</span>
             </div>
             <div>
               <span class="info-label"></span>
@@ -128,18 +128,18 @@
         <div class="main-title">项目入组标准</div>
         <div class="main-info">
           <div>
-            <el-table :data="familytable" height="300" border style="width: 100%">
+            <el-table :data="newtruptable" height="300" border style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column prop="relationship" label="逻辑关系"></el-table-column>
-              <el-table-column prop="tumour" label="字段信息"></el-table-column>
-              <el-table-column prop="cancerage" label="筛选内容"></el-table-column>
+              <el-table-column prop='logic' label="逻辑关系"></el-table-column>
+              <el-table-column prop="field" label="字段信息"></el-table-column>
+              <el-table-column prop='value' label="筛选内容"></el-table-column>
             </el-table>
           </div>
         </div>
         <div class="main-title">项目人员信息</div>
         <div class="main-info">
           <div>
-            <el-table :data="familytable" height="300" border style="width: 100%">
+            <el-table :data="persontable" height="300" border style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
               <el-table-column prop="relationship" label="工作单位"></el-table-column>
               <el-table-column prop="tumour" label="所属科室"></el-table-column>
@@ -153,18 +153,96 @@
   </div>
 </template>
 <script>
+import {project,dict} from 'api/index.js';
 export default {
   data() {
     return{
-        infoform:{}
+        infoform:{},
+        truptable:[],
+        persontable:[],
+        zdlist:[],
+        newtruptable:[]
+    }
+  },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth(),
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
+    logicFilter(val){
+      if(val=='and'){
+        return '并'
+      }else if(val=='or'){
+        return '或'
+      }
+    },
+    fieldFilter(val){
+      vm.zdlist.map(item=>{
+        if(item.itemValue==val){
+          return item.itemName
+        }
+      })
+    },
+    valueFilter(val){
+      vm.zdlist.map(item=>{
+        item.itemLists.map(items=>{
+          if(items.id==val){
+            return items.itemName
+          }
+        })
+      })
+      return val
     }
   },
   methods: {
-
-
+    getAll(callback=null){
+      dict.getAll().then((res)=>{
+        if(res.returnCode==0){
+          this.zdlist=res.data;
+          callback()
+        } 
+      })
+    },
+    geinfo(){
+      this.infoform=this.$store.state.infoform.projectModel.project;
+    this.truptable=this.$store.state.infoform.stdList;
+    this.persontable=this.$store.state.infoform.appList;
+    this.newtruptable=this.truptable.map(item=>{
+      if(item.logic=='and'){
+        item.logic='并'
+      }else if(item.logic=='or'){
+        item.logic='或'
+      }
+      item.value=item.value;
+      this.zdlist.map(items=>{
+        if(items.itemValue==item.field && items.fieldType==1){
+          items.itemList.map(ite=>{
+            if(ite.id==item.value){
+              item.value=ite.itemName
+            }
+          })
+        }
+      })
+      this.zdlist.map(items=>{
+        if(items.itemValue==item.field){
+          item.field=items.itemName
+        }
+      })
+      
+      return item
+    })
+    }
   },
-  created() {
-
+  created(){
+    this.getAll(this.geinfo)
+  },
+  mounted() {
+    
   }
 };
 </script>

@@ -48,4 +48,13 @@ export const dict = {
             return Promise.resolve(res.data)
         })
     },
+    /**
+     * 查询下拉框
+     * @param {*} obj 
+     */
+    getAll(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'item/getAll', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

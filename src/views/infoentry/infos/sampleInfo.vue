@@ -58,7 +58,7 @@
     </div>
     <div class="basic-inner">
       <div class="basic-tab">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName">
           <el-tab-pane label="样本库" name="sample"></el-tab-pane>
         </el-tabs>
       </div>
@@ -67,8 +67,8 @@
           <el-form ref="form" :model="sampleform" label-width="150px" label-position="left">
             <el-form-item label="是否留样本：">
               <el-radio-group v-model="sampleform.issample">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="样品编号：">
@@ -83,7 +83,7 @@
             <el-form-item>
               <span>
               <el-button type="primary" @click="saveSample" size="medium" v-if='ssave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateBank" v-else>编辑</el-button>
               </span>
               <el-button type="primary" @click="submit" size="medium" class="submit">提交</el-button>
             </el-form-item>
@@ -101,44 +101,71 @@ export default {
     return {
       activeName: "sample",
       ssave:true,
-      sampleform: {
-      }
+      sampleform: {}
     };
   },
   methods: {
-    handleClick() {},
     saveSample() {
       this.sampleform['pid']=this.$store.state.patientid;
       infoentry.saveBank(this.sampleform).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.entryState=13;
           this.ssave=false;
+        }else{
+          this.$message.error(res.msg);
         }
       })
       
     },
     submit(){
-
-    },
-    bankInfo(){
       let obj={
         id:this.$store.state.patientid
       }
-      infoentry.bankInfo(obj).then((res)=>{
+      infoentry.submitPatient(obj).then((res)=>{
         if(res.returnCode==0){
-          this.basicform=res.data;
+          this.$message({
+            message: '提交成功！',
+            type: 'success'
+          });
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
+    bankInfo(){
+      let obj={
+        pid:this.$store.state.patientid
+      }
+      infoentry.bankInfo(obj).then((res)=>{
+        if(res.returnCode==0){
+          if(res.data!=null){
+            this.sampleform=res.data;
+          }
+        }else{
+          this.$message.error(res.msg);
+        }
+      })
+    },
+    updateBank(){
+      infoentry.updateBank(this.sampleform).then((res)=>{
+        if(res.returnCode==0){
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.bankInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      })
+    }
   },
   created() {
-    if(this.$store.state.edit){
       this.entry=this.$store.state.entryState;
-        if(this.entry>=12){
+        if(this.entry>=13){
           this.ssave=false;
           this.bankInfo()
         }
-      }
   }
 };
 </script>

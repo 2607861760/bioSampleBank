@@ -71,18 +71,18 @@
               <el-input v-model="basicform.name"></el-input>
             </el-form-item>
             <el-form-item label="性别：">
-              <el-select v-model="basicform.sex" placeholder="请选择..." @focus='searchItem("sex",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in sexlist" :key="index"></el-option>
+              <el-select v-model="basicform.sex" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['sex']" :key="index">{{item.itemName}}</el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="国籍：">
-              <el-select v-model="basicform.nationality" placeholder="请选择..." @focus='searchItem("nationality",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in nationalitylist" :key="index"></el-option>
+              <el-select v-model="basicform.nationality" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['nationality']" :key="index">{{item.itemName}}</el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="民族：">
-              <el-select v-model="basicform.nation" placeholder="请选择..." @focus='searchItem("nation",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in nationlist" :key="index"></el-option>
+              <el-select v-model="basicform.nation" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['nation']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="出生日期：">
@@ -92,14 +92,14 @@
               <el-input v-model.number="basicform.age"></el-input>
             </el-form-item>
             <el-form-item label="血型：" prop="btype">
-              <el-select v-model="basicform.btype" placeholder="请选择..." @focus='searchItem("btype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in btypelist" :key="index"></el-option>
+              <el-select v-model="basicform.btype" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['btype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="RH血型：">
-              <el-radio-group v-model="basicform.RH">
-                <el-radio label="阴性"></el-radio>
-                <el-radio label="阳性"></el-radio>
+              <el-radio-group v-model="basicform.rh">
+                <el-radio :label="0" :value='0'>阴性</el-radio>
+                <el-radio :label="1" :value='1'>阳性</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="登记号：" prop="number">
@@ -173,7 +173,7 @@
 </template>
 <script>
 import { infoentry, dict } from "api/index.js";
-import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName,getOption} from "../../../base/js/common.js";
 export default {
   data() {
     var poneAvailable = (rule, value, callback) => {
@@ -211,11 +211,9 @@ export default {
         // phone:[{ validator: poneAvailable, trigger: 'blur' }]
       },
       doctorform: {},
-      sexlist: [],
-      btypelist:[],
-      nationalitylist:[],
-      nationlist:[],
-      disabled:true
+      disabled:true,
+      cancerid:0,
+      optionlist:[]
     };
   },
   computed:{
@@ -226,8 +224,7 @@ export default {
       return true
     },
     fsave(){
-      console.log(this.$store.state.entryState)
-      if(this.$store.state.entryState>2){
+      if(this.$store.state.entryState>=2){
         return false
       }
       return true
@@ -235,24 +232,25 @@ export default {
   },
   methods: {
     handleClick(val) {
-      if(this.activeName=='basic'){
+      if(this.$store.state.entryState>=1 && val.name=='basic'){
         this.getBasicInfo()
       }
-      if(this.activeName=='doctor'){
+      if(this.$store.state.entryState>=2 && val.name=='doctor'){
         this.getDocotorInfo()
       }
     },
     saveBasic() {
       this.$refs["basicform"].validate(valid => {
         if (valid) {
-          this.basicform["userId"] = 1;
-          this.basicform["ctype"] = this.$store.state.cancerid;
+          this.basicform["userId"] = this.$store.state.userId;
+          this.basicform["ctype"] = this.cancerid;
           infoentry.savePatient(this.basicform).then(res => {
             if (res.returnCode == 0) {
               this.$store.state.patientid = res.data.id;
-              this.$store.state.entryState=2;
+              this.$store.state.entryState=1;
               this.entry=this.$store.state.entryState;
-              this.activeName = "doctor";
+            }else{
+              this.$message.error(res.msg);
             }
           });
         } else {
@@ -265,7 +263,7 @@ export default {
       this.doctorform["pid"] = this.$store.state.patientid;
       infoentry.saveVisit(this.doctorform).then(res => {
         if (res.returnCode == 0) {
-          this.$store.state.entryState=1;
+          this.$store.state.entryState=2;
           this.$store.state.tabState=2;
           this.$router.push({
             path: "/infoentry/addpatient",
@@ -274,36 +272,10 @@ export default {
             }
           });
           
+        }else{
+          this.$message.error(res.msg);
         }
       });
-    },
-    searchItem(name,type=null) {
-      let obj = {
-        itemValue: name,
-        itype: this.$store.state.cancerid
-      };
-      if(type!==null){
-        obj.itype=type
-      }
-      dict.searchItem(obj).then((res)=>{
-        if(res.returnCode==0){
-          res.data.sort(sortRule)
-          switch(name){
-            case 'sex':
-              this.sexlist=res.data;
-              break;
-            case 'btype':
-              this.btypelist=res.data;
-              break;
-            case 'nationality':
-              this.nationalitylist=res.data;
-              break;
-            case 'nation':
-              this.nationlist=res.data;
-              break;
-          }
-        }
-      })
     },
     getBasicInfo(){
       let obj={
@@ -312,6 +284,8 @@ export default {
       infoentry.patientInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data;
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
@@ -320,9 +294,11 @@ export default {
         if (valid) {
           infoentry.updatePatient(this.basicform).then(res => {
             if (res.returnCode == 0) {
-              this.disabled=false;
-              this.activeName = "doctor";
-            }
+              this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.getBasicInfo()}
           });
         } else {
           console.log("error submit!!");
@@ -337,40 +313,41 @@ export default {
       infoentry.visitInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data;
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
     upDoctor() {
       infoentry.updateVisit(this.doctorform).then(res => {
         if (res.returnCode == 0) {
-          if(this.$store.state.entryState<2){
-            this.$store.state.entryState=2;
-          }
-          this.$router.push({
-            path: "/infoentry/addpatient",
-            query: {
-              type: "historyInfo"
-            }
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
           });
+          this.getDocotorInfo()
           
+        }else{
+          this.$message.error(res.msg);
         }
       });
     },
   },
   created() {
-      this.searchItem("sex",0);
-      this.searchItem("nationality",0);
-      this.searchItem("nation",0);
-      this.searchItem("btype",0);
+      this.cancerid=this.$store.state.cancerid;
+      let selectlist=["sex","nationality","nation","btype"];
+      this.optionlist=getOption(this.$store.state.zdlist,selectlist,this.cancerid);
   },
   mounted(){
     let state = this.$store.state.entryState;
     this.tablist = getTabListByState(0,state);
     this.activeName = getActiveName(0,state);
+    if(state>=1){
+      this.getBasicInfo()
+    }
   },
   watch:{
     "$store.state.entryState":function(){
-      debugger;
       let state = this.$store.state.entryState;
       this.tablist = getTabListByState(0,state);
       this.activeName = getActiveName(0,state);

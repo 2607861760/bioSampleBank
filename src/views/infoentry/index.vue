@@ -108,12 +108,14 @@
         color: #076112;
       }
     }
-    .choice-file{
-      margin:20px;
+    .choice-file {
+      margin: 20px;
       overflow: hidden;
     }
   }
 }
+  
+
 </style>
 
 <template>
@@ -134,16 +136,18 @@
       </div>
       <div class="btn-right">
         <div>
-          <el-button size="small" plain class="acstate" @click="getPatient()">全部</el-button>
-          <el-button size="small" plain @click="getPatient(1)">进行中</el-button>
-          <el-button size="small" plain @click="getPatient(0)">已完成</el-button>
+          <el-button size="small" plain :class="all?'acstate':''" @click="getPatient()">全部</el-button>
+          <el-button size="small" plain :class="ing?'acstate':''" @click="getPatient(1)">进行中</el-button>
+          <el-button size="small" plain :class="done?'acstate':''" @click="getPatient(14)">已完成</el-button>
         </div>
         <div>
-          <el-input
-            placeholder="请选择登记号、癌种"
-            size="small"
-            suffix-icon="iconfont el-icon-biosearch"
-          ></el-input>
+          <el-input placeholder="请选择登记号、癌种" v-model="selectinner" size="small">
+            <el-select v-model="select" slot="prepend" placeholder="请选择...">
+              <el-option label="登记号" value="1"></el-option>
+              <el-option label="癌种" value="2"></el-option>
+            </el-select>
+            <el-button slot="append" icon="iconfont el-icon-biosearch" @click="search"></el-button>
+          </el-input>
         </div>
       </div>
     </div>
@@ -227,12 +231,11 @@
           <div style="float:right;">
             <el-button size="medium">上传文件</el-button>
           </div>
-          
         </div>
         <div class="choice-file">
           <span></span>
           <div style="float:right;">
-          <el-button size="medium" style="width:98px;" @click='readInfo'>查看</el-button>
+            <el-button size="medium" style="width:98px;" @click="readInfo">查看</el-button>
           </div>
         </div>
       </div>
@@ -240,14 +243,19 @@
   </div>
 </template>
 <script>
-import {infoentry} from 'api/index.js';
+import { infoentry } from "api/index.js";
 export default {
   data() {
     return {
-      pageSize:10,
-      current:1,
-      total:0,
-      cancerid:0,
+      pageSize: 10,
+      current: 1,
+      total: 0,
+      cancerid: 0,
+      all: true,
+      ing: false,
+      done: false,
+      select:'',
+      selectinner:'',
       tableData: [
         {
           registration: "201901032578",
@@ -284,125 +292,163 @@ export default {
           name: "肺癌",
           icon: "iconfont el-icon-biolung",
           rightclass: "biolung",
-          cancerid:1
+          cancerid: 1
         },
         {
           name: "结直肠癌",
           icon: "iconfont el-icon-biocolorectum",
           rightclass: "biocolorectum",
-          cancerid:2
+          cancerid: 2
         },
         {
           name: "乳腺癌",
           icon: "iconfont el-icon-biobreast",
           rightclass: "biobreast",
-          cancerid:3
+          cancerid: 3
         },
         {
           name: "胃癌",
           icon: "iconfont el-icon-biogastric",
           rightclass: "biogastric",
-          cancerid:4
+          cancerid: 4
         },
         {
           name: "膀胱癌",
           icon: "iconfont el-icon-biocarcinoma",
           rightclass: "biocarcinoma",
-          cancerid:5
+          cancerid: 5
         }
       ],
       choiceNum: null,
       inputModel: false
     };
   },
-  filters:{
-    sexfilter(val){
-      if(val==0){
-        return '男'
-      }else if(val==1){
-        return '女'
+  filters: {
+    sexfilter(val) {
+      if (val == 0) {
+        return "男";
+      } else if (val == 1) {
+        return "女";
       }
     },
-    ctypefilter(val){
-      switch(val){
+    ctypefilter(val) {
+      switch (val) {
         case 1:
-          return '肺癌';
+          return "肺癌";
           break;
         case 2:
-          return '结直肠癌';
+          return "结直肠癌";
           break;
         case 3:
-          return '乳腺癌';
+          return "乳腺癌";
           break;
         case 4:
-          return '胃癌';
+          return "胃癌";
           break;
         case 5:
-          return '膀胱癌';
+          return "膀胱癌";
           break;
       }
     }
   },
   methods: {
+    search(){
+      if(this.ing){
+        this.getPatient(1)
+      }else if(this.done){
+        this.getPatient(14)
+      }else{
+        this.getPatient()
+      }
+    },
     handleEdit(index, row) {
-      this.$store.state.entryState=row.state;
-      this.$store.state.patientid=row.id;
-      this.$store.state.edit=true;
+      this.$store.state.entryState = row.state;
+      this.$store.state.patientid = row.id;
+      this.$store.state.edit = true;
       this.$router.push("/infoentry/addpatient?type=basicInfo");
     },
-    handleDelete(index, row) {},
+    handleDelete(index, row) {
+      let obj = {
+        id: row.id
+      };
+      infoentry.delPatient(obj).then(res => {
+        if (res.returnCode == 0) {
+          this.getPatient();
+        }
+      });
+    },
     addPatient() {
       this.choiceCarcinoma = true;
     },
     choice() {
       this.choiceCarcinoma = false;
-      this.$store.state.cancerid=this.cancerid;
-      this.$store.state.entryState=0;
-      this.$store.state.tabState=1;
-      this.$store.state.edit=false;
+      this.$store.state.cancerid = this.cancerid;
+      this.$store.state.entryState = 0;
+      this.$store.state.tabState = 1;
+      this.$store.state.edit = false;
       this.$router.push("/infoentry/addpatient?type=basicInfo");
     },
     inputInfo() {
       this.inputModel = true;
     },
-    readInfo(){
-
+    readInfo() {
       this.$router.push("/infoentry/upinfo");
     },
-    choiceCancer(item,index){
-      this.choiceNum=index;
-      this.cancerid=item.cancerid;
+    choiceCancer(item, index) {
+      this.choiceNum = index;
+      this.cancerid = item.cancerid;
     },
-    handleCurrentChange(val){//current改变
-      this.current=val;
+    handleCurrentChange(val) {
+      //current改变
+      this.current = val;
       this.getPatient();
     },
-    handleSizeChange(val){  //pageSize改变
-      this.pageSize=val;
+    handleSizeChange(val) {
+      //pageSize改变
+      this.pageSize = val;
       this.getPatient();
     },
-    getPatient(state=null){  //获取信息列表
-      let obj={
-        userId:'1'
-      },
-      pagelist={
-        offset:this.current,
-        size:this.pageSize
-      };
-      if(state!=null){
-        obj['state']=state
-      }
-      this.tableData=[]
-      infoentry.getPatient(pagelist,obj).then((res)=>{
-        if(res.returnCode==0){
-          this.tableData=res.data.patientList;
-          this.total=res.data.total;
+    getPatient(state = null) {
+      //获取信息列表
+      let obj = {
+          userId: this.$store.state.userId
+        },
+        pagelist = {
+          offset: this.current,
+          size: this.pageSize
+        };
+      this.all = true;
+      if (state != null) {
+        obj["state"] = state;
+        if (state == 1) {
+          this.all = false;
+          this.done = false;
+          this.ing = true;
+        } else if (state == 14) {
+          this.all = false;
+          this.done = true;
+          this.ing = false;
         }
-      })
+      } else {
+        this.done = false;
+        this.ing = false;
+      }
+      if(this.select==1){
+        obj['number']=this.selectinner
+      }else if(this.select==2){
+        obj['ctype']=this.selectinner
+      }
+      this.tableData = [];
+      infoentry.getPatient(pagelist, obj).then(res => {
+        if (res.returnCode == 0) {
+          this.tableData = res.data.patientList;
+          this.total = res.data.total;
+        }
+      });
     }
   },
-  created(){
-    this.getPatient()
+  created() {
+    this.getPatient();
   }
 };
 </script>

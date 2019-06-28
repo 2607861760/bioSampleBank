@@ -67,13 +67,13 @@
           type="primary"
           icon="iconfont el-icon-bioadd"
           size="medium"
-          @click="addRole"
+          @click="addUser"
         >新建</el-button>
         <el-button
           type="danger"
           icon="iconfont el-icon-biorecycle"
           size="medium"
-          @click="addProject"
+          @click="delUsers"
         >批量删除</el-button>
       </div>
       <div class="btn-right">
@@ -81,24 +81,26 @@
           <el-input
             placeholder="请输入用户名"
             size="small"
-            suffix-icon="iconfont el-icon-biosearch"
-          ></el-input>
+            v-model="username"
+          >
+          <el-button slot="append" icon="iconfont el-icon-biosearch" @click="searchUser"></el-button>
+          </el-input>
         </div>
       </div>
     </div>
     <div class="info-table">
-      <el-table :data="tableData" height="550" border style="width: 100%">
+      <el-table :data="tableData" height="550" border style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column
       type="selection"
       width="55"></el-table-column>
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="userid" label="用户ID"></el-table-column>
+        <el-table-column prop="id" label="用户ID"></el-table-column>
         <el-table-column prop="username" label="用户名" sortable></el-table-column>
         <el-table-column prop="email" label="邮箱" sortable></el-table-column>
         <el-table-column prop="userinfo" label="角色信息"></el-table-column>
         <el-table-column prop="project" label="所属项目"></el-table-column>
-        <el-table-column prop="state" label="状态"></el-table-column>
-        <el-table-column prop="startdate" label="创建时间"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="createDate" label="创建时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
@@ -110,16 +112,18 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pageSize"
+          :current-page="current"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {role} from 'api/index.js'
 export default {
   data() {
     return {
@@ -151,20 +155,86 @@ export default {
         }
         
       ],
-      
+      multipleSelection:[],
+      current:1,
+      pageSize:10,
+      total:0,
+      username:''
     };
   },
   methods: {
-      handleEdit(){
+    searchUser(){
+      this.getUser(this.username)
+    },
+    delUsers(){
+      let arr=[],
+        obj={};
+      this.multipleSelection.map(item=>{
+        arr.push(item.id)
+      })
+      obj['idList']=arr;
+      role.delUserBylist(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.getUser()
+          }else{
+            this.$message.error(res.msg)
+          }
+      })
+    },
+    handleSelectionChange(val){
+       this.multipleSelection = val;
+    },
+      handleEdit(index,row){
+          this.$store.state.userid=row.id;
           this.$router.push('/authority/adduser')
       },
-      addRole(){
+      addUser(){
+          this.$store.state.userid=null;
           this.$router.push('/authority/adduser')
       },
-    handleCheck(index,row){
-        this.$store.state.audit=true;
-        this.$router.push("/scientific/joininfo")
+      handleDelete(index,row){
+        let obj={
+          id:row.id
+        }
+        role.delUser(obj).then((res)=>{
+          if(res.returnCode==0){
+            this.getUser()
+          }else{
+            this.$message.error(res.msg)
+          }
+        })
+      },
+      handleSizeChange(val){
+      this.pageSize=val;
+      this.getUser();
+    },
+    handleCurrentChange(val){
+      this.current=val;
+      this.getUser()
+    },
+    getUser(state=null){
+      let obj = {
+          userId: this.$store.state.userId
+        },
+        pagelist = {
+          offset: this.current,
+          size: this.pageSize
+        };
+        if(state!=null){
+          obj['username']=state;
+        }
+      role.getUser(pagelist,obj).then((res)=>{
+        if(res.returnCode==0){
+          this.tableData=res.data.userList;
+          this.total=res.data.total;
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
     }
+  },
+  mounted(){
+    this.getUser()
   }
 };
 </script>

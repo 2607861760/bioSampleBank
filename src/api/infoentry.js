@@ -12,6 +12,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    delPatient(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'patient/del', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 病人信息
      * @param {*} obj 
@@ -64,6 +69,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateDesHistory(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'desHistory/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 家族史
      * @param {*} obj 
@@ -78,17 +88,27 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateFamilyHistory(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'familyHistory/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 基本检查
      * @param {*} obj 
      */
     saveBasicCheck(obj) {
-        return $ajax.post(apiUrl.apiUrl + 'basicCheck/info', obj).then(function(res) {
+        return $ajax.post(apiUrl.apiUrl + 'basicCheck/save', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },
     basicCheckInfo(obj) {
         return $ajax.post(apiUrl.apiUrl + 'basicCheck/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updateBasicCheck(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'basicCheck/update', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },
@@ -106,6 +126,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateIntroscope(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'introscope/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 病理检查
      * @param {*} obj  
@@ -117,6 +142,11 @@ export const infoentry = {
     },
     pathologicInfo(obj) {
         return $ajax.post(apiUrl.apiUrl + 'pathologic/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updatePathologic(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'pathologic/update', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },
@@ -134,6 +164,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateMolDetection(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'molDetection/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 药物治疗
      * @param {*} obj 
@@ -145,6 +180,11 @@ export const infoentry = {
     },
     medicationInfo(obj) {
         return $ajax.post(apiUrl.apiUrl + 'medication/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updateMedication(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'medication/update', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },
@@ -162,6 +202,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateAssess(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'assess/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 疗效评估
      * @param {*} obj 
@@ -173,6 +218,11 @@ export const infoentry = {
     },
     clinicalInfo(obj) {
         return $ajax.post(apiUrl.apiUrl + 'clinical/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updateClinical(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'clinical/update', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },
@@ -190,6 +240,11 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+    updateFollowUp(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'followUp/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 样本库
      * @param {*} obj 
@@ -201,6 +256,16 @@ export const infoentry = {
     },
     bankInfo(obj) {
         return $ajax.post(apiUrl.apiUrl + 'bank/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updateBank(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'bank/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    submitPatient(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'patient/submit', obj).then(function(res) {
             return Promise.resolve(res.data)
         })
     },

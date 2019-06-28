@@ -11,6 +11,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import 'iview/dist/styles/iview.css';
 import { Sider, Steps, Step } from 'iview';
+
+import "./base/font/iconfont.css";
+
 Vue.component('Sider', Sider);
 Vue.component('Steps', Steps);
 Vue.component('Step', Step);
@@ -21,7 +24,7 @@ Vue.use(ElementUI);
 sync(store, router);
 
 /* eslint-disable no-new */
-new Vue({
+let vm = new Vue({
     el: '#app',
     router,
     store,

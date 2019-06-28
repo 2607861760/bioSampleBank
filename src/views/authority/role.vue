@@ -73,7 +73,7 @@
           type="danger"
           icon="iconfont el-icon-biorecycle"
           size="medium"
-          @click="addProject"
+          @click="delRoles"
         >批量删除</el-button>
       </div>
       <div class="btn-right">
@@ -81,21 +81,27 @@
           <el-input
             placeholder="请输入角色名称"
             size="small"
-            suffix-icon="iconfont el-icon-biosearch"
-          ></el-input>
+            v-model="roleName"
+          >
+          <el-button slot="append" icon="iconfont el-icon-biosearch" @click="searchRole"></el-button>
+          </el-input>
         </div>
       </div>
     </div>
     <div class="info-table">
-      <el-table :data="tableData" height="550" border style="width: 100%">
+      <el-table :data="tableData" height="550" border style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column
       type="selection"
       width="55"></el-table-column>
-        <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="proposer" label="角色ID"></el-table-column>
-        <el-table-column prop="organization" label="角色名称" sortable></el-table-column>
-        <el-table-column prop="joindate" label="权限信息" sortable></el-table-column>
-        <el-table-column prop="state" label="创建时间 "></el-table-column>
+        <el-table-column type="index" width="50" label="序号"></el-table-column>
+        <el-table-column prop="id" label="角色ID"></el-table-column>
+        <el-table-column prop="roleName" label="角色名称" sortable></el-table-column>
+        <el-table-column prop="power" label="权限信息" sortable></el-table-column>
+        <el-table-column label="创建时间 ">
+          <template slot-scope="scope">
+            {{scope.row.createDate | dateFilter}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
@@ -107,19 +113,25 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pageSize"
+          :current-page="current"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {role} from 'api/index.js'
 export default {
   data() {
     return {
+      pageSize:10,
+      current:1,
+      total:0,
+      roleName:'',
       tableData: [
         {
           proposer: "武一",
@@ -146,20 +158,93 @@ export default {
           state: "已审批",
         }
       ],
-      
+      multipleSelection:[]
     };
   },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth(),
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
+  },
   methods: {
-      handleEdit(){
+    searchRole(){
+      this.getRole(this.roleName)
+    },
+    delRoles(){
+      let arr=[],
+        obj={};
+      this.multipleSelection.map(item=>{
+        arr.push(item.id)
+      })
+      obj['idList']=arr;
+      role.delRoleBylist(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.getRole()
+          }else{
+            this.$message.error(res.msg)
+          }
+      })
+    },
+    handleSelectionChange(val){
+       this.multipleSelection = val;
+    },
+      handleEdit(index,row){
+          this.$store.state.roleid=row.id;
           this.$router.push('/authority/addrole')
       },
       addRole(){
+        this.$store.state.roleid=null;
           this.$router.push('/authority/addrole')
       },
-    handleCheck(index,row){
-        this.$store.state.audit=true;
-        this.$router.push("/scientific/joininfo")
+      handleDelete(index,row){
+        let obj={
+          id:row.id
+        }
+        role.delRole(obj).then((res)=>{
+          if(res.returnCode==0){
+            this.getRole()
+          }else{
+            this.$message.error(res.msg)
+          }
+        })
+      },
+    handleSizeChange(val){
+      this.pageSize=val;
+      this.getRole();
+    },
+    handleCurrentChange(val){
+      this.current=val;
+      this.getRole()
+    },
+    getRole(state=null){
+      let obj = {
+          userId: this.$store.state.userId
+        },
+        pagelist = {
+          offset: this.current,
+          size: this.pageSize
+        };
+        if(state!=null){
+          obj['roleName']=state;
+        }
+      role.getRole(pagelist,obj).then((res)=>{
+        if(res.returnCode==0){
+          this.tableData=res.data.roleList;
+          this.total=res.data.total;
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
     }
+  },
+  mounted(){
+    this.getRole()
   }
 };
 </script>

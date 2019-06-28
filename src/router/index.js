@@ -54,8 +54,17 @@ export default new Router({
             path: '/scientific/auditinfo',
             component: resolve => require(['views/scientific/auditinfo.vue'], resolve)
         }, {
-            name: '预览系统',
-            path: '/preview',
+            name: '病人数统计',
+            path: '/preview/patientStatic',
+            component: resolve => require(['views/preview/patient.vue'], resolve)
+        }, {
+            name: '样本亚型统计',
+            path: '/preview/hypotypeStatic',
+            component: resolve => require(['views/preview/hypotype.vue'], resolve)
+        }, {
+            name: '科室样本统计',
+            path: '/preview/sampleStatic',
+            component: resolve => require(['views/preview/sample.vue'], resolve)
         }, {
             name: '角色管理',
             path: '/authority/role',

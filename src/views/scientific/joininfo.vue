@@ -53,41 +53,41 @@
         :rules="basicrules"
         label-position="left"
       >
-        <el-form-item label="姓名：" prop="name">
-          <el-input v-model="basicform.name" placeholder="请输入"></el-input>
+        <el-form-item label="姓名：" prop="applyName">
+          <el-input v-model="basicform.applyName" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="工作单位：" prop="organization">
-          <el-input v-model="basicform.organization" placeholder="请输入"></el-input>
+        <el-form-item label="工作单位：" prop="hospital">
+          <el-input v-model="basicform.hospital" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="所属科室：" prop="administrative">
-          <el-input v-model="basicform.administrative" placeholder="请输入"></el-input>
+        <el-form-item label="所属科室：" prop="dept">
+          <el-input v-model="basicform.dept" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="研究领域：" prop="research">
-          <el-input v-model="basicform.research" placeholder="请输入"></el-input>
+        <el-form-item label="研究领域：" prop="realm">
+          <el-input v-model="basicform.realm" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="申请加入原因：" prop="reason">
-          <el-input v-model="basicform.reason" placeholder="请输入"></el-input>
+        <el-form-item label="申请加入原因：" prop="applyReason">
+          <el-input v-model="basicform.applyReason" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="预计提供样本数：">
-          <el-input v-model="basicform.samplenum" placeholder="请输入">
+          <el-input v-model="basicform.sampleCount" placeholder="请输入">
             <template slot="suffix">例</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="申请加入时间：" prop="joindate">
-          <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.joindate"></el-date-picker>
+        <el-form-item label="申请加入时间：" prop="joinTime">
+          <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.joinTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="联系方式：">
-          <el-input v-model="basicform.phone" placeholder="请输入电话号码"></el-input>
+          <el-input v-model="basicform.tel" placeholder="请输入电话号码"></el-input>
         </el-form-item>
         <el-form-item label="Email：">
-          <el-input v-model="basicform.Email" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="basicform.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="相关领域科研情况：">
-          <el-input v-model="basicform.scientific" placeholder="请输入" type="textarea" :rows="2"></el-input>
+          <el-input v-model="basicform.situation" placeholder="请输入" type="textarea" :rows="2"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="saveBasic" size="medium">保存</el-button>
-          <el-button size="medium">取消</el-button>
+          <el-button type="primary" @click="saveProApp" size="medium">保存</el-button>
+          <el-button size="medium" @click="basicform={}">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -126,7 +126,7 @@
       </div>
       <div class="audit-col">
         <span class="info-label">Email：</span>
-        <span class="info-text">{{basicform.Email}}</span>
+        <span class="info-text">{{basicform.email}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">相关领域科研情况：</span>
@@ -141,27 +141,28 @@
   </div>
 </template>
 <script>
+import {project} from 'api/index.js';
 export default {
   data() {
     return {
       basicform: {},
       audit: false,
       basicrules: {
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        organization: [
+        applyName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        hospital: [
           { required: true, message: "请输入工作单位", trigger: "blur" }
         ],
-        administrative: [
+        dept: [
           { required: true, message: "请输入所属科室", trigger: "blur" }
         ],
-        research: [
+        realm: [
           { required: true, message: "请输入研究领域", trigger: "blur" }
         ],
-        reason: [
+        applyReason: [
           { required: true, message: "请输入申请加入原因", trigger: "blur" }
         ],
-        phone: [{ required: true, message: "请输入联系方式", trigger: "blur" }],
-        joindate: [
+        tel: [{ required: true, message: "请输入联系方式", trigger: "blur" }],
+        joinTime: [
           {
             type: "date",
             required: true,
@@ -172,9 +173,43 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    saveProApp(){
+      this.basicform['projectId']=this.$store.state.projectid;
+      this.basicform['applicantId']=this.$store.state.userid;
+      this.$refs['form'].validate((valid)=>{
+        if(valid){
+          project.saveProApp(this.basicform).then((res)=>{
+            if(res.returnCode==0){
+              this.$router.push('/scientific')
+            }else{
+              this.$message.error(res.msg)
+            }
+          })
+        }else{
+          return false
+        }
+      })
+    },
+    infoProApp(){
+      let obj={
+        id:this.$store.state.userid
+      }
+      project.infoProApp(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.basicform=res.data
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    }
+  },
   created() {
+    
     this.audit = this.$store.state.audit;
+    if(this.audit){
+
+    }
     // for (var a = 0; a < datas.length; a++) {
     //   var playPeriodStart1='datas['+a+'].packageList[0].playPeriodStart';
     //   var playPeriodEnd1='datas['+a+'].packageList[0].playPeriodEnd';

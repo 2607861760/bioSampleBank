@@ -147,8 +147,17 @@
                 <el-option v-for='item in carcinoma' :key='item.cancerid' :value="item.cancerid" :label="item.name"></el-option>
               </el-select>
           </el-form-item>
+          <el-form-item label="单位：">
+              <el-input v-model="dictform.fieldUnit" placeholder="请输入"></el-input>
+          </el-form-item>
           <el-form-item label="排序：">
               <el-input v-model="dictform.sort" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="类型：">
+              <!-- <el-input v-model="dictform.fieldType" placeholder="请输入"></el-input> -->
+              <el-select v-model="fieldType" placeholder="请选择..." >
+                <el-option v-for='item in fieldlist' :key='item.id' :value="item.id" :label="item.name"></el-option>
+              </el-select>
           </el-form-item>
           <el-form-item>
               <el-button type="primary" @click="saveDict" size="medium">保存</el-button>
@@ -163,7 +172,7 @@ import {dict} from 'api/index.js';
 export default {
   data() {
     return {
-      pageSize:100,
+      pageSize:1000,
       current:1,
       total:0,
       tableData: [],
@@ -195,7 +204,18 @@ export default {
           cancerid:5
         }
       ],
-      type:''
+      type:'',
+      fieldlist:[
+        {
+          name:'下拉框',
+          id:1
+        },
+        {
+          name:'输入框',
+          id:2
+        },
+      ],
+      fieldType:''
     };
   },
   filters:{
@@ -227,6 +247,7 @@ export default {
     handleEdit(index, row) {
       this.dictform=row;
       this.type=row.itype;
+      this.fieldType=row.fieldType;
       this.inputModel=true;
       this.edit=true;
     },
@@ -243,6 +264,7 @@ export default {
     addDict() {
       this.dictform={};
       this.type='';
+      this.fieldType='';
       this.edit=false;
       this.inputModel = true;
     },
@@ -256,6 +278,7 @@ export default {
     },
     saveDict(){
       this.dictform['itype']=this.type;
+      this.dictform['fieldType']=this.fieldType;
       if(this.edit){
         dict.updateItem(this.dictform).then((res)=>{
            if(res.returnCode==0){
@@ -280,6 +303,7 @@ export default {
       },obj={
         'pid':0
       };
+      this.tableData.length=0;
       dict.getItemlist(pagelist,obj).then((res)=>{
         if(res.returnCode==0){
           this.tableData=res.data.itemList;

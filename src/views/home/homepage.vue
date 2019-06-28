@@ -388,7 +388,7 @@ export default {
         ]
       });
     },
-    drawPie() {
+    drawPie(total) {
       let myChart = echarts.init(document.getElementById("piecharts"));
       myChart.setOption({
         tooltip: {
@@ -401,6 +401,18 @@ export default {
           bottom: "50px",
           data: ["肺癌", "结直肠癌", "乳腺癌", "胃癌", "膀胱癌"]
         },
+        title:{
+          text:total,
+          subtext: '总数据量',
+          x: 'center',
+                    y: 'center',
+                    textStyle:{
+                        color:'#fff',
+                        fontSize:40,
+                        fontWeight:'bold',
+                    }
+        },
+        color:['#7e6fff','#4ecc48','#5797fc','#ffcc29','#f37070'],
         series: [
           {
             name: "",
@@ -429,37 +441,22 @@ export default {
               {
                 value: 335,
                 name: "肺癌",
-                itemStyle: {
-                  color: "#7e6fff"
-                }
               },
               {
                 value: 310,
                 name: "结直肠癌",
-                itemStyle: {
-                  color: "#4ecc48"
-                }
               },
               {
                 value: 234,
                 name: "乳腺癌",
-                itemStyle: {
-                  color: "#5797fc"
-                }
               },
               {
                 value: 135,
                 name: "胃癌",
-                itemStyle: {
-                  color: "#ffcc29"
-                }
               },
               {
                 value: 1548,
                 name: "膀胱癌",
-                itemStyle: {
-                  color: "#f37070"
-                }
               }
             ]
           }

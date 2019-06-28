@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-import historyInfo from'./infos/historyInfo'
+import historyInfo from'./infos/historyInfo';
 export default {
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     processChange(item,index) {
-      if(this.currentNum>=index || this.entryState>=index){
+      if(this.currentNum>index || this.entryState>index){
         this.currentView = item.type;
       }
     },
@@ -125,9 +125,12 @@ export default {
         type:'',
         num:0
       };
-      if(num==1 || num==14 || num==0){
+      if(num==1 || num==0){
         obj.type='basicInfo';
         obj.num=1;
+      }else if(num==14){
+        obj.type='basicInfo';
+        obj.num=6;
       }else if(num>=2 && 4>num){
         obj.type='historyInfo';
         obj.num=2;
@@ -148,7 +151,6 @@ export default {
     }
   },
   created() {
-    
     if(this.$store.state.entryState!=null){
       let obj=this.entryStatefilter(this.$store.state.entryState);
       this.$store.state.tabState=obj.num;

@@ -71,10 +71,10 @@
           <img src="static/img/logo.png">
         </div>
         <div class="login-input">
-           <el-input placeholder="请输入用户名" prefix-icon="iconfont el-icon-biouser" ></el-input>
+           <el-input placeholder="请输入用户名" prefix-icon="iconfont el-icon-biouser" v-model="email"></el-input>
         </div>
        <div class="login-input">
-           <el-input placeholder="请输入密码" prefix-icon="iconfont el-icon-biopassword" ></el-input>
+           <el-input placeholder="请输入密码" prefix-icon="iconfont el-icon-biopassword" v-model="password"></el-input>
         </div>
         <div class="login-input remember">
           <el-checkbox>记住密码</el-checkbox>
@@ -87,16 +87,30 @@
   </div>
 </template>
 <script>
+import {common} from 'api/index.js';
 export default {
   name:'login',
   data(){
     return{
-
+      email:'',
+      password:''
     }
   },
   methods:{
     login(){
-      this.$router.push('/home')
+      let obj={
+        email:this.email,
+        password:this.password
+      }
+      common.login(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.$store.state.userId=res.data.id;
+          this.$router.push('/home')
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+      // this.$router.push('/home')
     }
   }
 }

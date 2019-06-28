@@ -46,7 +46,7 @@
           <el-input v-model="basicform.username"></el-input>
         </el-form-item>
         <el-form-item label="所属部门：">
-              <el-select v-model="basicform.depart" placeholder="请选择...">
+              <el-select v-model="basicform.deptId" placeholder="请选择...">
                 <el-option label="男" value="1"></el-option>
                 <el-option label="女" value="0"></el-option>
               </el-select>
@@ -61,19 +61,19 @@
           <el-input v-model="basicform.password"></el-input>
         </el-form-item>
         <el-form-item label="角色：">
-              <el-select v-model="basicform.role" placeholder="请选择...">
+              <el-select v-model="basicform.roleId" placeholder="请选择...">
                 <el-option label="男" value="1"></el-option>
                 <el-option label="女" value="0"></el-option>
               </el-select>
             </el-form-item>
     <el-form-item label="数据权限：">
-              <el-radio-group v-model="basicform.auth">
-                <el-radio label="全科室" value='1'></el-radio>
-                <el-radio label="用户个人" value='0'></el-radio>
+              <el-radio-group v-model="basicform.dataType">
+                <el-radio :label="1" :value='1'>全科室</el-radio>
+                <el-radio :label="0" :value='0'>用户个人</el-radio>
               </el-radio-group>
             </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="saveRole" size="medium">确认</el-button>
+            <el-button type="primary" @click="saveUser" size="medium">确认</el-button>
           <el-button size="medium">取消</el-button>
           
         </el-form-item>
@@ -82,28 +82,60 @@
   </div>
 </template>
 <script>
+import {role} from 'api/index.js'
 export default {
   data() {
     return {
         basicform:{},
-        rolenoteList:[
-            {
-                name:'角色管理（创建、修改、删除）'
-            },{
-                name:'用户管理（创建、修改、删除）'
-            },{
-                name:'项目管理（创建、修改、删除、查看、查询、申请加入、审批）'
-            },{
-                name:'信息录入'
-            },{
-                name:'结果查询'
-            },{
-                name:'统计预览'
-            }
-        ]
     };
   },
-  methods: {}
+  methods: {
+    saveUser(){
+      if(this.$store.state.userid==null){
+        role.saveUser(this.basicform).then((res)=>{
+        if(res.returnCode==0){
+          this.$router.push('/authority/user');
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+      }else{
+        role.updateUser(this.basicform).then((res)=>{
+        if(res.returnCode==0){
+          this.$router.push('/authority/user');
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+      }
+      
+    },
+    cancel(){
+      this.basicform={};
+      if(this.$store.state.userid==null){
+        this.basicform={};
+      }else{
+        this.basicform=this.oldbasic;
+      }
+      
+    },
+    getUserInfo(){
+      let obj={
+        id:this.$store.state.userid
+      }
+      role.getUserInfo(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.basicform=res.data;
+          this.oldbasic=this.basicform.Copy()
+        }
+      })
+    }
+  },
+  mounted(){
+    if(this.$store.state.userid!=null){
+      this.getUserInfo()
+    }
+  }
 };
 </script>
 

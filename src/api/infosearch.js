@@ -21,4 +21,13 @@ export const infosearch = {
             return Promise.resolve(res.data)
         })
     },
+    /**
+     * 报告
+     * @param {*} obj 
+     */
+    detailPatient(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'patient/detail', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

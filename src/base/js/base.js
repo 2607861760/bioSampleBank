@@ -1,3 +1,3 @@
 export const apiUrl = {
-    apiUrl: '/1.0/'
+    apiUrl: 'http://42.123.125.101:8091/1.0/'
 }

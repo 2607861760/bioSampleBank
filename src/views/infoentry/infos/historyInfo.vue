@@ -52,20 +52,20 @@
       <div class="basic-main">
         <div v-if="activeName=='present'">
           <el-form ref="form" :model="presentform" label-width="150px" label-position="left">
-            <el-form-item label="肠癌相关症状：" v-if='cancertype=="colorectal"'>
-              <el-select v-model="presentform.symptom" placeholder="请选择..." @focus='searchItem("symptom")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in symptomlist" :key="index"></el-option>
+            <el-form-item label="肠癌相关症状：" v-if='cancerid==2'>
+              <el-select v-model="presentform.symptom" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['symptom']" :key="index"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="乳腺癌相关症状：" v-if='cancertype=="breast"'>
-              <el-select v-model="presentform.symptom" placeholder="请选择..." @focus='searchItem("symptom")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in symptomlist" :key="index"></el-option>
+            <el-form-item label="乳腺癌相关症状：" v-if='cancerid==3'>
+              <el-select v-model="presentform.symptom" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['symptom']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="体重改变：">
               <el-radio-group v-model="presentform.wchange" @change="wchange">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="presentform.wchange=='0'">
@@ -78,8 +78,8 @@
             </el-form-item>
             <el-form-item label="是否手术史：">
               <el-radio-group v-model="presentform.issurgery">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="presentform.issurgery=='0'">
@@ -92,48 +92,48 @@
               <el-input v-model="presentform.blorigin" placeholder="病理组织来源"></el-input>
             </el-form-item>
             <el-form-item v-if="presentform.issurgery=='0'">
-              <el-select v-model="presentform.shbltype" placeholder="病理类型请选择WHO病理分类" @focus='searchItem("shbltype")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in shbltypelist" :key="index"></el-option>
+              <el-select v-model="presentform.shbltype" placeholder="病理类型请选择WHO病理分类">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['shbltype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="初诊转移部位：">
-              <el-select v-model="presentform.vmetastatic" placeholder="请选择..." @focus='searchItem("vmetastatic")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in vmetastaticlist" :key="index"></el-option>
+              <el-select v-model="presentform.vmetastatic" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['vmetastatic']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="原发灶位置：">
-              <el-select v-model="presentform.dprimary" placeholder="请选择..." @focus='searchItem("dprimary")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in dprimarylist" :key="index"></el-option>
+              <el-select v-model="presentform.dprimary" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dprimary']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="是否化疗：">
               <el-radio-group v-model="presentform.ischemo">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-show="presentform.ischemo=='0'">
               <el-date-picker type="date" placeholder="开始时间" v-model="presentform.chdate"></el-date-picker>
             </el-form-item>
             <el-form-item v-if="presentform.ischemo=='0'">
-              <el-select v-model="presentform.chprogramme" placeholder="化疗方案" @focus='searchItem("chprogramme",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in chprogrammelist" :key="index"></el-option>
+              <el-select v-model="presentform.chprogramme" placeholder="化疗方案">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['chprogramme']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-if="presentform.ischemo=='0'">
-              <el-select v-model="presentform.chgoal" placeholder="化疗目的" @focus='searchItem("chgoal",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in chgoallist" :key="index"></el-option>
+              <el-select v-model="presentform.chgoal" placeholder="化疗目的">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['chgoal']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-if="presentform.ischemo=='0'">
-              <el-select v-model="presentform.chevaluation" placeholder="疗效评价" @focus='searchItem("chevaluation",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in chevaluationlist" :key="index"></el-option>
+              <el-select v-model="presentform.chevaluation" placeholder="疗效评价">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['chevaluation']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="是否放疗：">
               <el-radio-group v-model="presentform.isradiotherapy">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="presentform.isradiotherapy=='0'">
@@ -145,8 +145,8 @@
               </el-input>
             </el-form-item>
             <el-form-item v-if="presentform.isradiotherapy=='0'">
-              <el-select v-model="presentform.rtgoal" placeholder="目的" @focus='searchItem("rtgoal",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in rtgoallist" :key="index"></el-option>
+              <el-select v-model="presentform.rtgoal" placeholder="目的">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['rtgoal']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-if="presentform.isradiotherapy=='0'">
@@ -156,21 +156,21 @@
             </el-form-item>
             <el-form-item label="是否靶向用药：">
               <el-radio-group v-model="presentform.isdrug">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="presentform.isdrug=='0'">
               <el-date-picker type="date" placeholder="开始时间" v-model="presentform.drugdate"></el-date-picker>
             </el-form-item>
             <el-form-item v-if="presentform.isdrug=='0'">
-              <el-select v-model="presentform.drugname" placeholder="目的" @focus='searchItem("drugname")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in drugnamelist" :key="index"></el-option>
+              <el-select v-model="presentform.drugname" placeholder="目的">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['drugname']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveBasic" size="medium" v-if='bsave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateDesHistory" v-else>编辑</el-button>
               
             </el-form-item>
           </el-form>
@@ -184,16 +184,16 @@
           >
             <el-form-item label="是否家族史：">
               <el-radio-group v-model="familyform.isft">
-                 <el-radio label="0" value="0">是</el-radio>
-                 <el-radio label="1" value="1">否</el-radio>
+                 <el-radio :label="0" :value="0">是</el-radio>
+                 <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="familyform. isft=='0'">
               <el-input v-model="familyform.cpnum" placeholder="患肿瘤总人数"></el-input>
             </el-form-item>
             <el-form-item v-if="familyform. isft=='0'">
-              <el-select v-model="familyform.fttype" placeholder="家族史分类" @focus='searchItem("fttype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in fttypelist" :key="index"></el-option>
+              <el-select v-model="familyform.fttype" placeholder="家族史分类">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['fttype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item v-if="familyform. isft=='0'">
@@ -205,13 +205,13 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="展示家族史：">
-              <el-checkbox v-model="person">本人患癌情况</el-checkbox>
+              <el-checkbox v-model="person" @change="personchange">本人患癌情况</el-checkbox>
             </el-form-item>
             <div v-if="person">
               <div v-for='(item,index) in personlist' :key='index' >
             <el-form-item>
-              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型" @focus='searchItem("cpartandtype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cpartandtypelist" :key="index"></el-option>
+              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cpartandtype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -230,8 +230,8 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型" @focus='searchItem("cpartandtype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cpartandtypelist" :key="index"></el-option>
+              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cpartandtype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -246,7 +246,7 @@
             
             </div>
             <el-form-item>
-              <el-checkbox v-model="secondlevel">二级亲属患癌情况</el-checkbox>
+              <el-checkbox v-model="secondlevel" @change="secondlevelchange">二级亲属患癌情况</el-checkbox>
             </el-form-item>
             <div v-if='secondlevel'>
             <div  v-for='(item,index) in secondlevellist' :key='index' >
@@ -255,8 +255,8 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型" @focus='searchItem("cpartandtype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cpartandtypelist" :key="index"></el-option>
+              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cpartandtype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -271,7 +271,7 @@
             
             </div>
             <el-form-item>
-              <el-checkbox v-model="thirdlevel">三级亲属患癌情况</el-checkbox>
+              <el-checkbox v-model="thirdlevel" @change="thirdlevelchange">三级亲属患癌情况</el-checkbox>
             </el-form-item>
             <div v-if='thirdlevel'>
             <div  v-for='(item,index) in thirdlevellist' :key='index' >
@@ -280,8 +280,8 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型" @focus='searchItem("cpartandtype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cpartandtypelist" :key="index"></el-option>
+              <el-select v-model="item.cpartandtype" placeholder="肿瘤部位及类型">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cpartandtype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -296,35 +296,35 @@
             
             </div>
             <el-form-item>
-              <el-checkbox v-model="familyform.specialintro">特殊说明</el-checkbox>
+              <el-checkbox v-model="specialintro" @change="specialintrochange">特殊说明</el-checkbox>
             </el-form-item>
             <el-form-item>
               <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="备注..."
-                v-model="familyform.instructionsnote"
+                v-model="familyform.specialintro"
               ></el-input>
             </el-form-item>
             <el-form-item label="家系图：">
               <span>Revised Bethesda:</span>
               <el-radio-group v-model="familyform.rb">
-                 <el-radio label="0" value="0">是</el-radio>
-                 <el-radio label="1" value="1">否</el-radio>
-                <el-radio label="2" value="2">不确定</el-radio>
+                 <el-radio :label="0" :value="0">是</el-radio>
+                 <el-radio :label="1" :value="1">否</el-radio>
+                <el-radio :label="2" :value="2">不确定</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
               <span>Amsterdam criteria:</span>
-              <el-radio-group v-model="familyform.amsterdam">
-                 <el-radio label="0" value="0">是</el-radio>
-                 <el-radio label="1" value="1">否</el-radio>
-                <el-radio label="2" value="2">不确定</el-radio>
+              <el-radio-group v-model="familyform.ac">
+                 <el-radio :label="0" :value="0">是</el-radio>
+                 <el-radio :label="1" :value="1">否</el-radio>
+                <el-radio :label="2" :value="2">不确定</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="savefamily" v-if="fsave">保存</el-button>
-              <el-button v-else>编辑</el-button>
+              <el-button @click="updateFamilyHistory" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -334,7 +334,7 @@
 </template>
 <script>
 import { infoentry,dict } from "api/index.js";
-import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName,getOption} from "../../../base/js/common.js";
 export default {
   data() {
     return {
@@ -362,85 +362,27 @@ export default {
       thirdlevellist:[{}],
       person:false,
       personlist:[{}],
-      symptomlist:[],
-      vmetastaticlist:[],
-      dprimarylist:[],
-      fttypelist:[],
-      cpartandtypelist:[],
-      cancertype: "colorectal",
-      shbltypelist:[],
-      chprogrammelist:[],
-      chgoallist:[],
-      chevaluationlist:[],
-      rtgoallist:[],
-      drugnamelist:[],
-      disabled:true
+      disabled:true,
+      specialintro:false,
+      cancerid:0,
+      optionlist:{}
     };
   },
   computed:{
     bsave(){
-      if(this.$store.state.entryState>3){
+      if(this.$store.state.entryState>=3){
         return false
       }
       return true
     },
     fsave(){
-      if(this.$store.state.entryState>4){
+      if(this.$store.state.entryState>=4){
         return false
       }
       return true
     }
   },
   methods: {
-    searchItem(name,type=null) {
-      let obj = {
-        itemValue: name,
-        itype: this.$store.state.cancerid
-      };
-      if(type!==null){
-        obj.itype=type
-      }
-      dict.searchItem(obj).then((res)=>{
-        if(res.returnCode==0){
-          res.data.sort(sortRule)
-          switch(name){
-            case 'symptom':
-              this.symptomlist=res.data;
-              break;
-            case 'vmetastatic':
-              this.vmetastaticlist=res.data;
-              break;
-            case 'dprimary':
-              this.dprimarylist=res.data;
-              break;
-            case 'fttype':
-              this.fttypelist=res.data;
-              break;
-            case 'cpartandtype':
-              this.cpartandtypelist=res.data;
-              break;
-            case 'shbltype':
-              this.shbltypelist=res.data;
-              break;
-            case 'chprogramme':
-              this.chprogrammelist=res.data;
-              break;
-            case 'chgoal':
-              this.chgoallist=res.data;
-              break;
-            case 'chevaluation':
-              this.chevaluationlist=res.data;
-              break;
-            case 'rtgoal':
-              this.rtgoallist=res.data;
-              break;
-            case 'drugname':
-              this.drugnamelist=res.data;
-              break;
-          }
-        }
-      })
-    },
     handlefamily(name,index,handle){  //添加亲属
     let n=0;
     if(handle=='del'){
@@ -459,17 +401,42 @@ export default {
       }
     },
     firstlevelchange(val){
-      console.log(val);
-      console.log(this.firstlevel)
+      this.firstlevel=val;
+      if(val==true){
+        this.firstlevellist=[{}];
+      }
+    },
+    secondlevelchange(val){
+      this.secondlevel=val;
+      if(val==true){
+        this.secondlevellist=[{}];
+      }
+    },
+    thirdlevelchange(val){
+      this.thirdlevel=val;
+      if(val==true){
+        this.thirdlevellist=[{}];
+      }
+    },
+    personchange(val){
+      this.person=val;
+      if(val==true){
+        this.personlist=[{}];
+      }
+    },
+    specialintrochange(val){
+      if(val==false){
+        this.familyform.specialintro=''
+      }
     },
     wchange(val) {
       console.log(val);
       console.log(this.presentform);
     },
-    handleClick() {
-      if(this.$store.state.entryState>=3 && this.activeName=='present'){
+    handleClick(val) {
+      if(this.$store.state.entryState>=3 && val.name=='present'){
         this.getDesHistoryInfo()
-      }else if(this.$store.state.entryState>=4 && this.activeName=='family'){
+      }else if(this.$store.state.entryState>=4 && val.name=='family'){
         this.getFamilyHistoryInfo()
       }
     },
@@ -480,7 +447,6 @@ export default {
           this.$store.state.entryState=3;
           this.disabled=false;
           this.entry=this.$store.state.entryState;
-          this.activeName = "family";
         }
       });
     },
@@ -525,39 +491,121 @@ export default {
     },
     getDesHistoryInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.desHistoryInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.presentform=res.data;
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
     getFamilyHistoryInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.familyHistoryInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.familyform=res.data;
+          if(this.familyform.specialintro && (this.familyform.specialintro!=null || this.familyform.specialintro!='')){
+            this.specialintro=true
+          }
+          if(this.familyform.familyIllinfoList && this.familyform.familyIllinfoList.length>0){
+            this.firstlevellist.length=0;
+            this.secondlevellist.length=0;
+            this.thirdlevellist.length=0;
+            this.personlist.length=0;
+            this.familyform.familyIllinfoList.map((item,index)=>{
+              if(item.relationship && item.relationship!=null){
+                if(item.relationship=='1'){
+                  this.firstlevellist.push(item)
+                }else if(item.relationship=='2'){
+                  this.secondlevellist.push(item)
+                }else if(item.relationship=='3'){
+                  this.thirdlevellist.push(item)
+                }
+              }else{
+                this.personlist.push(item)
+              }
+            })
+            if(this.firstlevellist.length>0 && JSON.stringify(this.firstlevellist[0])!="{}"){
+              this.firstlevel=true;
+            }
+            if(this.secondlevellist.length>0 && JSON.stringify(this.secondlevellist[0])!="{}"){
+              this.secondlevel=true;
+            }
+            if(this.thirdlevellist.length>0 && JSON.stringify(this.thirdlevellist[0])!="{}"){
+              this.thirdlevel=true;
+            }
+            if(this.personlist.length>0 && JSON.stringify(this.firstlevellist[0])!="{}"){
+              this.person=true;
+            }
+          }else{
+            this.firstlevellist=[{}];
+            this.secondlevellist=[{}];
+            this.thirdlevellist=[{}];
+            this.personlist=[{}];
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
+    },
+    updateDesHistory(){
+      this.presentform["pid"] = this.$store.state.patientid;
+      infoentry.updateDesHistory(this.presentform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.getDesHistoryInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    updateFamilyHistory(){
+      let familyIllinfoList=[],
+        personlist=this.familyIllinfo(this.person,this.personlist,'0'),
+        firstlevellist=this.familyIllinfo(this.firstlevel,this.firstlevellist,'1'),
+        secondlevellist=this.familyIllinfo(this.secondlevel,this.secondlevellist,'2'),
+        thirdlevellist=this.familyIllinfo(this.thirdlevel,this.thirdlevellist,'3');
+      familyIllinfoList.push.apply(familyIllinfoList,personlist);
+      familyIllinfoList.push.apply(familyIllinfoList,firstlevellist);
+      familyIllinfoList.push.apply(familyIllinfoList,secondlevellist);
+      familyIllinfoList.push.apply(familyIllinfoList,thirdlevellist);
+      this.familyform["familyIllinfoList"]=familyIllinfoList;
+      infoentry.updateFamilyHistory(this.familyform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.getFamilyHistoryInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
     }
+  },
+  created(){
+    this.cancerid=this.$store.state.cancerid;
+    let selectlist=["symptom","shbltype","vmetastatic","dprimary","chprogramme","chgoal","chevaluation","rtgoal","drugname","fttype","cpartandtype"];
+    this.optionlist=getOption(this.$store.state.zdlist,selectlist,this.cancerid);
   },
   mounted() {
     // this.cancertype='breast';
-    if(this.$store.state.edit){
-      if(this.entry>=3){
-        this.getDesHistoryInfo()
-      }
-    }
     let state = this.$store.state.entryState;
     this.tablist = getTabListByState(1,state);
     this.activeName = getActiveName(1,state);
+    if(state>=3){
+      this.getDesHistoryInfo()
+    }
   },
   watch:{
     "$store.state.entryState":function(){
-      debugger;
       let state = this.$store.state.entryState;
       this.tablist = getTabListByState(1,state);
       this.activeName = getActiveName(1,state);

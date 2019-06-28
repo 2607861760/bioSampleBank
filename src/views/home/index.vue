@@ -106,10 +106,11 @@
         active-text-color="#fff"
         :collapse-transition="collapsetrs"
         @select="menuselect"
-        :unique-opened='unique'
+        :unique-opened='true'
+        :default-openeds="openeds"
       >
         <div v-for="(item,index) in menu" :key="index">
-          <el-submenu v-if="item.children" index>
+          <el-submenu v-if="item.children" :index='String(index)'>
             <template slot="title">
               <div :index="item.path">
                 <i :class="item.icon"></i>
@@ -215,7 +216,7 @@
             <el-tab-pane
               :key="item.name"
               v-for="(item) in topNavList"
-              :label="item.name"
+              :label="item.newname"
               :name="item.path"
             ></el-tab-pane>
           </el-tabs>
@@ -228,6 +229,7 @@
   </div>
 </template>
 <script>
+import {dict} from 'api/index.js';
 export default {
   data() {
     return {
@@ -258,7 +260,23 @@ export default {
         {
           name: "预览系统",
           icon: "iconfont el-icon-bionews",
-          path: "/preview"
+          children:[
+            {
+              name: "科室样本统计",
+              icon: "",
+              path: "/preview/sampleStatic"
+            },
+            {
+              name: "病人数统计",
+              icon: "",
+              path: "/preview/patientStatic"
+            },
+            {
+              name: "样本亚型统计",
+              icon: "",
+              path: "/preview/hypotypeStatic"
+            },
+          ]
         },
         {
           name: "权限管理",
@@ -286,26 +304,27 @@ export default {
           path: "/dict/dict"
         },
       ],
-      editableTabs: [
-        {
-          title: "Tab 1",
-          name: "1",
-          content: "Tab 1 content"
-        },
-        {
-          title: "Tab 2",
-          name: "2",
-          content: "Tab 2 content"
-        }
-      ],
       topNavList: [
         {
           name: "首页",
-          path: "/home"
+          newname:"首页",
+          path: "/home",
         }
       ],
       activeName:'/home'
     };
+  },
+  computed:{
+    openeds:function(){
+      let pathlist=this.$route.path.split('/');
+      if(pathlist[1]=='preview'){
+        return ['4']
+      }else if(pathlist[1]=='authority'){
+        return ['5']
+      }else{
+        return []
+      }
+    }
   },
   watch:{
     activeName(newval,oldval){
@@ -318,34 +337,52 @@ export default {
       }
       
     })
-    }
+    },
+    topNavList(val){
+      this.$store.state.topNavList=val;
+    },
   },
   methods: {
+    delMore(lists,name){
+      let newlist=[]
+      lists.forEach((item)=>{
+        if(item.newname!=name){
+          newlist.push(item)
+        }
+      })
+      return newlist
+    },
     menuselect(index, indexPath,flag) {
-      console.log(index, indexPath,flag)
       let obj = {};
-      if (this.topNavList.some(item => indexPath[0] === item.path)) {
+      if (this.topNavList.some(item => index === item.path)){
       } else {
         this.menu.forEach(item => {
-          if (indexPath[0] === item.path) {
+          
+          if (index === item.path) {
+            this.topNavList=this.delMore(this.topNavList,item.name)
             obj = {
-              path: indexPath[0],
-              name: item.name
+              path: index,
+              name: item.name,
+              newname:item.name,
             };
           } else if (item.children) {
             item.children.forEach(items => {
-              if (indexPath[0] === items.path) {
-                obj = {
-                path: indexPath[0],
-                name: items.name
+            if (index === items.path) {
+              this.topNavList=this.delMore(this.topNavList,item.name)
+              obj = {
+                path: index,
+                name: items.name,
+                newname:item.name,
               };
-              }
-            });
+            }
+          });
           }
         });
-        this.topNavList.push(obj);
+        if(Object.keys(obj).length!=0){
+          this.topNavList.push(obj);
+        }
       }
-      this.activeName=indexPath[0];   
+      this.activeName=index;   
     },
     colchange() {
       this.collapse = !this.collapse;
@@ -361,6 +398,13 @@ export default {
       })
       this.activeName=this.topNavList[this.topNavList.length-1].name;
       this.$router.push(this.topNavList[this.topNavList.length-1].path)
+    },
+    getAll(){
+      dict.getAll().then((res)=>{
+        if(res.returnCode==0){
+          this.$store.state.zdlist=res.data;
+        } 
+      })
     } 
   },
   mounted(){
@@ -374,7 +418,10 @@ export default {
         bar[0].style.transform='translateX('+tab[0].offsetLeft+'px)';
       }
     })
-    
+    if(this.$store.state.topNavList && this.$store.state.topNavList.length>0){
+      this.topNavList=this.$store.state.topNavList;
+    }
+    this.getAll()
   },
   components: {}
 };

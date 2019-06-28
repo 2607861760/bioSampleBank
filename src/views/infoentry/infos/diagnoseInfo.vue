@@ -61,12 +61,12 @@
     </div>
     <div class="basic-inner">
       <div class="basic-tab">
-        <div v-if='cancertype=="colorectal"'>
+        <div v-if='cancerid==2'>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane v-for='(item,index) in coltablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
         </div>
-        <div v-if='cancertype=="breast"'>
+        <div v-if='cancerid==3'>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane v-for='(item,index) in bretablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
@@ -102,67 +102,67 @@
                 <template slot="suffix">mmHg</template>
               </el-input>
             </el-form-item>
-            <div v-if="cancertype=='breast'">
+            <div v-if="cancerid==3">
               <el-form-item label="乳房位置：">
                 <el-radio-group v-model="basicform.breastdepart">
-                  <el-radio label="对称" value="1"></el-radio>
-                  <el-radio label="不对称" value="0"></el-radio>
+                  <el-radio label="对称" :value="1"></el-radio>
+                  <el-radio label="不对称" :value="0"></el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="皮肤表皮：">
-                <el-select v-model="basicform.epidermis" placeholder="请选择..." @focus='searchItem("epidermis")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in epidermislist" :key="index"></el-option>
+                <el-select v-model="basicform.epidermis" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['epidermis']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="是否有肿块：">
                 <el-radio-group v-model="basicform.bossing">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="乳头情况：">
-                <el-select v-model="basicform.papilla" placeholder="请选择..." @focus='searchItem("papilla")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in papillalist" :key="index"></el-option>
+                <el-select v-model="basicform.papilla" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['papilla']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="是否溢液：">
                 <el-radio-group v-model="basicform.discharge">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item>
-                <el-select v-model="basicform.dischargeway" placeholder="溢液方式" @focus='searchItem("dischargeway")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in dischargewaylist" :key="index"></el-option>
+                <el-select v-model="basicform.dischargeway" placeholder="溢液方式">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargeway']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item>
-                <el-select v-model="basicform.dischargerange" placeholder="溢液范围" @focus='searchItem("dischargerange")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in dischargerangelist" :key="index"></el-option>
+                <el-select v-model="basicform.dischargerange" placeholder="溢液范围">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargerange']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="乳晕颜色：">
                 <el-radio-group v-model="basicform.mammary">
-                  <el-radio label="正常" value="1"></el-radio>
-                  <el-radio label="异常" value="0"></el-radio>
+                  <el-radio label="正常" :value="1"></el-radio>
+                  <el-radio label="异常" :value="0"></el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否湿疹样改变：">
                 <el-radio-group v-model="basicform.discharge">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否有区域淋巴结：">
                 <el-radio-group v-model="basicform.discharge">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
             </div>
-            <el-form-item label="KPS评分：" v-if="cancertype=='colorectal'">
-              <el-select v-model="basicform.kps" placeholder="请选择..." @focus='searchItem("kps")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in kpslist" :key="index"></el-option>
+            <el-form-item label="KPS评分：" v-if="cancerid==2">
+              <el-select v-model="basicform.kps" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['kps']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="血常规"></el-form-item>
@@ -297,13 +297,13 @@
               </el-input>
             </el-form-item>
             <el-form-item label="隐血试验：">
-              <el-select v-model="basicform.obt" placeholder="请选择..." @focus='searchItem("obt")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in obtlist" :key="index"></el-option>
+              <el-select v-model="basicform.obt" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['obt']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="寄生虫：">
-              <el-select v-model="basicform.parasite" placeholder="请选择..." @focus='searchItem("parasite")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in parasitelist" :key="index"></el-option>
+              <el-select v-model="basicform.parasite" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['parasite']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="肿瘤标志物"></el-form-item>
@@ -350,49 +350,45 @@
                 <template slot="suffix">kU/L</template>
               </el-input>
             </el-form-item>
-            <div v-if="cancertype=='colorectal'">
+            <div v-if="cancerid==2">
               <el-form-item label="影像检查"></el-form-item>
               <el-form-item label="CT：">
                 <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.ctdate"></el-date-picker>
               </el-form-item>
-              <el-form-item v-model="basicform.ct">
-                <!-- <el-upload
+              <el-form-item>
+                <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
+                action="/1.0/upload/upload"
                 multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-                >-->
+                :on-success='ctchoice'
+                list-type="picture"
+                :file-list="ctfile"
+                :limit='2'
+                >
                 <el-button size="small" type="primary">选择文件</el-button>
-                <!-- </el-upload> -->
+                </el-upload>
               </el-form-item>
               <el-form-item label="PET-CT：">
                 <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.petdate"></el-date-picker>
               </el-form-item>
-              <el-form-item v-model="basicform.pet">
-                <!-- <el-upload
+              <el-form-item>
+                <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
+                action="/1.0/upload/upload"
                 multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-                >-->
+                :on-success='petchoice'
+                list-type="picture"
+                :file-list="petfile"
+                :limit='2'
+                >
                 <el-button size="small" type="primary">选择文件</el-button>
-                <!-- </el-upload> -->
+                </el-upload>
               </el-form-item>
             </div>
             <el-form-item>
               
               <el-button type="primary" @click="saveBasic" size="medium" v-if='bsave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateBasicCheck" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -406,18 +402,18 @@
             </el-form-item>
             <el-form-item label="肠镜能否通过：">
               <el-radio-group v-model="endoscopeform.ispass">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="肿瘤位置：">
-              <el-select v-model="endoscopeform.tumloc" placeholder="请选择..." @focus='searchItem("tumloc")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in tumloclist" :key="index"></el-option>
+              <el-select v-model="endoscopeform.tumloc" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['tumloc']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="肠镜占肠壁：">
-              <el-select v-model="endoscopeform.proportion" placeholder="请选择..." @focus='searchItem("proportion")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in proportionlist" :key="index"></el-option>
+              <el-select v-model="endoscopeform.proportion" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['proportion']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="肿瘤大小：">
@@ -432,19 +428,19 @@
             </el-form-item>
             <el-form-item label="是否有息肉：">
               <el-radio-group v-model="endoscopeform.ispolyp">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="息肉数量：">
-              <el-select v-model="endoscopeform.polypnum" placeholder="请选择..." @focus='searchItem("polypnum")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in polypnumlist" :key="index"></el-option>
+              <el-select v-model="endoscopeform.polypnum" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['polypnum']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               
               <el-button type="primary" @click="saveEndoscope" size="medium" v-if='esave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateEndoscope" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -457,93 +453,91 @@
               <el-input v-model="pathologyform.bnum"></el-input>
             </el-form-item>
             <el-form-item label="病理标本类型：">
-              <el-select v-model="pathologyform.btype" placeholder="请选择..." @focus='searchItem("pbtype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in pbtypelist" :key="index"></el-option>
+              <el-select v-model="pathologyform.btype" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['pbtype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="电子切片扫描：" v-model="pathologyform.isscan">
-              <!-- <el-upload
+            <el-form-item label="电子切片扫描：">
+              <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
+                action="/1.0/upload/upload"
                 multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-              >-->
+                :on-success='isscanchoice'
+                list-type="picture"
+                :file-list="isscanfile"
+                :limit='2'
+              >
               <el-button size="small" type="primary">选择文件</el-button>
-              <!-- </el-upload> -->
+              </el-upload>
             </el-form-item>
-            <div v-if='cancertype=="colorectal"'>
+            <div v-if='cancerid==2'>
               <el-form-item label="原发灶性质：">
                 <el-radio-group v-model="pathologyform.prinature" @change="prinaturechange">
-                  <el-radio label="0" value="0">单发性</el-radio>
-                  <el-radio label="1" value="1">多发性</el-radio>
+                  <el-radio :label="0" :value="0">单发性</el-radio>
+                  <el-radio :label="1" :value="1">多发性</el-radio>
                 </el-radio-group>
               </el-form-item>
               <div  v-if='pathologyform.prinature==1'>
                 <el-form-item label="肿瘤部位：">
-                  <el-select v-model="pathologyform.tumloc" placeholder="请选择..." @focus='searchItem("ptumloc")' :multiple='true'>
-                  <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in ptumloclist" :key="index"></el-option>
+                  <el-select v-model="mtumloc" placeholder="请选择..." :multiple='true'>
+                  <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['ptumloc']" :key="index"></el-option>
                 </el-select>
                 </el-form-item>
               </div>
               <div  v-if='pathologyform.prinature==0'>
               <el-form-item label="肿瘤部位：">
-                <el-select v-model="pathologyform.tumloc" placeholder="请选择..." @focus='searchItem("ptumloc")'>
-                  <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in ptumloclist" :key="index"></el-option>
+                <el-select v-model="tumloc" placeholder="请选择...">
+                  <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['ptumloc']" :key="index"></el-option>
                 </el-select>
                 </el-form-item>
               </div>
             </div>
-            <el-form-item label="检测标本：" v-if='cancertype=="breast"'>
-              <el-select v-model="pathologyform.testSpecimen" placeholder="请选择..." @focus='searchItem("testSpecimen")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in testSpecimenlist" :key="index"></el-option>
+            <el-form-item label="检测标本：" v-if='cancerid==3'>
+              <el-select v-model="pathologyform.testSpecimen" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['testSpecimen']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="组织学类型：">
-              <el-select v-model="pathologyform.htype" placeholder="请选择..." @focus='searchItem("htype")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in htypelist" :key="index"></el-option>
+              <el-select v-model="pathologyform.htype" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['htype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="组织学分级：">
-              <el-select v-model="pathologyform.hgrade" placeholder="请选择..." @focus='searchItem("hgrade",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in hgradelist" :key="index"></el-option>
+              <el-select v-model="pathologyform.hgrade" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['hgrade']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="分化程度：">
-              <el-select v-model="pathologyform.degree" placeholder="请选择..." @focus='searchItem("degree")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in degreelist" :key="index"></el-option>
+              <el-select v-model="pathologyform.degree" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['degree']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="既往用药史：">
-              <el-checkbox label="none" :checked="pathologyform.pmh=='none'" @change="pmhcheck">无</el-checkbox>
+              <el-checkbox label="none" v-model="pmhnone" @change="pmhcheck">无</el-checkbox>
             </el-form-item>
             <el-form-item>
-              <el-checkbox label="dname" :disabled="nowpmh" @change="dnamecheck">化疗药</el-checkbox>
+              <el-checkbox label="dname" v-model="pmhdname" :disabled="nowpmh" @change="dnamecheck">化疗药</el-checkbox>
             </el-form-item>
             <el-form-item v-if="nowdname">
               <el-input v-model="pathologyform.dname" placeholder="请输入化疗药名称"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox label="targetedDrug" :disabled="nowpmh" @change="targetedDrugcheck">靶向药</el-checkbox>
+              <el-checkbox label="targetedDrug" v-model="pmhtargetedDrug" :disabled="nowpmh" @change="targetedDrugcheck">靶向药</el-checkbox>
             </el-form-item>
             <el-form-item v-if="nowtargetedDrug">
               <el-input v-model="pathologyform.targetedDrug" placeholder="请输入靶向药名称"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox label="otherDrug" :disabled="nowpmh" @change="otherDrugcheck">其他</el-checkbox>
+              <el-checkbox label="otherDrug" v-model="pmhotherDrug" :disabled="nowpmh" @change="otherDrugcheck">其他</el-checkbox>
             </el-form-item>
             <el-form-item v-if="nowotherDrug">
               <el-input v-model="pathologyform.otherDrug" placeholder="请输入其他药物名称"></el-input>
             </el-form-item>
-            <div v-if='cancertype=="colorectal"'>
+            <div v-if='cancerid==2'>
               <el-form-item label="是否转移：">
                 <el-radio-group v-model="pathologyform.istransfer">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <div v-if="pathologyform.istransfer==0">
@@ -567,8 +561,8 @@
               </div>
               <el-form-item label="是否复发：">
                 <el-radio-group v-model="pathologyform.isrelapse">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <div v-if="pathologyform.isrelapse==0">
@@ -584,119 +578,119 @@
                 </el-form-item>
               </div>
               <el-form-item label="临床分期：">
-                <el-select v-model="pathologyform.clinicalStage" placeholder="请选择..." @focus='searchItem("clinicalStage")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in clinicalStagelist" :key="index"></el-option>
+                <el-select v-model="pathologyform.clinicalStage" placeholder="请选择..." >
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['clinicalStage']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="pTNM：">
                 <p>
-                  <el-checkbox :checked="pathologyform.ptnm">NA</el-checkbox>
+                  <el-checkbox v-model="ptnmcheck">NA</el-checkbox>
                 </p>
                 <p style="margin-top:10px;">
-                  <el-checkbox :checked="(pathologyform.pt &&pathologyform.pt!='')?true:false">pT</el-checkbox>
-                  <el-select v-model="pathologyform.pt" placeholder="请选择..." @focus='searchItem("pt")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in ptlist" :key="index"></el-option>
+                  <el-checkbox v-model="ptcheck">pT</el-checkbox>
+                  <el-select v-model="pathologyform.pt" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['pt']" :key="index"></el-option>
               </el-select>
                 </p>
                 <p style="margin-top:10px;">
-                  <el-checkbox :checked="(pathologyform.pn &&pathologyform.pn!='')?true:false">pN</el-checkbox>
-                  <el-select v-model="pathologyform.pn" placeholder="请选择..." @focus='searchItem("pn")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in pnlist" :key="index"></el-option>
+                  <el-checkbox v-model="pncheck">pN</el-checkbox>
+                  <el-select v-model="pathologyform.pn" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['pn']" :key="index"></el-option>
               </el-select>
                 </p>
                 <p style="margin-top:10px;">
-                  <el-checkbox :checked="(pathologyform.pm &&pathologyform.pm!='')?true:false">pM</el-checkbox>
-                  <el-select v-model="pathologyform.pm" placeholder="请选择..." @focus='searchItem("pm")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in pmlist" :key="index"></el-option>
+                  <el-checkbox v-model="pmcheck">pM</el-checkbox>
+                  <el-select v-model="pathologyform.pm" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['pm']" :key="index"></el-option>
               </el-select>
                 </p>
               </el-form-item>
             </div>
-            <div v-if='cancertype=="breast"'>
+            <div v-if='cancerid==3'>
               <el-form-item label="是否转移：">
                 <el-radio-group v-model="pathologyform.istransfer">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="脉管侵犯：">
                 <el-radio-group v-model="pathologyform.vasInvasion">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="合并原位癌：">
                 <el-radio-group v-model="pathologyform.combineCancer">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否复发：">
                 <el-radio-group v-model="pathologyform.isrelapse">
-                  <el-radio label="0" value="0">是</el-radio>
-                  <el-radio label="1" value="1">否</el-radio>
+                  <el-radio :label="0" :value="0">是</el-radio>
+                  <el-radio :label="1" :value="1">否</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="肿瘤分期：">
-                <el-select v-model="pathologyform.tumorStage" placeholder="请选择..." @focus='searchItem("tumorStage")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in tumorStagelist" :key="index"></el-option>
+                <el-select v-model="pathologyform.tumorStage" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['tumorStage']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="TNM分期：">
-                <el-select v-model="pathologyform.tnm" placeholder="请选择..." @focus='searchItem("tnm")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in tnmlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.tnm" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['tnm']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="T分期：">
-                <el-select v-model="pathologyform.t" placeholder="请选择..." @focus='searchItem("t")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in tlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.t" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['t']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="N分期：">
-                <el-select v-model="pathologyform.cn" placeholder="N-临床区域淋巴结转移" @focus='searchItem("cn")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cnlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.cn" placeholder="N-临床区域淋巴结转移">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cn']" :key="index"></el-option>
               </el-select>
-                <el-select v-model="pathologyform.tpn" placeholder="pN-病理区域淋巴结转移" @focus='searchItem("tpn")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in tpnlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.tpn" placeholder="pN-病理区域淋巴结转移">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['tpn']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="M分期：">
-                <el-select v-model="pathologyform.m" placeholder="请选择..." @focus='searchItem("m")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in mlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.m" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['m']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="特殊诊断类型：">
-                <el-select v-model="pathologyform.specialType" placeholder="请选择..." @focus='searchItem("specialType")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in specialTypelist" :key="index"></el-option>
+                <el-select v-model="pathologyform.specialType" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['specialType']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="乳腺癌并发症（术前）：">
-                <el-select v-model="pathologyform.complication" placeholder="请选择..." @focus='searchItem("complication")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in complicationlist" :key="index"></el-option>
+                <el-select v-model="pathologyform.complication" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['complication']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="一般状况ECGO：">
-                <el-select v-model="pathologyform.ecgo" placeholder="请选择..." @focus='searchItem("ecgo")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in ecgolist" :key="index"></el-option>
+                <el-select v-model="pathologyform.ecgo" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['ecgo']" :key="index"></el-option>
               </el-select>
               </el-form-item>
             </div>
             <el-form-item label="免疫组化"></el-form-item>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="MLH1：">
                   <el-radio-group v-model="pathologyform.mlh1">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -705,16 +699,16 @@
                 <el-form-item label="MLH3：">
                   <el-radio-group v-model="pathologyform.mlh3">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -723,16 +717,16 @@
                 <el-form-item label="MSH2：">
                   <el-radio-group v-model="pathologyform.msh2">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -741,36 +735,36 @@
                 <el-form-item label="MSH6：">
                   <el-radio-group v-model="pathologyform.msh6">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="PMS1：">
                   <el-radio-group v-model="pathologyform.pms1">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -779,16 +773,16 @@
                 <el-form-item label="PMS2：">
                   <el-radio-group v-model="pathologyform.pms2">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -797,16 +791,16 @@
                 <el-form-item label="APC：">
                   <el-radio-group v-model="pathologyform.apc">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -815,36 +809,36 @@
                 <el-form-item label="AXIN2：">
                   <el-radio-group v-model="pathologyform.axin2">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="STK11：">
                   <el-radio-group v-model="pathologyform.stk11">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -853,16 +847,16 @@
                 <el-form-item label="EPCAM：">
                   <el-radio-group v-model="pathologyform.epcam">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -871,16 +865,16 @@
                 <el-form-item label="PTEN：">
                   <el-radio-group v-model="pathologyform.pten">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -889,36 +883,36 @@
                 <el-form-item label="SMAD4：">
                   <el-radio-group v-model="pathologyform.smad4">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="MUTYH：">
                   <el-radio-group v-model="pathologyform.mutyh">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -927,36 +921,36 @@
                 <el-form-item label="BMPR1A：">
                   <el-radio-group v-model="pathologyform.bmpr1a">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="ER：">
                   <el-radio-group v-model="pathologyform.ER">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -965,36 +959,36 @@
                 <el-form-item label="PR：">
                   <el-radio-group v-model="pathologyform.PR">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="P53：">
                   <el-radio-group v-model="pathologyform.P53">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1003,36 +997,36 @@
                 <el-form-item label="CK5/6：">
                   <el-radio-group v-model="pathologyform.CK5">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="E-Card：">
                   <el-radio-group v-model="pathologyform.ECard">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1041,36 +1035,36 @@
                 <el-form-item label="EGFR：">
                   <el-radio-group v-model="pathologyform.EGFR">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="Her-2：">
                   <el-radio-group v-model="pathologyform.Her2">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1079,43 +1073,43 @@
                 <el-form-item label="Ki-67：">
                   <el-radio-group v-model="pathologyform.Ki67">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div v-if='cancertype=="colorectal"'>
+            <div v-if='cancerid==2'>
               <el-form-item label="是否有遗传易感综合征：">
-                <el-select v-model="pathologyform.hasyndrome" placeholder="请选择..." @focus='searchItem("hasyndrome")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in hasyndromelist" :key="index"></el-option>
+                <el-select v-model="pathologyform.hasyndrome" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['hasyndrome']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="Lynch相关病理特征：">
                 <p>
-                  <el-checkbox :checked="(pathologyform.inrolymreaction &&pathologyform.inrolymreaction!='')?true:false">黏膜内淋巴细胞反应</el-checkbox>
-                  <el-select v-model="pathologyform.inrolymreaction" placeholder="请选择..." @focus='searchItem("inrolymreaction")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in inrolymreactionlist" :key="index"></el-option>
+                  <el-checkbox v-model="inrolycheck">黏膜内淋巴细胞反应</el-checkbox>
+                  <el-select v-model="pathologyform.inrolymreaction" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['inrolymreaction']" :key="index"></el-option>
               </el-select>
                 </p>
 
                 <p style="margin-top:10px;">
-                  <el-checkbox :checked="(pathologyform.perilymreaction &&pathologyform.perilymreaction!='')?true:false">肿瘤周淋巴细胞反应</el-checkbox>
-                  <el-select v-model="pathologyform.perilymreaction" placeholder="请选择..." @focus='searchItem("perilymreaction")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in perilymreactionlist" :key="index"></el-option>
+                  <el-checkbox v-model="perilycheck">肿瘤周淋巴细胞反应</el-checkbox>
+                  <el-select v-model="pathologyform.perilymreaction" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['perilymreaction']" :key="index"></el-option>
               </el-select>
                 </p>
                 <p>
-                  <el-checkbox :checked="(pathologyform.othereaction &&pathologyform.othereaction!='')?true:false">其他</el-checkbox>
+                  <el-checkbox v-model="othereactioncheck">其他</el-checkbox>
                 </p>
                 <p>
                   <el-input
@@ -1127,14 +1121,14 @@
                 </p>
               </el-form-item>
             </div>
-            <el-form-item label="分子分型：" v-if='cancertype=="breast"'>
-              <el-select v-model="pathologyform.moleType" placeholder="请选择..." @focus='searchItem("moleType")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in moleTypelist" :key="index"></el-option>
+            <el-form-item label="分子分型：" v-if='cancerid==3'>
+              <el-select v-model="pathologyform.moleType" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['moleType']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="savePathology" size="medium" v-if='psave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updatePathology" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -1144,78 +1138,79 @@
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="moleculeform.mdate"></el-date-picker>
             </el-form-item>
             <el-form-item label="标本类型：">
-              <el-select v-model="moleculeform.sampletype" placeholder="请选择..." @focus='searchItem("sampletype",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in sampletypelist" :key="index"></el-option>
+              <el-select v-model="moleculeform.sampletype" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['sampletype']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="MSI：">
               <el-radio-group v-model="moleculeform.msi">
-                <el-radio label="1" value="1">已检测</el-radio>
-                <el-radio label="0" value="0">未检测</el-radio>
+                <el-radio :label="1" :value="1">已检测</el-radio>
+                <el-radio :label="0" :value="0">未检测</el-radio>
               </el-radio-group>
             </el-form-item>
             <div v-if="moleculeform.msi=='1'">
               <el-form-item >
-                <el-select v-model="moleculeform.msisp" placeholder="请选择..." @focus='searchItem("msisp",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in msisplist" :key="index"></el-option>
+                <el-select v-model="moleculeform.msisp" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['msisp']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item>
-                <el-select v-model="moleculeform.msiresult" placeholder="请选择..." @focus='searchItem("msiresult",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in msiresultlist" :key="index"></el-option>
+                <el-select v-model="moleculeform.msiresult" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['msiresult']" :key="index"></el-option>
               </el-select>
               </el-form-item>
             </div>
             <el-form-item label="MLH1启动子甲基化分析【MSP】：">
-              <el-select v-model="moleculeform.msp" placeholder="请选择..." @focus='searchItem("msp",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in msplist" :key="index"></el-option>
+              <el-select v-model="moleculeform.msp" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['msp']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="MLPA：">
               <el-radio-group v-model="moleculeform.mlpa">
-                <el-radio label="0" value="0">未检测</el-radio>
-                <el-radio label="1" value="1">已检测</el-radio>
+                <el-radio :label="0" :value="0">未检测</el-radio>
+                <el-radio :label="1" :value="1">已检测</el-radio>
               </el-radio-group>
             </el-form-item>
             
               <div v-if="moleculeform.mlpa=='1'">
               <el-form-item >
-                <el-select v-model="moleculeform.mlpagene" placeholder="请选择..." @focus='searchItem("mlpagene")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in mlpagenelist" :key="index"></el-option>
+                <el-select v-model="moleculeform.mlpagene" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlpagene']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item>
-                <el-select v-model="moleculeform.mlparesult" placeholder="请选择..." @focus='searchItem("mlparesult",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in mlparesultlist" :key="index"></el-option>
+                <el-select v-model="moleculeform.mlparesult" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
               </el-select>
               </el-form-item>
             </div>
             <el-form-item label="NGS检测：">
               <el-radio-group v-model="moleculeform.ngsjc">
-                <el-radio label="0" value="0">已做</el-radio>
-                <el-radio label="1" value="1">未做</el-radio>
+                <el-radio :label="0" :value="0">已做</el-radio>
+                <el-radio :label="1" :value="1">未做</el-radio>
               </el-radio-group>
             </el-form-item>
             <div v-if="moleculeform.ngsjc=='0'">
-              <div v-for="(item,index) in checkResultList" :key='index'>
+              
               <el-form-item>
                 <el-form-item label="NGS平台：">
-                  <el-radio-group v-model="item.ngspt">
-                    <el-radio label="0" value="0">Illumina</el-radio>
-                    <el-radio label="1" value="1">Life</el-radio>
-                    <el-radio label="2" value="2">其他</el-radio>
+                  <el-radio-group v-model="moleculeform.ngspt">
+                    <el-radio :label="0" :value="0">Illumina</el-radio>
+                    <el-radio :label="1" :value="1">Life</el-radio>
+                    <el-radio :label="2" :value="2">其他</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="上机测序编号：" style="margin-top:10px;">
                   AQ
-                  <el-input v-model="item.seqnum"></el-input>
+                  <el-input v-model="moleculeform.seqnum"></el-input>
                 </el-form-item>
                 <el-form-item label="NGS Panel：" style="margin-top:10px;">
-                  <el-select v-model="item.ngspanel" placeholder="请选择..." @focus='searchItem("ngspanel",0)'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in ngspanellist" :key="index"></el-option>
+                  <el-select v-model="moleculeform.ngspanel" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['ngspanel']" :key="index"></el-option>
               </el-select>
                 </el-form-item>
                 <el-form-item label="检测结果"></el-form-item>
+                <div v-for="(item,index) in checkResultList" :key='index'>
                 <el-form-item label="Gene：" style="margin-top:10px;">
                   <el-input v-model="item.gene"></el-input>
                 </el-form-item>
@@ -1250,39 +1245,40 @@
                   <el-input v-model="item.eas"></el-input>
                 </el-form-item>
                 <el-form-item label="致病性分级：" style="margin-top:10px;">
-                  <el-select v-model="item.grade" placeholder="请选择..." @focus='searchItem("grade",0)'>
-                <el-option :label="items.itemName" :value="items.id" v-for="(items,index) in gradelist" :key="index"></el-option>
+                  <el-select v-model="item.grade" placeholder="请选择...">
+                <el-option :label="items.itemName" :value="items.id" v-for="(items,index) in optionlist['grade']" :key="index"></el-option>
               </el-select>
                 </el-form-item>
                 <el-form-item style="margin-top:10px;">
                   <el-button type="text" style="color:red;" @click="handle('checkResult',index,'del')">删除</el-button>
                 <el-button type="text" style="color:#28c16e;" @click="handle('checkResult',index,'add')">添加一例</el-button>
                 </el-form-item>
+                </div>
                 </el-form-item>
-              </div>
+              
             </div>
             <el-form-item label="其他代表性基因突变结果："></el-form-item>
             <el-form-item label="检测平台：">
               <el-radio-group v-model="moleculeform.testp">
-                <el-radio label="0" value="0">ARMS</el-radio>
-                <el-radio label="1" value="1">NGS</el-radio>
+                <el-radio label="0" :value="0">ARMS</el-radio>
+                <el-radio label="1" :value="1">NGS</el-radio>
               </el-radio-group>
             </el-form-item>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="KRAS：">
                   <el-radio-group v-model="moleculeform.kras">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1291,16 +1287,16 @@
                 <el-form-item label="NRAS：">
                   <el-radio-group v-model="moleculeform.nras">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1309,36 +1305,36 @@
                 <el-form-item label="BRAF：">
                   <el-radio-group v-model="moleculeform.braf">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="colorectal"'>
+            <div class="immun" v-if='cancerid==2'>
               <div>
                 <el-form-item label="PIK3CA：">
                   <el-radio-group v-model="moleculeform.pik3ca">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1347,113 +1343,113 @@
                 <el-form-item label="PTEN：">
                   <el-radio-group v-model="moleculeform.pten">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div></div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="MUTYH：">
-                  <el-radio-group v-model="pathologyform.mutyh">
+                  <el-radio-group v-model="moleculeform.mutyh">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="MSH2">
-                  <el-radio-group v-model="pathologyform.msh2">
+                  <el-radio-group v-model="moleculeform.msh2">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="MSH6：">
-                  <el-radio-group v-model="pathologyform.msh6">
+                  <el-radio-group v-model="moleculeform.msh6">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="MRE11A：">
-                  <el-radio-group v-model="pathologyform.mre11a">
+                  <el-radio-group v-model="moleculeform.mre11a">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
             </div>
-            <div class="immun" v-if='cancertype=="breast"'>
+            <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="MLH1：">
-                  <el-radio-group v-model="pathologyform.mlh1">
+                  <el-radio-group v-model="moleculeform.mlh1">
                     <p>
-                      <el-radio label="1" value="1">+</el-radio>
+                      <el-radio label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" value="0">-</el-radio>
+                      <el-radio label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" value="2">未做</el-radio>
+                      <el-radio label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" value="3">不确定</el-radio>
+                      <el-radio label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1463,7 +1459,7 @@
             <el-form-item>
               
               <el-button type="primary" @click="saveMolecule" size="medium" v-if='msave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateMolDetection" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -1475,32 +1471,30 @@
             <el-form-item>
               <!-- <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
+                action="/1.0/upload/upload"
                 multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-              >-->
+                :on-success='ctchoice'
+                list-type="picture"
+                :file-list="ctfile"
+                :limit='2'
+              > -->
               <el-button size="small" type="primary">选择文件</el-button>
               <!-- </el-upload> -->
             </el-form-item>
             <el-form-item label="有无异常情况：">
               <el-radio-group v-model="assistform.unusual">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="assistform.calcification" placeholder="钙化" @focus='searchItem("calcification")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in calcificationlist" :key="index"></el-option>
+              <el-select v-model="assistform.calcification" placeholder="钙化">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['calcification']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-select v-model="assistform.massedge" placeholder="肿物边缘" @focus='searchItem("massedge")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in massedgelist" :key="index"></el-option>
+              <el-select v-model="assistform.massedge" placeholder="肿物边缘">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['massedge']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -1525,13 +1519,13 @@
               <!-- </el-upload> -->
             </el-form-item>
             <el-form-item label="乳腺MRI征象：">
-              <el-select v-model="assistform.MRIsign" placeholder="请选择..." @focus='searchItem("MRIsign")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in MRIsignlist" :key="index"></el-option>
+              <el-select v-model="assistform.MRIsign" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['MRIsign']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="BI-RADS分类：">
-              <el-select v-model="assistform.BIRADS" placeholder="请选择..." @focus='searchItem("BIRADS")'>
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in BIRADSlist" :key="index"></el-option>
+              <el-select v-model="assistform.BIRADS" placeholder="请选择...">
+                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['BIRADS']" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -1546,7 +1540,7 @@
 </template>
 <script>
 import { infoentry,dict } from "api/index.js";
-import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName,getOption} from "../../../base/js/common.js";
 export default {
   data() {
     return {
@@ -1598,7 +1592,6 @@ export default {
       mdisabled:true,
       checkResultList:[{}],
       transferinfolist: [{}],
-      cancertype: "colorectal",
       activeName: "basic",
       basicform: {},
       assistform: {},
@@ -1609,52 +1602,26 @@ export default {
       nowtargetedDrug: false,
       nowotherDrug: false,
       nowpmh: false,
-      kpslist:[],
-      obtlist:[],
-      parasitelist:[],
-      tumloclist:[],
-      proportionlist:[],
-      polypnumlist:[],
-      pbtypelist:[],
-      ptumloclist:[],
-      htypelist:[],
-      hgradelist:[],
-      degreelist:[],
-      clinicalStagelist:[],
-      ptlist:[],
-      pnlist:[],
-      pmlist:[],
-      hasyndromelist:[],
-      inrolymreactionlist:[],
-      perilymreactionlist:[],
-      sampletypelist:[],
-      msisplist:[],
-      msiresultlist:[],
-      msplist:[],
-      mlpagenelist:[],      
-      mlparesultlist:[],
-      ngspanellist:[],
-      gradelist:[],
-      epidermislist:[],
-      papillalist:[],
-      dischargewaylist:[],
-      dischargerangelist:[],
-      testSpecimenlist:[],
-      tumorStagelist:[],
-      tnmlist:[],      
-      tlist:[],      
-      cnlist:[],      
-      tpnlist:[],      
-      mlist:[],      
-      specialTypelist:[],      
-      complicationlist:[],      
-      ecgolist:[], 
-      moleTypelist:[],
-      calcificationlist:[],
-      massedgelist:[],
-      MRIsignlist:[],
-      BIRADSlist:[],
-      multipe:false
+      multipe:false,
+      pmhnone:false,
+      pmhdname:false,
+      pmhtargetedDrug:false,
+      pmhotherDrug:false,
+      ptnmcheck:false,
+      ptcheck:false,
+      pncheck:false,
+      pmcheck:false,
+      inrolycheck:false,
+      perilycheck:false,
+      othereactioncheck:false,
+      ctfile:[],
+      petfile:[],
+      isscanfile:[],
+      imgurl:'http://42.123.125.101:82/',
+      cancerid:0,
+      optionlist:{},
+      mtumloc:[],
+      tumloc:''
     };
   },
   computed:{
@@ -1665,182 +1632,40 @@ export default {
       return true
     },
     esave(){
-      if(this.$store.state.entryState>6){
+      if(this.$store.state.entryState>=6){
         return false
       }
       return true
     },
     ssave(){
-      if(this.$store.state.entryState>6){
+      if(this.$store.state.entryState>=6){
         return false
       }
       return true
     }
     ,
     msave(){
-      if(this.$store.state.entryState>7){
+      if(this.$store.state.entryState>=8){
         return false
       }
       return true
     },
     psave(){
-      if(this.$store.state.entryState>8){
+      if(this.$store.state.entryState>=7){
         return false
       }
       return true
-    }
+    },
   },
   methods: {
-    searchItem(name,type=null) {
-      let obj = {
-        itemValue: name,
-        itype: this.$store.state.cancerid
-      };
-      if(type!==null){
-        obj.itype=type
-      }
-      dict.searchItem(obj).then((res)=>{
-        if(res.returnCode==0){
-          res.data.sort(sortRule)
-          switch(name){
-            case 'kps':
-              this.kpslist=res.data;
-              break;
-            case 'obt':
-              this.obtlist=res.data;
-              break;
-            case 'parasite':
-              this.parasitelist=res.data;
-              break;
-            case 'tumloc':
-              this.tumloclist=res.data;
-              break;
-            case 'proportion':
-              this.proportionlist=res.data;
-              break;
-            case 'polypnum':
-              this.polypnumlist=res.data;
-              break;
-            case 'pbtype':
-              this.pbtypelist=res.data;
-              break;
-            case 'ptumloc':
-              this.ptumloclist=res.data;
-              break;
-            case 'htype':
-              this.htypelist=res.data;
-              break;
-            case 'hgrade':
-              this.hgradelist=res.data;
-              break;
-            case 'degree':
-              this.degreelist=res.data;
-              break;
-            case 'clinicalStage':
-              this.clinicalStagelist=res.data;
-              break;
-            case 'pt':
-              this.ptlist=res.data;
-              break;
-            case 'pn':
-              this.pnlist=res.data;
-              break;
-            case 'pm':
-              this.pmlist=res.data;
-              break;
-            case 'hasyndrome':
-              this.hasyndromelist=res.data;
-              break;
-            case 'inrolymreaction':
-              this.inrolymreactionlist=res.data;
-              break;
-            case 'perilymreaction':
-              this.perilymreactionlist=res.data;
-              break;
-            case 'sampletype':
-              this.sampletypelist=res.data;
-              break;
-            case 'msisp':
-              this.msisplist=res.data;
-              break;
-            case 'msiresult':
-              this.msiresultlist=res.data;
-              break;
-            case 'msp':
-              this.msplist=res.data;
-              break;
-            case 'mlpagene':
-              this.mlpagenelist=res.data;
-              break;
-            case 'mlparesult':
-              this.mlparesultlist=res.data;
-              break;
-            case 'ngspanel':
-              this.ngspanellist=res.data;
-              break;
-            case 'grade':
-              this.gradelist=res.data;
-              break;
-            case 'epidermis':
-              this.epidermislist=res.data;
-              break;
-            case 'papilla':
-              this.papillalist=res.data;
-              break;
-            case 'dischargeway':
-              this.dischargewaylist=res.data;
-              break;
-            case 'dischargerange':
-              this.dischargerangelist=res.data;
-              break;
-            case 'testSpecimen':
-              this.testSpecimenlist=res.data;
-              break;
-            case 'tumorStage':
-              this.tumorStagelist=res.data;
-              break;
-            case 'tnm':
-              this.tnmlist=res.data;
-              break;
-            case 't':
-              this.tlist=res.data;
-              break;
-            case 'cn':
-              this.cntlist=res.data;
-              break;
-            case 'tpn':
-              this.tpnlist=res.data;
-              break;
-            case 'm':
-              this.mlist=res.data;
-              break;
-            case 'specialType':
-              this.specialTypelist=res.data;
-              break;
-            case 'complication':
-              this.complicationlist=res.data;
-              break;
-            case 'ecgo':
-              this.ecgolist=res.data;
-              break;
-            case 'moleType':
-              this.moleTypelist=res.data;
-              break;
-            case 'calcification':
-              this.calcificationlist=res.data;
-              break;
-            case 'massedge':
-              this.massedgelist=res.data;
-              break;
-            case 'MRIsign':
-              this.MRIsignlist=res.data;
-              break;
-            case 'BIRADS':
-              this.BIRADSlist=res.data;
-              break;
-          }
-        }
-      })
+    ctchoice(res,file,fileList){
+      this.ctfile.push({url:this.imgurl+res.data})
+    },
+    petchoice(res,file,fileList){
+      this.petfile.push({url:this.imgurl+res.data})
+    },
+    isscanchoice(res,file,fileList){
+      this.isscanfile.push({url:this.imgurl+res.data})
     },
     handle(name,index, handle) {
       let n = 0;
@@ -1858,8 +1683,8 @@ export default {
       }
       
     },
-    prinaturechange(){
-      console.log(this.pathologyform)
+    prinaturechange(val){
+      console.log(val)
     },
     pmhlistchange(name) {
       if (name in this.pmhlist) {
@@ -1869,9 +1694,6 @@ export default {
     },
     pmhcheck(val) {
       this.nowpmh = val;
-      if (val) {
-        this.pathologyform.pmh = "none";
-      }
     },
     dnamecheck(val) {
       this.nowdname = val;
@@ -1882,95 +1704,256 @@ export default {
     otherDrugcheck(val) {
       this.nowotherDrug = val;
     },
-    handleClick() {
-      if(this.$store.state.entryState>=4 && this.activeName=='basic'){
+    handleClick(val) {
+      if(this.$store.state.entryState>=5 && val.name=="basic"){
         this.basicCheckInfo()
-      }else if(this.$store.state.entryState>=5 && (this.activeName=='endoscope'|| this.activeName=='assist')){
-        if(this.activeName=='endoscope'){
+      }else if(this.$store.state.entryState>=6 && (val.name=='endoscope' || val.name=='assist')){
           this.introscopeInfo()
-        }
-        if(this.activeName=='assist'){
-          this.introscopeInfo()
-        }
-      }else if(this.$store.state.entryState>=6 && this.activeName=='pathology'){
+      }else if(this.$store.state.entryState>=7 && val.name=="pathology"){
         this.pathologicInfo()
-      }else if(this.$store.state.entryState>=7 && this.activeName=='molecule'){
+      }else if(this.$store.state.entryState>=8 && val.name=="molecule"){
         this.molDetectionInfo()
       }
     },
     saveBasic() {
       this.basicform["pid"] = this.$store.state.patientid;
+      let ct=[],
+        pet=[]
+      this.ctfile.map(item=>{
+        ct.push(item.url)
+      })
+      this.petfile.map(item=>{
+        pet.push(item.url)
+      })
+      this.basicform["ct"]=String(ct)
+      this.basicform["pet"]=String(pet)
       infoentry.saveBasicCheck(this.basicform).then(res => {
         if (res.returnCode == 0) {
-          if (this.cancertype == "colorectal") {
-            this.edisabled=false;
-            this.activeName = "endoscope";
-          } else if (this.cancertype == "breast") {
-            this.adisabled=false;
-            this.activeName = "assist";
-          }
           this.$store.state.entryState=5;
           this.entry=this.$store.state.entryState;
+        }else{
+          this.$message.error(res.msg);
         }
       });
     },
     basicCheckInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.basicCheckInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.basicform=res.data;
+          if(res.data!=null){
+            this.basicform=res.data;
+            if(this.basicform.ct && (this.basicform.ct!=null || this.basicform.ct!='')){
+              let ct=[];
+            ct=this.basicform.ct.split(',');
+            this.ctfile.length=0;
+            ct.map(item=>{
+              this.ctfile.push({url:item})
+            })
+            }
+            
+           if(this.basicform.pet && (this.basicform.pet!=null || this.basicform.pet!='')){
+              let pet=[];
+            pet=this.basicform.pet.split(',');
+            this.petfile.length=0;
+            pet.map(item=>{
+              this.petfile.push({url:item})
+            })
+            }
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
+    },
+    updateBasicCheck(){
+      let ct=[],
+        pet=[]
+      this.ctfile.map(item=>{
+        ct.push(item.url)
+      })
+      this.petfile.map(item=>{
+        pet.push(item.url)
+      })
+      this.basicform["ct"]=String(ct)
+      this.basicform["pet"]=String(pet)
+      infoentry.updateBasicCheck(this.basicform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.basicCheckInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
     },
     saveAssist() {
       this.$store.state.entryState=6;
       this.entry=this.$store.state.entryState;
-      this.pdisabled=false;
-      this.activeName = "pathology";
     },
     saveEndoscope() {
       this.endoscopeform["pid"] = this.$store.state.patientid;
       infoentry.saveIntroscope(this.endoscopeform).then(res => {
         if (res.returnCode == 0) {
           this.$store.state.entryState=6;
-          this.pdisabled=false;
           this.entry=this.$store.state.entryState;
-          this.activeName = "pathology";
+        }else{
+          this.$message.error(res.msg);
         }
       });
     },
     introscopeInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.introscopeInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.endoscopeform=res.data;
+          if(res.data!=null){
+            this.endoscopeform=res.data;
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
+    updateEndoscope() {
+      infoentry.updateIntroscope(this.endoscopeform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.introscopeInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
+    },
     savePathology() {
       this.pathologyform["pid"] = this.$store.state.patientid;
+      if(this.pathologyform.prinature==1){
+        this.pathologyform['tumloc']=String(this.mtumloc);
+      }else if(this.pathologyform.prinature==0){
+         this.pathologyform['tumloc']=this.tumloc;
+      }
+      let transferinfolist=[];
+      this.transferinfolist.map((item)=>{
+        transferinfolist.push(item.transferinfo)
+      })
+      this.pathologyform["transferinfo"]=String(transferinfolist);
+      let isscan=[];
+      this.isscanfile.map(item=>{
+        isscan.push(item.url)
+      })
+      this.pathologyform["isscan"]=String(isscan)
       infoentry.savePathologic(this.pathologyform).then(res => {
         if (res.returnCode == 0) {
           this.$store.state.entryState=7;
-          this.mdisabled=false;
           this.entry=this.$store.state.entryState;
-          this.activeName = "molecule";
+        }else{
+          this.$message.error(res.msg);
         }
       });
     },
     pathologicInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.pathologicInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.pathologyform=res.data;
+          if(res.data!=null){
+            this.pathologyform=res.data;
+            if(this.pathologyform.prinature==1){
+              this.mtumloc=this.pathologyform.tumloc.split(',');
+            }else if(this.pathologyform.prinature==0){
+              this.tumloc=this.pathologyform['tumloc'];
+            }
+            if(this.pathologyform.transferinfo && (this.pathologyform.transferinfo!='' || this.pathologyform.transferinfo!=null)){
+              let transferinfolist=this.pathologyform.transferinfo.split(',');
+              transferinfolist.map((item,index)=>{
+                let obj={
+                  transferinfo:item
+                }
+                this.transferinfolist[index]=obj
+              })
+              if(this.pathologyform.isscan && (this.pathologyform.isscan!=null || this.pathologyform.isscan!='')){
+                let isscan=[];
+                isscan=this.pathologyform.isscan.split(',');
+                this.isscanfile.length=0;
+                isscan.map(item=>{
+                  this.isscanfile.push({url:item})
+                })
+              }
+            }else{
+              this.transferinfolist.push({})
+            }
+            if(this.pathologyform.pmh && (this.pathologyform.pmh!='' || this.pathologyform.pmh!=null)){
+              this.pmhnone=true;
+            }
+            if(this.pathologyform.dname && (this.pathologyform.dname!='' || this.pathologyform.dname!=null)){
+              this.pmhdname=true;
+              this.nowdname=true;
+            }
+            if(this.pathologyform.targetedDrug && (this.pathologyform.targetedDrug!='' || this.pathologyform.targetedDrug!=null)){
+              this.pmhtargetedDrug=true;
+              this.nowtargetedDrug=true;
+            }
+            if(this.pathologyform.otherDrug && (this.pathologyform.otherDrug!='' || this.pathologyform.otherDrug!=null)){
+              this.pmhotherDrug=true;
+              this.nowotherDrug=true;
+            }
+            if(this.pathologyform.ptnm && (this.pathologyform.ptnm!='' || this.pathologyform.ptnm!=null)){
+              this.ptnmcheck=true;
+            }
+            if(this.pathologyform.pt && (this.pathologyform.pt!='' || this.pathologyform.pt!=null)){
+              this.ptcheck=true
+            }
+            if(this.pathologyform.pn && (this.pathologyform.pn!='' || this.pathologyform.pn!=null)){
+              this.pncheck=true
+            }
+            if(this.pathologyform.pm && (this.pathologyform.pm!='' || this.pathologyform.pm!=null)){
+              this.pmcheck=true
+            }
+            if(this.pathologyform.perilymreaction && this.pathologyform.perilymreaction!=null){
+              this.perilycheck=true
+            }
+            if(this.pathologyform.inrolymreaction && this.pathologyform.inrolymreaction!=null){
+              this.inrolycheck=true
+            }
+            if(this.pathologyform.othereaction && (this.pathologyform.othereaction!='' || this.pathologyform.othereaction!=null)){
+              this.othereactioncheck=true
+            }
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
+    },
+    updatePathology() {
+      let transferinfolist=[];
+      this.transferinfolist.map((item)=>{
+        transferinfolist.push(item.transferinfo)
+      })
+      this.pathologyform["transferinfo"]=String(transferinfolist);
+      let isscan=[]
+      this.isscanfile.map(item=>{
+        isscan.push(item.url)
+      })
+      this.pathologyform["isscan"]=String(isscan)
+      infoentry.updatePathologic(this.pathologyform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.pathologicInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
     },
     saveMolecule() {
       this.moleculeform["checkResultList"]=this.checkResultList;
@@ -1985,32 +1968,99 @@ export default {
               type: "treatInfo"
             }
           });
+        }else{
+          this.$message.error(res.msg);
         }
       });
     },
     molDetectionInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.molDetectionInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.pathologyform=res.data;
+          if(res.data!=null){
+            this.moleculeform=res.data;
+            if(this.moleculeform.checkResultList && this.moleculeform.checkResultList.length>0){
+              this.checkResultList=this.moleculeform.checkResultList;
+            }else{
+              this.checkResultList=[{}]
+            }
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
+    updateMolDetection(){
+      this.moleculeform["checkResultList"]=this.checkResultList;
+      infoentry.updateMolDetection(this.moleculeform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.molDetectionInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
+    }
   },
   created() {
-    // this.cancertype='breast';
-    if(this.$store.state.edit){
-        if(this.entry>=5){
-          this.basicCheckInfo()
-        }
-      }
+      this.cancerid=this.$store.state.cancerid;
+      let selectlist=["epidermis","BIRADS","MRIsign","massedge","calcification",
+      "grade","ngspanel","mlparesult","mlpagene","msp","msiresult","msisp","sampletype",
+      "moleType","perilymreaction","inrolymreaction","hasyndrome","ecgo","complication",
+      "specialType","m","tpn","cn","t","tnm","tumorStage","pm","pn","pt","clinicalStage",
+      "degree","hgrade","htype","testSpecimen","ptumloc","pbtype","polypnum","proportion",
+      "tumloc","parasite","obt","kps","dischargerange","dischargeway","papilla"];
+      this.optionlist=getOption(this.$store.state.zdlist,selectlist,this.cancerid);
   },
   mounted(){
-    let state = this.$store.state.entryState;
+    // let state = this.$store.state.entryState;
+    let state=6;
     this.coltablist = getTabListByState(2,state);
     this.activeName = getActiveName(2,state);
+    if(state>=5){
+      this.basicCheckInfo()
+    }
+  },
+  watch:{
+    "$store.state.entryState":function(){
+      let state = this.$store.state.entryState;
+      this.tablist = getTabListByState(2,state);
+      this.activeName = getActiveName(2,state);
+    },
+    "basicform.height":function(){
+      if(this.basicform.height){
+        this.basicform.height=parseFloat(this.basicform.height)
+      }
+    },
+    "basicform.weight":function(){
+      if(this.basicform.weight){
+        this.basicform.weight=parseFloat(this.basicform.weight)
+      }
+      
+    },
+    "basicform.bmi":function(){
+      if(this.basicform.bmi){
+        this.basicform.bmi=parseFloat(this.basicform.bmi)
+      }
+    },
+    "basicform.diastolic":function(){
+      if(this.basicform.diastolic){
+        this.basicform.diastolic=parseFloat(this.basicform.diastolic)
+      }
+    },
+    "basicform.systolic":function(){
+      if(this.basicform.systolic){
+        this.basicform.systolic=parseFloat(this.basicform.systolic)
+      }
+    },
+    activeName(val){
+      this.$store.state.activeName=val;
+    }
   }
 };
 </script>

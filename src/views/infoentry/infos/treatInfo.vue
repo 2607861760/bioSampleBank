@@ -55,7 +55,7 @@
     <div class="basic-inner">
       <div class="basic-tab">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane v-for='(item,index) in coltablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
+          <el-tab-pane v-for='(item,index) in tablist' :label="item.label" :name='item.name' :key='index' :disabled="item.disabled"></el-tab-pane>
         </el-tabs>
       </div>
       <div class="basic-main">
@@ -65,21 +65,21 @@
             <el-form-item label="化疗药物：">
               <el-radio-group v-model="therapyform.chemodrugs">
                 <el-form-item>
-                  <el-radio label="0" value="0">无化疗</el-radio>
+                  <el-radio :label="0" :value="0">无化疗</el-radio>
                 </el-form-item>
                 <el-form-item>
-                  <el-radio label="1" value="1">有化疗</el-radio>
+                  <el-radio :label="1" :value="1">有化疗</el-radio>
                 </el-form-item>
                 <div v-if="therapyform.chemodrugs==1">
-                  <el-select v-model="therapyform.drug" placeholder="请选择化疗药物" @focus='searchItem("drug",0)'>
+                  <el-select v-model="therapyform.drug" placeholder="请选择化疗药物">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in druglist" :key="index"></el-option>
               </el-select>
                 </div>
                 <el-form-item>
-                  <el-radio label="3" value="3">未知化疗史</el-radio>
+                  <el-radio :label="3" :value="3">未知化疗史</el-radio>
                 </el-form-item>
                 <el-form-item>
-                  <el-radio label="4" value="4">其他</el-radio>
+                  <el-radio :label="4" :value="4">其他</el-radio>
                 </el-form-item>
                 <div v-if="therapyform.chemodrugs==4">
                   <el-input v-model="therapyform.drugother" placeholder="请输入其他药物"></el-input>
@@ -98,7 +98,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="给药途径：">
-              <el-select v-model="therapyform.cway" placeholder="请选择..." @focus='searchItem("cway",0)'>
+              <el-select v-model="therapyform.cway" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cwaylist" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -109,35 +109,35 @@
             </el-form-item>
             <el-form-item label="是否参与临床试验：">
               <el-radio-group v-model="therapyform.cisctrials">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="靶向药物"></el-form-item>
             <el-form-item label="靶点：">
-              <el-checkbox-group v-model="targetlist" @change="targetchange">
+              <el-checkbox-group v-model="targetlist">
               <div v-if="cancertype=='colorectal'">
                 
               <p>
-                <el-checkbox label="EGFR" :checked="therapyform.target=='EGFR'" :disabled="(targetlist[0]=='EGFR' || nowtarget==false)?false:true">EGFR</el-checkbox>
+                <el-checkbox label="EGFR" value='EGFR' :disabled="disEGFR">EGFR</el-checkbox>
               </p>
               <p>
-                <el-checkbox label="VEGF" :checked="therapyform.target=='VEGF'" :disabled="(targetlist[0]=='VEGF' || nowtarget==false)?false:true">VEGF</el-checkbox>
+                <el-checkbox label="VEGF" value='VEGF' :disabled="disVEGF">VEGF</el-checkbox>
               </p>
               
               </div>
               <div v-if="cancertype=='breast'">
                 <p>
-                  <el-checkbox label="HER2" :checked="therapyform.target=='HER2'" :disabled="(targetlist[0]=='HER2' || nowtarget==false)?false:true">HER2</el-checkbox>
-                  <el-checkbox label="PARP" :checked="therapyform.target=='PARP'" :disabled="(targetlist[0]=='PARP' || nowtarget==false)?false:true">PARP</el-checkbox>
+                  <el-checkbox label="HER2" value='HER2' :disabled="disHER2">HER2</el-checkbox>
+                  <el-checkbox label="PARP" value='PARP' :disabled="disPARP">PARP</el-checkbox>
                 </p>
                 <p>
-                  <el-checkbox label="CKD4" :checked="therapyform.target=='CKD4'" :disabled="(targetlist[0]=='CKD4' || nowtarget==false)?false:true">CKD4/6</el-checkbox>
-                  <el-checkbox label="PI3K" :checked="therapyform.target=='PI3K'" :disabled="(targetlist[0]=='PI3K' || nowtarget==false)?false:true">PI3K/AKT/mTor</el-checkbox>
+                  <el-checkbox label="CKD4" value='CKD4' :disabled="disCKD4">CKD4/6</el-checkbox>
+                  <el-checkbox label="PI3K" value='PI3K' :disabled="disPI3K">PI3K/AKT/mTor</el-checkbox>
                 </p>
               </div>
               <p>
-                <el-checkbox label="othertarget" :checked="therapyform.target=='othertarget'" :disabled="(targetlist[0]=='othertarget' || nowtarget==false)?false:true">其他</el-checkbox>
+                <el-checkbox label="othertarget" value='othertarget' :disabled="disothertarget">其他</el-checkbox>
               </p>
               <p>
                 <el-input v-model="therapyform.other" placeholder="请输入其他靶点"></el-input>
@@ -167,7 +167,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="给药途径：">
-              <el-select v-model="therapyform.tway" placeholder="请选择..." @focus='searchItem("cway",0)'>
+              <el-select v-model="therapyform.tway" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cwaylist" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -178,13 +178,13 @@
             </el-form-item>
             <el-form-item label="是否参与临床试验：">
               <el-radio-group v-model="therapyform.tisctrials">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="免疫药物"></el-form-item>
             <el-form-item label="靶点：">
-              <el-checkbox-group v-model="imtargetlist" @change="imtargetchange">
+              <el-checkbox-group v-model="imtargetlist">
               <p>
                 <el-checkbox label="PD1">PD-1</el-checkbox>
               </p>
@@ -237,7 +237,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="给药途径：">
-              <el-select v-model="therapyform.immway" placeholder="请选择..." @focus='searchItem("cway",0)'>
+              <el-select v-model="therapyform.immway" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in cwaylist" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -248,14 +248,14 @@
             </el-form-item>
             <el-form-item label="是否参与临床试验：">
               <el-radio-group v-model="therapyform.immisctrials">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
               
               <el-button type="primary" @click="saveTherapy" size="medium" v-if='tsave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateMedication" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -263,8 +263,8 @@
           <el-form ref="form" :model="evaluationform" label-width="150px" label-position="left">
             <el-form-item label="疗效评估：">
               <el-radio-group v-model="evaluationform.lxassess">
-                <el-radio label="0" value="0">有</el-radio>
-                <el-radio label="1" value="1">无</el-radio>
+                <el-radio :label="0" :value="0">有</el-radio>
+                <el-radio :label="1" :value="1">无</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="靶病灶名称：">
@@ -287,19 +287,19 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="靶病灶评估：">
-              <el-select v-model="evaluationform.focusass" placeholder="请选择..." @focus='searchItem("focusass",0)'>
+              <el-select v-model="evaluationform.focusass" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in focusasslist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="非靶病灶评估：">
-              <el-select v-model="evaluationform.unfocusass" placeholder="请选择..." @focus='searchItem("unfocusass",0)'>
+              <el-select v-model="evaluationform.unfocusass" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in unfocusasslist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="是否有新病灶：">
               <el-radio-group v-model="evaluationform.isnewfocus">
-                <el-radio label="0" value="0">是</el-radio>
-                <el-radio label="1" value="1">否</el-radio>
+                <el-radio :label="0" :value="0">是</el-radio>
+                <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="新靶病灶名称：">
@@ -320,19 +320,19 @@
             </el-form-item>
             <el-form-item label="肿瘤标记物评估：">
               <el-radio-group v-model="evaluationform.tumormarher">
-                <el-radio label="0" value="0">正常</el-radio>
-                  <el-radio label="1" value="1">异常</el-radio>
+                <el-radio :label="0" :value="0">正常</el-radio>
+                  <el-radio :label="1" :value="1">异常</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="总体疗效评估：">
-              <el-select v-model="evaluationform.allass" placeholder="请选择..." @focus='searchItem("allass",0)'>
+              <el-select v-model="evaluationform.allass" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in allasslist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               
               <el-button type="primary" @click="saveEvaluation" size="medium" v-if='esave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateAssess" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -340,15 +340,15 @@
           <el-form ref="form" :model="symptomsform" label-width="150px" label-position="left">
             <el-form-item label="是否经历不良反应：">
               <el-radio-group v-model="symptomsform.isreact">
-                  <el-radio label="0" value="0">有</el-radio>
-                  <el-radio label="1" value="1">无</el-radio>
+                  <el-radio :label="0" :value="0">有</el-radio>
+                  <el-radio :label="1" :value="1">无</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="不良反应名称：">
               <el-input v-model="symptomsform.reactname"></el-input>
             </el-form-item>
             <el-form-item label="产生不良反应来源：">
-              <el-select v-model="symptomsform.reactsource" placeholder="请选择..." @focus='searchItem("reactsource",0)'>
+              <el-select v-model="symptomsform.reactsource" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in reactsourcelist" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -359,36 +359,36 @@
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="symptomsform.enddate"></el-date-picker>
             </el-form-item>
             <el-form-item label="标准毒性：">
-              <el-select v-model="symptomsform.stoxic" placeholder="请选择..." @focus='searchItem("stoxic",0)'>
+              <el-select v-model="symptomsform.stoxic" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in stoxiclist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="放射性损伤早期分级：">
               <el-radio-group v-model="symptomsform.earlyclass">
-                  <el-radio label="0" value="0">有</el-radio>
-                  <el-radio label="1" value="1">无</el-radio>
+                  <el-radio :label="0" :value="0">有</el-radio>
+                  <el-radio :label="1" :value="1">无</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="放射性损伤晚期分级：">
               <el-radio-group v-model="symptomsform.latterclass">
-                  <el-radio label="0" value="0">有</el-radio>
-                  <el-radio label="1" value="1">无</el-radio>
+                  <el-radio :label="0" :value="0">有</el-radio>
+                  <el-radio :label="1" :value="1">无</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="治疗变化：">
-              <el-select v-model="symptomsform.changes" placeholder="请选择..." @focus='searchItem("changes",0)'>
+              <el-select v-model="symptomsform.changes" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in changeslist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="不良事件结局：">
-              <el-select v-model="symptomsform.badevent" placeholder="请选择..." @focus='searchItem("badevent",0)'>
+              <el-select v-model="symptomsform.badevent" placeholder="请选择...">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in badeventlist" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
               
               <el-button type="primary" @click="saveSymptoms" size="medium" v-if='ssave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateClinical" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -398,11 +398,11 @@
 </template>
 <script>
 import {infoentry,dict} from 'api/index.js';
-import {sortRule,getTabListByState} from "../../../base/js/common.js";
+import {sortRule,getTabListByState,getActiveName} from "../../../base/js/common.js";
 export default {
   data() {
     return {
-      coltablist:[
+      tablist:[
         {
           name:'therapy',
           label:'药物治疗',
@@ -420,11 +420,7 @@ export default {
           num:11
         }
       ],
-      sdisabled:true,
-      edisabled:true,
-      imnowtarget:false,
       imtargetlist:[],
-      nowtarget:false,
       targetlist:[],
       cancertype:'colorectal',
       activeName: "therapy",
@@ -441,7 +437,7 @@ export default {
       reactsourcelist:[],
       stoxiclist:[],
       changeslist:[],
-      badeventlist:[]
+      badeventlist:[],
     }
   },
   computed:{
@@ -452,17 +448,60 @@ export default {
       return true
     },
     esave(){
-      if(this.$store.state.entryState>10){
+      if(this.$store.state.entryState>=10){
         return false
       }
       return true
     },
     ssave(){
-      if(this.$store.state.entryState>11){
+      if(this.$store.state.entryState>=11){
         return false
       }
       return true
-    }
+    },
+    disEGFR(){
+      console.log(this.targetlist)
+      if(this.targetlist[0]=='EGFR' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disVEGF(){
+      if(this.targetlist[0]=='VEGF' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disHER2(){
+      if(this.targetlist[0]=='HER2' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disPARP(){
+      if(this.targetlist[0]=='PARP' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disCKD4(){
+      if(this.targetlist[0]=='CKD4' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disPI3K(){
+      if(this.targetlist[0]=='PI3K' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
+    disothertarget(){
+      if(this.targetlist[0]=='othertarget' || this.targetlist.length==0){
+        return false
+      }
+      return true
+    },
   },
   methods: {
     searchItem(name,type=null) {
@@ -508,19 +547,12 @@ export default {
         }
       })
     },
-    targetchange(){
-      if(this.targetlist.length==1){
-        this.nowtarget=true
-      }else if(this.targetlist.length==0){
-        this.nowtarget=false
-      }
-    },
-    handleClick() {
-      if(this.$store.state.entryState>=8 && this.activeName=='therapy'){
+    handleClick(val) {
+      if(this.$store.state.entryState>=9 && val.name=="therapy"){
         this.medicationInfo()
-      }else if(this.$store.state.entryState>=9 && this.activeName=='evaluation'){
+      }else if(this.$store.state.entryState>=10 && val.name=="evaluation"){
           this.assessInfo()
-      }else if(this.$store.state.entryState>=10 && this.activeName=='symptoms'){
+      }else if(this.$store.state.entryState>=11 && val.name=="symptoms"){
         this.clinicalInfo()
       }
     },
@@ -532,17 +564,43 @@ export default {
         if(res.returnCode==0){
           this.$store.state.entryState=9;
           this.entry=this.$store.state.entryState;
-          this.activeName = "evaluation";
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
     medicationInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.medicationInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.therapyform=res.data;
+          if(res.data!=null){
+            this.therapyform=res.data;
+            if(this.therapyform.target && (this.therapyform.target!=null || this.therapyform.target!='')){
+              this.targetlist.push(this.therapyform.target)
+            }
+            if(this.therapyform.immtarget && (this.therapyform.immtarget!=null || this.therapyform.immtarget!='')){
+              this.imtargetlist=this.therapyform.immtarget.split(',');
+            }
+          }
+        }else{
+          this.$message.error(res.msg);
+        }
+      })
+    },
+    updateMedication(){
+      this.therapyform['immtarget']=String(this.imtargetlist);
+      this.therapyform['target']=this.targetlist[0];
+      infoentry.updateMedication(this.therapyform).then((res)=>{
+        if(res.returnCode==0){
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.medicationInfo()
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
@@ -552,18 +610,36 @@ export default {
         if(res.returnCode==0){
           this.$store.state.entryState=10;
           this.entry=this.$store.state.entryState;
-          this.activeName = "symptoms";
+        }else{
+          this.$message.error(res.msg);
         }
       })
       
     },
     assessInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.assessInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.therapyform=res.data;
+          if(res.data!=null){
+            this.evaluationform=res.data;
+          }
+        }else{
+          this.$message.error(res.msg);
+        }
+      })
+    },
+    updateAssess(){
+      infoentry.updateAssess(this.evaluationform).then((res)=>{
+        if(res.returnCode==0){
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.assessInfo()
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
@@ -579,28 +655,65 @@ export default {
               type: "followInfo"
             }
           });
+        }else{
+          this.$message.error(res.msg);
         }
       })
       
     },
     clinicalInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.clinicalInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.therapyform=res.data;
+          if(res.data!=null){
+            this.symptomsform=res.data;
+          }
+        }else{
+          this.$message.error(res.msg);
         }
       })
     },
-  },
-  mounted() {
-    // this.cancertype='breast'
-    if(this.$store.state.edit){
-        if(this.entry>=9){
-          this.medicationInfo()
+    updateClinical(){
+      infoentry.updateClinical(this.symptomsform).then((res)=>{
+        if(res.returnCode==0){
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.clinicalInfo()
+        }else{
+          this.$message.error(res.msg);
         }
-      }
+      })
+    }
+  },
+  created(){
+    this.searchItem("cway",0);
+    this.searchItem("drug",0);
+    this.searchItem("focusass",0);
+    this.searchItem("allass",0);
+    this.searchItem("unfocusass",0);
+    this.searchItem("reactsource",0);
+    this.searchItem("changes",0);
+    this.searchItem("stoxic",0);
+    this.searchItem("badevent",0);
+  },
+  mounted(){
+    let state = this.$store.state.entryState;
+    this.tablist = getTabListByState(3,state);
+    this.activeName = getActiveName(3,state);
+    if(state>=9){
+      this.medicationInfo()
+    }
+  },
+  watch:{
+    "$store.state.entryState":function(){
+      let state = this.$store.state.entryState;
+      this.coltablist = getTabListByState(3,state);
+      this.activeName = getActiveName(3,state);
+    }
   }
 };
 </script>

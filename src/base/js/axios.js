@@ -1,6 +1,7 @@
 // 引入服务器请求模块
 import Axios from 'axios';
 import router from '../../router';
+// var root = process.env.API_ROOT;
 
 
 Axios.defaults.withCredentials = true;
@@ -15,6 +16,7 @@ Axios.interceptors.request.use(
         if (token) {
             config.headers.common['Authorization'] = token;
         }
+        // config.url = root + config.url;
         return config;
     },
     err => {

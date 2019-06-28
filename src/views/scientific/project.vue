@@ -82,9 +82,9 @@
       </div>
       <div class="btn-right">
         <div>
-          <el-button size="small" plain class="acstate">全部</el-button>
-          <el-button size="small" plain>参与</el-button>
-          <el-button size="small" plain>未参与</el-button>
+          <el-button size="small" plain :class="type==0?'acstate':''" @click="all">全部</el-button>
+          <el-button size="small" plain :class="type==1?'acstate':''" @click="join">参与</el-button>
+          <el-button size="small" plain :class="type==2?'acstate':''" @click="disjoin">未参与</el-button>
         </div>
         <div>
           <el-input
@@ -97,21 +97,25 @@
     </div>
     <div class="info-table">
       <el-table :data="tableData" height="550" border style="width: 100%">
-        <el-table-column prop="projectname" label="项目名称"></el-table-column>
-        <el-table-column prop="expenditure" label="经费"></el-table-column>
-        <el-table-column prop="principal" label="负责人"></el-table-column>
-        <el-table-column prop="startdate" label="开始时间"></el-table-column>
-        <el-table-column prop="participating" label="参与单位数量"></el-table-column>
+        <el-table-column prop="project.projectName" label="项目名称"></el-table-column>
+        <el-table-column prop="project.funds" label="经费"></el-table-column>
+        <el-table-column prop="project.projectPeople" label="负责人"></el-table-column>
+        <el-table-column label="开始时间">
+          <template slot-scope="scope">
+            {{scope.row.project.beginTime |dateFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="project.numberCount" label="参与单位数量"></el-table-column>
         <el-table-column label="操作" width="450px">
           <template slot-scope="scope">
             <el-button type="success" size="small" plain class="check"  @click="handleCheck(scope.$index, scope.row)">查看</el-button>
-            <el-button type="primary" size="small" class="query" @click="handleQuery(scope.$index, scope.row)">查询</el-button>
-            <el-badge :value="3" class="item">
-            <el-button type="primary" size="small" plain class="audit" @click="handleAudit(scope.$index, scope.row)">审核</el-button>
+            <el-button type="primary" size="small" class="query" @click="handleQuery(scope.$index, scope.row)" v-if='scope.row.roleType!=2'>查询</el-button>
+            <el-badge :value="scope.row.reviewCount" class="item">
+            <el-button type="primary" size="small" plain class="audit" @click="handleAudit(scope.$index, scope.row)" v-if='scope.row.roleType==0'>审核</el-button>
             </el-badge>
-            <el-button type="success" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button type="danger" size="small" class="delete" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            <el-button type="success" size="small" class="join" @click="handleJoin(scope.$index, scope.row)">申请加入</el-button>
+            <el-button type="success" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.roleType==0'>编辑</el-button>
+            <el-button type="danger" size="small" class="delete" @click="handleDelete(scope.$index, scope.row)" v-if='scope.row.roleType==0'>删除</el-button>
+            <el-button type="success" size="small" class="join" @click="handleJoin(scope.$index, scope.row)" v-if='scope.row.roleType==2'>申请加入</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,41 +123,43 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pageSize"
+          :current-page="current"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {project} from 'api/index.js';
 export default {
   data() {
     return {
       tableData: [
-        {
-          projectname: "肿瘤标志物的精准测量及分子机制",
-          expenditure: "2000万",
-          principal: "王二",
-          startdate: "2019/04/29",
-          participating: "3"
-        },
-        {
-          projectname: "肿瘤标志物的精准测量及分子机制",
-          expenditure: "2000万",
-          principal: "王二",
-          startdate: "2019/04/29",
-          participating: "3"
-        },
-        {
-          projectname: "肿瘤标志物的精准测量及分子机制",
-          expenditure: "2000万",
-          principal: "王二",
-          startdate: "2019/04/29",
-          participating: "3"
-        }
+        // {
+        //   projectname: "肿瘤标志物的精准测量及分子机制",
+        //   expenditure: "2000万",
+        //   principal: "王二",
+        //   startdate: "2019/04/29",
+        //   participating: "3"
+        // },
+        // {
+        //   projectname: "肿瘤标志物的精准测量及分子机制",
+        //   expenditure: "2000万",
+        //   principal: "王二",
+        //   startdate: "2019/04/29",
+        //   participating: "3"
+        // },
+        // {
+        //   projectname: "肿瘤标志物的精准测量及分子机制",
+        //   expenditure: "2000万",
+        //   principal: "王二",
+        //   startdate: "2019/04/29",
+        //   participating: "3"
+        // }
       ],
       choiceCarcinoma: false,
       carcinoma: [
@@ -183,26 +189,67 @@ export default {
           rightclass: "biocarcinoma"
         }
       ],
-      choiceNum: null
+      choiceNum: null,
+      pageSize:10,
+      current:1,
+      total:0,
+      type:0
     };
+  },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth(),
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
   },
   methods: {
     handleCheck(index, row){
-      this.$router.push('/scientific/projectinfo')
+      let obj={
+        id:row.project.id
+      }
+      project.detailProject(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.$store.state.infoform=res.data;
+          this.$router.push('/scientific/projectinfo')
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+      
     },
     handleQuery(index, row){
+      this.$store.state.projectid=row.project.id;
       this.$router.push('/scientific/resultinfo')
     },
     handleJoin(index, row){
+      this.$store.state.projectid=row.project.id;
       this.$router.push('/scientific/joininfo')
     },
     handleAudit(index, row){
+      // this.$store.state.audit=true;
+      this.$store.state.projectid=row.project.id;
       this.$router.push('/scientific/auditinfo')
     },
     handleEdit(index, row) {
       this.$router.push('/scientific/addproject')
     },
-    handleDelete(index, row) {},
+    handleDelete(index, row) {
+      let obj={
+        id:row.project.id
+      }
+      project.delProject(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.getProjectList()
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
     addProject() {
       this.$router.push('/scientific/addproject')
     },
@@ -212,7 +259,45 @@ export default {
     },
     readInfo() {
       this.$router.push("/infoentry/upinfo");
+    },
+    all(){
+      this.type=0;
+      this.getProjectList()
+    },
+    join(){
+      this.type=1;
+      this.getProjectList()
+    },
+    disjoin(){
+      this.type=2;
+      this.getProjectList()
+    },
+    handleSizeChange(val){
+      this.pageSize=val;
+      this.getProjectList()
+    },
+    getProjectList(){
+      let obj={
+        userId:this.$store.state.userId,
+        type:this.type
+      },
+      pagelist={
+        offset:this.current,
+        size:this.pageSize
+      }
+      project.getProjectList(pagelist,obj).then((res)=>{
+        if(res.returnCode==0){
+          this.tableData=res.data.modelList;
+          this.total=res.data.total;
+          console.log(this.tableData)
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
     }
+  },
+  mounted(){
+    this.getProjectList()
   }
 };
 </script>

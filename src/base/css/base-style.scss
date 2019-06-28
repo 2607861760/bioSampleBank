@@ -1,4 +1,4 @@
-@import 'base/font/iconfont.css';
+// @import 'base/font/iconfont.css';
 a,
 body,
 button,
@@ -205,4 +205,38 @@ body,
 
 .ivu-steps-item.ivu-steps-status-finish .ivu-steps-title {
     color: #666;
+}
+
+.btn-right {
+    .el-input-group__prepend {
+        width: 100px;
+    }
+}
+
+.el-upload-list--picture .el-upload-list__item {
+    width: 160px;
+    height: 105px;
+    padding: 5px;
+}
+
+.el-upload-list--picture .el-upload-list__item-thumbnail {
+    width: 100%;
+    height: 100%;
+    margin-left: 0px;
+}
+
+.el-upload-list__item .el-icon-close {
+    z-index: 999;
+}
+
+.el-upload-list--picture .el-upload-list__item-status-label {
+    z-index: 999;
+}
+
+.el-upload-list--picture .el-upload-list__item-name {
+    display: none;
+}
+
+.el-tree-node__content {
+    height: 50px;
 }

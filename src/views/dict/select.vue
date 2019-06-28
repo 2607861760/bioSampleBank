@@ -129,6 +129,9 @@
           <el-form-item label="子项名称：">
               <el-input v-model="dictform.itemName" placeholder="请输入"></el-input>
           </el-form-item>
+          <el-form-item label="子项值：">
+              <el-input v-model="dictform.itemValue" placeholder="请输入"></el-input>
+          </el-form-item>
           <el-form-item label="排序：">
               <el-input v-model="dictform.sort" placeholder="请输入"></el-input>
           </el-form-item>
