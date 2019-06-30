@@ -141,10 +141,10 @@
           <el-button size="small" plain :class="done?'acstate':''" @click="getPatient(14)">已完成</el-button>
         </div>
         <div>
-          <el-input placeholder="请选择登记号、癌种" v-model="selectinner" size="small">
+          <el-input placeholder="请选择登记号" v-model="selectinner" size="small">
             <el-select v-model="select" slot="prepend" placeholder="请选择...">
               <el-option label="登记号" value="1"></el-option>
-              <el-option label="癌种" value="2"></el-option>
+              <!-- <el-option label="癌种" value="2"></el-option> -->
             </el-select>
             <el-button slot="append" icon="iconfont el-icon-biosearch" @click="search"></el-button>
           </el-input>
@@ -155,11 +155,7 @@
       <el-table :data="tableData" height="550" border style="width: 100%">
         <el-table-column prop="number" label="登记号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column label="性别">
-          <template slot-scope="scope">
-            <span>{{scope.row.sex | sexfilter}}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="性别" prop='sex'></el-table-column>
         <el-table-column prop="age" label="年龄"></el-table-column>
         <el-table-column label="癌种">
           <template slot-scope="scope">
@@ -320,17 +316,11 @@ export default {
         }
       ],
       choiceNum: null,
-      inputModel: false
+      inputModel: false,
+      sexlist:{}
     };
   },
   filters: {
-    sexfilter(val) {
-      if (val == 0) {
-        return "男";
-      } else if (val == 1) {
-        return "女";
-      }
-    },
     ctypefilter(val) {
       switch (val) {
         case 1:
@@ -441,13 +431,28 @@ export default {
       this.tableData = [];
       infoentry.getPatient(pagelist, obj).then(res => {
         if (res.returnCode == 0) {
+          res.data.patientList.forEach(element => {
+            this.sexlist.itemList.map(item=>{
+              if(element.sex==item.id){
+                element.sex=item.itemName
+              }
+            })
+          });
           this.tableData = res.data.patientList;
           this.total = res.data.total;
         }
       });
     }
   },
-  created() {
+  created(){
+    this.$store.state.zdlist.map(item=>{
+      if(item.itemValue=='sex'){
+        this.sexlist=item
+      }
+    })
+    console.log(this.sexlist)
+  },
+  mounted() {
     this.getPatient();
   }
 };

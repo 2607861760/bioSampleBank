@@ -64,7 +64,7 @@
     <div class="process">
       <div class="title">
         <i class="iconfont el-icon-biosign"></i>
-        <span>本院科室样本统计</span>
+        <span>本院病人数统计</span>
       </div>
       <div class="process-inner">
           <div class="process-time">
@@ -110,6 +110,7 @@ require("echarts/lib/chart/pie");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/lib/component/legend");
+import {common} from 'api/index.js';
 export default {
     data(){
         return{
@@ -176,7 +177,8 @@ export default {
                         type:'pie',
                         radius : '55%',
                         center: ['50%', '50%'],
-                        data:ddata.sort(function (a, b) { return a.value - b.value; }),
+                        // data:ddata.sort(function (a, b) { return a.value - b.value; }),
+                        data:ddata,
                         roseType: 'radius',
                         label: {
                             normal: {
@@ -185,29 +187,29 @@ export default {
                                 }
                             }
                         },
-                        labelLine: {
-                            normal: {
-                                lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
-                                },
-                                smooth: 0.2,
-                                length: 10,
-                                length2: 20
-                            }
-                        },
-                        itemStyle: {
-                            normal: {
-                                color: '#c23531',
-                                shadowBlur: 200,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        },
+                        // labelLine: {
+                        //     normal: {
+                        //         lineStyle: {
+                        //             color: 'rgba(255, 255, 255, 0.3)'
+                        //         },
+                        //         smooth: 0.2,
+                        //         length: 10,
+                        //         length2: 20
+                        //     }
+                        // },
+                        // itemStyle: {
+                        //     normal: {
+                        //         color: '#fff',
+                        //         shadowBlur: 200,
+                        //         shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        //     }
+                        // },
 
-                        animationType: 'scale',
-                        animationEasing: 'elasticOut',
-                        animationDelay: function (idx) {
-                            return Math.random() * 200;
-                        }
+                        // animationType: 'scale',
+                        // animationEasing: 'elasticOut',
+                        // animationDelay: function (idx) {
+                        //     return Math.random() * 200;
+                        // }
                     }
                 ]
             })
@@ -221,38 +223,81 @@ export default {
                 })
                 this.drawPie(id,title,item.value,total)
             })
+        },
+        getPatient(){
+            let obj={
+               type:1,
+            }
+            common.getPatient(obj).then((res)=>{
+                let ageList=[],
+                agetitle=[],
+                ageLists=[],
+                sextitle=[],
+                sexList=[];
+                for (const key in res.data.age) {
+                    if (res.data.age.hasOwnProperty(key)) {
+                        let objs={};
+                        objs['value']=res.data.age[key]
+                        objs['name']=key
+                        agetitle.push(key);
+                        ageList.push(objs);
+                        this.agetotal+=res.data.age[key]
+                    }
+                }
+                for (const key in res.data.sex) {
+                    if (res.data.sex.hasOwnProperty(key)) {
+                        let objs={};
+                        objs['value']=res.data.sex[key]
+                        objs['name']=key
+                        sextitle.push(key);
+                        sexList.push(objs);
+                        this.sextotal+=res.data.sex[key]
+                    }
+                }
+                ageList.forEach(item=>{
+                    ageLists.push(item.value)
+                })
+                console.log(agetitle)
+                console.log(ageList)
+                // this.drawPie('ageChart',agetitle,ageList)
+                // this.drawPie('sexChart',sextitle,sexList)
+                // this.drawZhu('patientChart',agetitle,ageLists)
+            })
         }
     },
+    created(){
+        this.getPatient()
+    },
     mounted(){
-        let agetitle=['0-10岁','10-20岁','20-30岁','30-40岁','40-50岁','50-60岁','60-70岁','70-80岁','80-90岁','≥90岁'],
-        ageList=[
-            {value:335, name:'0-10岁'},
-            {value:310, name:'10-20岁'},
-            {value:274, name:'20-30岁'},
-            {value:235, name:'30-40岁'},
-            {value:400, name:'40-50岁'},
-            {value:400, name:'50-60岁'},
-            {value:400, name:'60-70岁'},
-            {value:400, name:'70-80岁'},
-            {value:400, name:'80-90岁'},
-            {value:400, name:'≥90岁'},
-        ],
-        sextitle=['男','女'],
-        sexList=[
-            {value:335, name:'男'},
-            {value:310, name:'女'},
-        ],
-        ageLists=[];
-        ageList.forEach(item=>{
-            this.agetotal+=item.value;
-            ageLists.push(item.value)
-        })
-        sexList.forEach(item=>{
-            this.sextotal+=item.value
-        })
-        this.drawPie('ageChart',agetitle,ageList)
-        this.drawPie('sexChart',sextitle,sexList)
-        this.drawZhu('patientChart',agetitle,ageLists)
+        // let agetitle=['0-10岁','10-20岁','20-30岁','30-40岁','40-50岁','50-60岁','60-70岁','70-80岁','80-90岁','≥90岁'],
+        // ageList=[
+        //     {value:335, name:'0-10岁'},
+        //     {value:310, name:'10-20岁'},
+        //     {value:274, name:'20-30岁'},
+        //     {value:235, name:'30-40岁'},
+        //     {value:400, name:'40-50岁'},
+        //     {value:400, name:'50-60岁'},
+        //     {value:400, name:'60-70岁'},
+        //     {value:400, name:'70-80岁'},
+        //     {value:400, name:'80-90岁'},
+        //     {value:400, name:'≥90岁'},
+        // ],
+        // sextitle=['男','女'],
+        // sexList=[
+        //     {value:335, name:'男'},
+        //     {value:310, name:'女'},
+        // ],
+        // ageLists=[];
+        // ageList.forEach(item=>{
+        //     this.agetotal+=item.value;
+        //     ageLists.push(item.value)
+        // })
+        // sexList.forEach(item=>{
+        //     this.sextotal+=item.value
+        // })
+        // this.drawPie('ageChart',agetitle,ageList)
+        // this.drawPie('sexChart',sextitle,sexList)
+        // this.drawZhu('patientChart',agetitle,ageLists)
     }
 };
 </script>

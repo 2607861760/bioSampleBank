@@ -180,9 +180,12 @@ export default {
     delDepts(){
       let arr=[],
         obj={};
-      this.multipleSelection.map(item=>{
+        if(this.multipleSelection){
+          this.multipleSelection.map(item=>{
         arr.push(item.id)
       })
+        }
+      
       obj['idList']=arr;
       role.delDeptBylist(obj).then((res)=>{
         if(res.returnCode==0){
@@ -253,9 +256,12 @@ export default {
         if(res.returnCode==0){
           this.tableData=res.data.deptList;
           this.total=res.data.total;
-          this.tableData.map(item=>{
+          if(this.tableData){
+            this.tableData.map(item=>{
             item['upName']=this.findUp(item.pid,this.treeData)
           })
+          }
+          
         }else{
           this.$message.error(res.msg)
         }

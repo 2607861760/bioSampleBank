@@ -163,7 +163,7 @@
               <el-input v-model="basicform.medication" placeholder="请输入用药名称"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button size="medium">重置</el-button>
+              <el-button size="medium" @click="reset">重置</el-button>
               <el-button type="primary" @click="query" size="medium">查询</el-button>
             </el-form-item>
         </el-form>
@@ -347,6 +347,22 @@ export default {
         }
       })
     },
+    reset(){
+      console.log(this.basicform)
+      this.ctype='';
+      this.btype='';
+      this.samdate='';
+      this.age='';
+      this.weight='';
+      this.bmi='';
+      this.systolic='';
+      this.diastolic='';
+      this.tumloc='';
+      this.clinicalStage='';
+      this.testSpecimen='';
+      this.tumorStage='';
+      this.basicform={}
+    }
   },
   created() {
     this.searchItem("pbtype",0);

@@ -73,7 +73,7 @@
                 </el-option>
               </el-select>
               <el-button size="middle" type="primary" style="margin:0 10px 0 20px;">确定</el-button>
-              <el-button size="middle">重置</el-button>
+              <el-button size="middle" @click="reset">重置</el-button>
           </div>
           <div class="process-cont">
               <div class="process-chart">

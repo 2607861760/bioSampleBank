@@ -212,7 +212,8 @@ export default {
       this.infoform=this.$store.state.infoform.projectModel.project;
     this.truptable=this.$store.state.infoform.stdList;
     this.persontable=this.$store.state.infoform.appList;
-    this.newtruptable=this.truptable.map(item=>{
+    if(this.truptable){
+      this.newtruptable=this.truptable.map(item=>{
       if(item.logic=='and'){
         item.logic='并'
       }else if(item.logic=='or'){
@@ -236,6 +237,8 @@ export default {
       
       return item
     })
+    }
+    
     }
   },
   created(){

@@ -100,7 +100,11 @@
         <el-table-column prop="userinfo" label="角色信息"></el-table-column>
         <el-table-column prop="project" label="所属项目"></el-table-column>
         <el-table-column prop="status" label="状态"></el-table-column>
-        <el-table-column prop="createDate" label="创建时间"></el-table-column>
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            {{scope.row.createDate | dateFilter}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
@@ -161,6 +165,17 @@ export default {
       total:0,
       username:''
     };
+  },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth(),
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
   },
   methods: {
     searchUser(){

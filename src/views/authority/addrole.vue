@@ -65,6 +65,7 @@
 </template>
 <script>
 import {role} from 'api/index.js'
+import {objCopy} from 'base/js/common.js';
 export default {
   data() {
     return {
@@ -135,7 +136,7 @@ export default {
       role.getRoleInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data;
-          this.oldbasic=this.basicform.copy();
+          this.oldbasic=objCopy(this.basicform);
           this.powerlist=this.basicform.power.split(',')
           this.oldpowerlist=this.powerlist;
         }

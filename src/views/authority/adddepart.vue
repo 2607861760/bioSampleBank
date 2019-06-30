@@ -145,11 +145,14 @@ export default {
     },
     findUp(id){
       let depName='';
-      this.treeData.map(item=>{
-        if(item.id==id){
-          depName=item.depName
-        }
-      })
+      if(this.treeData){
+        this.treeData.map(item=>{
+          if(item.id==id){
+            depName=item.depName
+          }
+        })
+      }
+      
       return depName
     },
     getDeptInfo(){

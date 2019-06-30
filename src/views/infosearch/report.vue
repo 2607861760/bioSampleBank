@@ -1694,6 +1694,7 @@ export default {
       transferbwlist:[],
       progresslist:[],
       followwaylist:[],
+      cancerid:0
     };
   },
   filters:{
@@ -2358,6 +2359,7 @@ export default {
   },
   mounted() {
     // this.cancertype = "breast";
+    this.cancerid=this.$store.state.cancerid;
     if(this.cancerid==3){
       this.collist.forEach((item,index)=>{
         if(item.prop=='endoscope'){

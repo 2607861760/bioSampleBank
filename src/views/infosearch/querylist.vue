@@ -87,6 +87,9 @@
           >
             <template slot-scope="scope">
               <span v-if="item.prop=='number'" class="registration" @click='toReport(scope.row)'>{{scope.row.number}}</span>
+              <span v-else-if="item.prop=='ctype'">{{scope.row.ctype | ctypeFilter}}</span>
+              <span v-else-if="item.prop=='istransfer'">{{scope.row.istransfer | isFilter}}</span>
+              <span v-else-if="item.prop=='isrelapse'">{{scope.row.isrelapse | isFilter}}</span>
               <span v-else>{{scope.row[item.prop]}}</span>
             </template>
           </el-table-column>
@@ -107,7 +110,7 @@
   </div>
 </template>
 <script>
-import { infoentry } from "api/index.js";
+import { infoentry,infosearch } from "api/index.js";
 export default {
   data() {
     return {
@@ -140,19 +143,19 @@ export default {
           label: "癌种"
         },
         {
-          prop: "histopathological",
+          prop: "htype",
           label: "病理组织学类型"
         },
         {
-          prop: "stages",
+          prop: "clinicalStage",
           label: "分期"
         },
         {
-          prop: "genename",
+          prop: "gene",
           label: "基因名"
         },
         {
-          prop: "mutation",
+          prop: "hgvs",
           label: "突变位点"
         }
       ],
@@ -178,27 +181,27 @@ export default {
           label: "癌种",
           checked:true
         },{
-          prop: "genename",
+          prop: "gene",
           label: "基因名",
           checked:true
         },
         {
-          prop: "histopathological",
+          prop: "htype",
           label: "病理组织学类型",
           checked:false
         },
         {
-          prop: "stages",
+          prop: "clinicalStage",
           label: "分期",
           checked:false
         },
         {
-          prop: "mutationtype",
+          prop: "mtype",
           label: "突变类型",
           checked:false
         },
         {
-          prop: "mutation",
+          prop: "hgvs",
           label: "突变位点",
           checked:false
         },
@@ -212,39 +215,70 @@ export default {
           checked:false
         },
         {
-            prop:"systolicmin",
+            prop:"samsource",
             label:"收缩压",
           checked:false
         },{
-            prop:"diastolicmin",
-            label:"收缩压",
+            prop:"diastolic",
+            label:"舒张压",
           checked:false
         },{
-            prop:"sampleresource",
+            prop:"samsource",
             label:"样本来源",
           checked:false
         },{
-            prop:"drugname",
+            prop:"medication",
             label:"用药名称",
           checked:false
         },{
-            prop:"trans",
+            prop:"istransfer",
             label:"是否转移",
           checked:false
         },{
-            prop:"reappear",
+            prop:"isrelapse",
             label:"是否复发",
           checked:false
         }
       ],
       checkNum: 0,
       current:1,
-      pageSize:10
+      pageSize:10,
+      total:0,
+      option:[]
     };
+  },
+  filters:{
+    ctypeFilter(val){
+      switch (val) {
+        case 1:
+          return "肺癌";
+          break;
+        case 2:
+          return "结直肠癌";
+          break;
+        case 3:
+          return "乳腺癌";
+          break;
+        case 4:
+          return "胃癌";
+          break;
+        case 5:
+          return "膀胱癌";
+          break;
+      }
+    },
+    isFilter(val){
+      if(val==0){
+        return '是'
+      }else if(val==1){
+        return '否'
+      }
+    }
   },
   methods: {
       toReport(row){
         this.$store.state.patientid=row.id;
+        this.$store.state.cancerid=row.ctype;
         this.$router.push('/query/report')
       },
       changecheck(){
@@ -259,6 +293,14 @@ export default {
         //   console.log(tablecolumn)
           this.tablecol=tablecolumn
       },
+      handleSizeChange(val){
+        this.pageSize=val;
+        this.getPatient()
+      },
+      handleCurrentChange(val){
+        this.current=val;
+        this.getPatient();
+      },
       getPatient() {
       //获取信息列表
       let obj = {
@@ -268,16 +310,44 @@ export default {
           offset: this.current,
           size: this.pageSize
         };
-      infoentry.getPatient(pagelist, obj).then(res => {
+      infosearch.searchList(pagelist, obj).then(res => {
         if (res.returnCode == 0) {
-          this.tableData = res.data.patientList;
+          res.data.modelList.forEach(mitem=>{
+            this.option.forEach(item=>{
+              if(item.itemValue=='htype' && item.itype==mitem.ctype){
+                item.itemList.forEach(items=>{
+                  if(items.id==mitem.htype){
+                    mitem.htype=items.itemName
+                  }
+                })
+              }
+              if(item.itemValue=='clinicalStage' && item.itype==mitem.ctype){
+                item.itemList.forEach(items=>{
+                  if(items.id==mitem.clinicalStage){
+                    mitem.clinicalStage=items.itemName
+                  }
+                })
+              }
+          })
+          })
+          this.tableData = res.data.modelList;
           this.total = res.data.total;
         }
       });
     }
   },
   created() {
-    this.getPatient()
+    let search=['clinicalStage','htype']
+    this.$store.state.zdlist.forEach(item=>{
+      search.forEach(searchitem=>{
+        if(item.itemValue==searchitem){
+          this.option.push(item)
+        }
+      })
+    })
+  },
+  mounted(){
+    this.getPatient();
   }
 };
 </script>

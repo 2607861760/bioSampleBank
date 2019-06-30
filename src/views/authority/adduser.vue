@@ -33,7 +33,7 @@
   <div class="contant">
     <div class="title">
       <i class="iconfont el-icon-biosign"></i>
-      <span>新建角色</span>
+      <span>新建用户</span>
     </div>
     <div class="info-table">
       <el-form
@@ -83,6 +83,7 @@
 </template>
 <script>
 import {role} from 'api/index.js'
+import {objCopy} from 'base/js/common.js';
 export default {
   data() {
     return {
@@ -126,7 +127,7 @@ export default {
       role.getUserInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data;
-          this.oldbasic=this.basicform.Copy()
+          this.oldbasic=objCopy(this.basicform);
         }
       })
     }

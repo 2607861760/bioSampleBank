@@ -198,7 +198,8 @@
             <div
               v-for="(item,index) in lineList"
               :key="index"
-              :class="index==lineNum?'line-active':''"
+              :class="item.active?'line-active':''"
+              @click="lineChange(item,index)"
             >
               <p>{{item.name}}</p>
               <div>
@@ -231,6 +232,7 @@ require("echarts/lib/chart/pie");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/lib/component/legend");
+import {common} from 'api/index.js';
 export default {
   data() {
     return {
@@ -238,35 +240,35 @@ export default {
       titleList: [
         {
           name: "肺癌",
-          number: 56,
+          number: 0,
           trend: false,
           icon: "iconfont el-icon-biolung",
           rightclass: "biolung"
         },
         {
           name: "结直肠癌",
-          number: 823,
+          number: 0,
           trend: true,
           icon: "iconfont el-icon-biocolorectum",
           rightclass: "biocolorectum"
         },
         {
           name: "乳腺癌",
-          number: 120,
+          number: 0,
           trend: true,
           icon: "iconfont el-icon-biobreast",
           rightclass: "biobreast"
         },
         {
           name: "胃癌",
-          number: 16,
+          number: 0,
           trend: false,
           icon: "iconfont el-icon-biogastric",
           rightclass: "biogastric"
         },
         {
           name: "膀胱癌",
-          number: 86,
+          number: 0,
           trend: false,
           icon: "iconfont el-icon-biocarcinoma",
           rightclass: "biocarcinoma"
@@ -275,24 +277,28 @@ export default {
       lineList: [
         {
           name: "近一年",
-          number: 328,
-          trend: false
+          number: 0,
+          trend: false,
+          active:true,
         },
         {
           name: "近六个月",
-          number: 780,
-          trend: true
+          number: 0,
+          trend: true,
+          active:false,
         },
         {
           name: "近三个月",
-          number: 256,
-          trend: true
+          number: 0,
+          trend: true,
+          active:false,
         }
-      ]
+      ],
+      allData:{}
     };
   },
   methods: {
-    drawLine() {
+    drawLine(data) {
       let myChart = echarts.init(document.getElementById("linecharts"));
       myChart.setOption({
         legend: {
@@ -308,15 +314,7 @@ export default {
         xAxis: [
           {
             boundaryGap: false,
-            data: [
-              "2018-08",
-              "2018-09",
-              "2018-10",
-              "2018-11",
-              "2018-12",
-              "2019-01",
-              "2019-02"
-            ]
+            data: data.timeData
           }
         ],
         yAxis: [
@@ -335,7 +333,7 @@ export default {
             areaStyle: {
               color: "#7e6fff"
             },
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data: data.c1
           },
           {
             name: "结直肠癌",
@@ -347,7 +345,7 @@ export default {
             areaStyle: {
               color: "#4ecc48"
             },
-            data: [220, 182, 191, 234, 290, 330, 310]
+            data: data.c2
           },
           {
             name: "乳腺癌",
@@ -359,7 +357,7 @@ export default {
             areaStyle: {
               color: "#5797fc"
             },
-            data: [150, 232, 201, 154, 190, 330, 410]
+            data: data.c3
           },
           {
             name: "胃癌",
@@ -371,7 +369,7 @@ export default {
             areaStyle: {
               color: "#ffcc29"
             },
-            data: [320, 332, 301, 334, 390, 330, 320]
+            data: data.c4
           },
           {
             name: "膀胱癌",
@@ -383,12 +381,12 @@ export default {
             areaStyle: {
               color: "#f37070"
             },
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
+            data: data.c5
           }
         ]
       });
     },
-    drawPie(total) {
+    drawPie(total,data) {
       let myChart = echarts.init(document.getElementById("piecharts"));
       myChart.setOption({
         tooltip: {
@@ -401,17 +399,17 @@ export default {
           bottom: "50px",
           data: ["肺癌", "结直肠癌", "乳腺癌", "胃癌", "膀胱癌"]
         },
-        title:{
-          text:total,
-          subtext: '总数据量',
-          x: 'center',
-                    y: 'center',
-                    textStyle:{
-                        color:'#fff',
-                        fontSize:40,
-                        fontWeight:'bold',
-                    }
-        },
+        // title:{
+          // text:total,
+        //   subtext: '总数据量',
+        //   x: 'center',
+        //             y: 'center',
+        //             textStyle:{
+        //                 color:'#fff',
+        //                 fontSize:40,
+        //                 fontWeight:'bold',
+        //             }
+        // },
         color:['#7e6fff','#4ecc48','#5797fc','#ffcc29','#f37070'],
         series: [
           {
@@ -437,36 +435,133 @@ export default {
                 show: false
               }
             },
-            data: [
-              {
-                value: 335,
-                name: "肺癌",
-              },
-              {
-                value: 310,
-                name: "结直肠癌",
-              },
-              {
-                value: 234,
-                name: "乳腺癌",
-              },
-              {
-                value: 135,
-                name: "胃癌",
-              },
-              {
-                value: 1548,
-                name: "膀胱癌",
-              }
-            ]
+            data: data
           }
         ]
       });
+    },
+    getIndex(){
+      common.getIndex().then((res)=>{
+        let pieData=[];
+        this.titleList.map(item=>{
+          res.data.c.forEach(element => {
+            let obj={}
+            if(element.ctype==1 &&　item.name=='肺癌'){
+              item.number=element.num
+              obj['name']=item.name;
+              obj['value']=item.number;
+              pieData.push(obj)
+            }else if(element.ctype==2 &&　item.name=='结直肠癌'){
+              item.number=element.num
+              obj['name']=item.name;
+              obj['value']=item.number;
+              pieData.push(obj)
+            }else if(element.ctype==3 &&　item.name=='乳腺癌'){
+              item.number=element.num
+              obj['name']=item.name;
+              obj['value']=item.number;
+              pieData.push(obj)
+            }else if(element.ctype==4 &&　item.name=='胃癌'){
+              item.number=element.num
+              obj['name']=item.name;
+              obj['value']=item.number;
+              pieData.push(obj)
+            }else if(element.ctype==5 &&　item.name=='膀胱癌'){
+              item.number=element.num
+              obj['name']=item.name;
+              obj['value']=item.number;
+              pieData.push(obj)
+            }
+          });
+        });
+        this.drawPie(0,pieData);
+        this.allData=this.dataFliter(res.data.t);
+        this.drawLine(this.allData)
+        this.lineList[0].number=res.data.total;
+        this.lineList[1].number=res.data.total6;
+        this.lineList[2].number=res.data.total3;
+      })
+    },
+    lineChange(item,index){
+      this.lineList.map((items,indexs)=>{
+        items.active=false;
+        if(index==indexs){
+          items.active=true;
+        }
+      })
+      if(index==0){
+        this.drawLine(this.allData);
+      }else if(index==1){
+        let obj={}
+        for (const key in this.allData) {
+          if (this.allData.hasOwnProperty(key)) {
+            obj[key]=this.allData[key].slice(-6)
+          }
+        }
+        console.log(obj)
+        this.drawLine(obj)
+      }else if(index==2){
+        let obj={}
+        for (const key in this.allData) {
+          if (this.allData.hasOwnProperty(key)) {
+            obj[key]=this.allData[key].slice(-3)
+          }
+        }
+        this.drawLine(obj)
+      }
+    },
+    dataFliter(data){
+      let timeData=[],
+      c1=[],
+      c2=[],
+      c3=[],
+      c4=[],
+      c5=[];
+      data[0].list.forEach(item=>{
+        timeData.push(item.timeSlot)
+      })
+      data.forEach(item=>{
+        if(item.ctype==1){
+          item.list.forEach(items=>{
+            c1.push(items.num)
+          })
+        }
+        if(item.ctype==2){
+          item.list.forEach(items=>{
+            c2.push(items.num)
+          })
+        }
+        if(item.ctype==3){
+          item.list.forEach(items=>{
+            c3.push(items.num)
+          })
+        }
+        if(item.ctype==4){
+          item.list.forEach(items=>{
+            c4.push(items.num)
+          })
+        }
+        if(item.ctype==5){
+          item.list.forEach(items=>{
+            c5.push(items.num)
+          })
+        }
+      })
+      let dataobj={
+        timeData:timeData,
+        c1:c1,
+        c2:c2,
+        c3:c3,
+        c4:c4,
+        c5:c5
+      }
+      return dataobj
     }
   },
-  mounted() {
-    this.drawLine();
-    this.drawPie();
+  created() {
+    // this.drawLine();
+    // this.drawPie();
+    this.getIndex()
   }
 };
 </script>

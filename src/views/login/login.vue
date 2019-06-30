@@ -76,9 +76,9 @@
        <div class="login-input">
            <el-input placeholder="请输入密码" prefix-icon="iconfont el-icon-biopassword" v-model="password"></el-input>
         </div>
-        <div class="login-input remember">
+        <!-- <div class="login-input remember">
           <el-checkbox>记住密码</el-checkbox>
-        </div>
+        </div> -->
         <div class="login-input loginbtn">
           <el-button type="success" @click='login'>登   录</el-button>
         </div>
