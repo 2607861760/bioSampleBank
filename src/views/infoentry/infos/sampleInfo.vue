@@ -78,7 +78,7 @@
               <el-input v-model="sampleform.samsource"></el-input>
             </el-form-item>
             <el-form-item label="样本日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="sampleform.samdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="sampleform.samdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <span>

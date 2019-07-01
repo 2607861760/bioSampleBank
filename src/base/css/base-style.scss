@@ -240,3 +240,8 @@ body,
 .el-tree-node__content {
     height: 50px;
 }
+
+.el-date-editor.el-input,
+.el-date-editor.el-input__inner {
+    width: 350px;
+}

@@ -253,6 +253,7 @@ export default {
       })
     },
     addProject() {
+      this.$store.state.edit=false;
       this.$router.push('/scientific/addproject')
     },
     choice() {

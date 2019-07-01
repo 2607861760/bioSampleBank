@@ -115,12 +115,14 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="samdate.start"
+                value-format="yyyy-MM-dd"
               ></el-date-picker>
               <span>到</span>
               <el-date-picker
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="samdate.end"
+                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-divider></el-divider>
@@ -283,19 +285,33 @@ export default {
       })
       return newlist
     },
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth(),
+        day=date.getDay();
+        console.log(mouth)
+        console.log(day)
+      return year+'-'+mouth+'-'+day
+      }
+    },
     query(){
-      this.basicform['samdate']=this.samdate;
-      this.basicform['age']=this.stringTonum(this.age,'1');
-      this.basicform['weight']=this.stringTonum(this.weight);
-      this.basicform['bmi']=this.stringTonum(this.bmi);
-      this.basicform['systolic']=this.stringTonum(this.systolic);
-      this.basicform['diastolic']=this.stringTonum(this.diastolic);
-      this.basicform['ctype']=this.stringTonum(this.ctype);
-      this.basicform['btype']=this.stringTonum(this.btype);
-      this.basicform['tumloc']=this.numTostring(this.tumloc);
-      this.basicform['clinicalStage']=this.numTostring(this.clinicalStage);
-      this.basicform['testSpecimen']=this.numTostring(this.testSpecimen);
-      this.basicform['tumorStage']=this.numTostring(this.tumorStage);
+      // console.log(this.samdate.start)
+      // this.samdate.start=this.dateFilter(this.samdate.start)
+      // this.samdate.end=this.dateFilter(this.samdate.end)
+      if(Object.keys(this.samdate).length>0) this.basicform['samdate']=this.samdate;
+      if(Object.keys(this.age).length>0) this.basicform['age']=this.stringTonum(this.age,'1');
+      if(Object.keys(this.weight).length>0) this.basicform['weight']=this.stringTonum(this.weight);
+      if(Object.keys(this.bmi).length>0) this.basicform['bmi']=this.stringTonum(this.bmi);
+      if(Object.keys(this.systolic).length>0) this.basicform['systolic']=this.stringTonum(this.systolic);
+      if(Object.keys(this.diastolic).length>0) this.basicform['diastolic']=this.stringTonum(this.diastolic);
+      if(this.ctype.length>0) this.basicform['ctype']=this.stringTonum(this.ctype);
+      if(this.btype.length>0) this.basicform['btype']=this.stringTonum(this.btype);
+      if(this.tumloc.length>0) this.basicform['tumloc']=this.numTostring(this.tumloc);
+      if(this.clinicalStage.length>0) this.basicform['clinicalStage']=this.numTostring(this.clinicalStage);
+      if(this.testSpecimen.length>0) this.basicform['testSpecimen']=this.numTostring(this.testSpecimen);
+      if(this.tumorStage.length>0) this.basicform['tumorStage']=this.numTostring(this.tumorStage);
       let pagelist={
         offset:1,
         size:10
@@ -303,6 +319,7 @@ export default {
       infosearch.searchList(pagelist,this.basicform).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.querylist=res.data.modelList;
+          this.$store.state.total=res.data.total;
           this.$router.push('/query/queryinfo')
         }
       })

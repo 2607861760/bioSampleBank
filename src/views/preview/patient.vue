@@ -69,19 +69,19 @@
       <div class="process-inner">
           <div class="process-time">
               <span>时间段：</span>
-              <el-date-picker size="middle" v-model="starttime" type="date" placeholder="选择日期"></el-date-picker>
+              <el-date-picker size="middle" v-model="starttime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
               <span style="padding:0 10px;">到</span>
-              <el-date-picker size="middle" v-model="endtime" type="date" placeholder="选择日期"></el-date-picker>
-              <el-button size="middle" type="primary" style="margin:0 10px 0 20px;">确定</el-button>
-              <el-button size="middle">重置</el-button>
+              <el-date-picker size="middle" v-model="endtime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-button size="middle" type="primary" style="margin:0 10px 0 20px;" @click="timeChange">确定</el-button>
+              <el-button size="middle" @click="reset">重置</el-button>
           </div>
           <div class="process-cont">
               <div>
-                  <el-radio-group v-model="radio">
-                    <el-radio :label="1">近三个月</el-radio>
-                    <el-radio :label="2">近六个月</el-radio>
-                    <el-radio :label="3">近六个月</el-radio>
-                    <el-radio :label="4">全部</el-radio>
+                  <el-radio-group v-model="radio" @change="radioChange">
+                    <el-radio :label="3">近三个月</el-radio>
+                    <el-radio :label="6">近六个月</el-radio>
+                    <el-radio :label="1">近一年</el-radio>
+                    <el-radio :label="''">全部</el-radio>
                 </el-radio-group>
               </div>
               <div class="process-chart">
@@ -164,16 +164,17 @@ export default {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
-                visualMap: {
-                    show: false,
-                    min: 80,
-                    max: 600,
-                    inRange: {
-                        colorLightness: [0, 1]
-                    }
-                },
+                // visualMap: {
+                //     show: false,
+                //     min: Math.min(ddata),
+                //     max: Math.max(ddata),
+                //     inRange: {
+                //         colorLightness: [0, 1]
+                //     }
+                // },
                 series : [
                     {
+                        name:'',
                         type:'pie',
                         radius : '55%',
                         center: ['50%', '50%'],
@@ -187,23 +188,23 @@ export default {
                                 }
                             }
                         },
-                        // labelLine: {
-                        //     normal: {
-                        //         lineStyle: {
-                        //             color: 'rgba(255, 255, 255, 0.3)'
-                        //         },
-                        //         smooth: 0.2,
-                        //         length: 10,
-                        //         length2: 20
-                        //     }
-                        // },
-                        // itemStyle: {
-                        //     normal: {
-                        //         color: '#fff',
-                        //         shadowBlur: 200,
-                        //         shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        //     }
-                        // },
+                        labelLine: {
+                            normal: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                },
+                                smooth: 0.2,
+                                length: 10,
+                                length2: 20
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                // color: '#fff',
+                                shadowBlur: 200,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
 
                         // animationType: 'scale',
                         // animationEasing: 'elasticOut',
@@ -224,49 +225,64 @@ export default {
                 this.drawPie(id,title,item.value,total)
             })
         },
-        getPatient(){
+        reset(){
+            this.starttime='';
+            this.endtime='';
+            this.radio=0;
+            this.getPatient('')
+        },
+        timeChange(){
             let obj={
-               type:1,
+                startTime:this.starttime,
+                endTime:this.endtime
             }
+            this.getPatient(obj)
+        },
+        radioChange(val){
+            let obj={
+                type:val,
+            }
+            this.getPatient(obj)
+        },
+        getPatient(obj){
             common.getPatient(obj).then((res)=>{
                 let ageList=[],
                 agetitle=[],
                 ageLists=[],
                 sextitle=[],
                 sexList=[];
-                for (const key in res.data.age) {
-                    if (res.data.age.hasOwnProperty(key)) {
-                        let objs={};
-                        objs['value']=res.data.age[key]
-                        objs['name']=key
-                        agetitle.push(key);
-                        ageList.push(objs);
-                        this.agetotal+=res.data.age[key]
-                    }
-                }
-                for (const key in res.data.sex) {
-                    if (res.data.sex.hasOwnProperty(key)) {
-                        let objs={};
-                        objs['value']=res.data.sex[key]
-                        objs['name']=key
-                        sextitle.push(key);
-                        sexList.push(objs);
-                        this.sextotal+=res.data.sex[key]
-                    }
-                }
+                this.sextotal=0;
+                this.agetotal=0;
+                if(res.data){
+                    res.data.age.forEach(item=>{
+                    let obj={}
+                    obj['value']=item.num
+                    obj['name']=item.type
+                    ageList.push(obj)
+                    agetitle.push(item.type)
+                    this.agetotal+=item.num
+                })
                 ageList.forEach(item=>{
                     ageLists.push(item.value)
                 })
-                console.log(agetitle)
-                console.log(ageList)
-                // this.drawPie('ageChart',agetitle,ageList)
-                // this.drawPie('sexChart',sextitle,sexList)
-                // this.drawZhu('patientChart',agetitle,ageLists)
+                res.data.sex.forEach(item=>{
+                    let obj={}
+                    obj['value']=item.num
+                    obj['name']=item.type
+                    sexList.push(obj)
+                    sextitle.push(item.type)
+                    this.sextotal+=item.num
+                })
+                this.drawPie('ageChart',agetitle,ageList)
+                this.drawPie('sexChart',sextitle,sexList)
+                this.drawZhu('patientChart',agetitle,ageLists)
+                }
+                
             })
         }
     },
     created(){
-        this.getPatient()
+        this.radioChange('')
     },
     mounted(){
         // let agetitle=['0-10岁','10-20岁','20-30岁','30-40岁','40-50岁','50-60岁','60-70岁','70-80岁','80-90岁','≥90岁'],

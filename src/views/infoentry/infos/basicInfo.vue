@@ -86,7 +86,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="出生日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.birthday"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.birthday" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="年龄：" prop="age">
               <el-input v-model.number="basicform.age"></el-input>
@@ -129,13 +129,13 @@
             label-position="left"
           >
             <el-form-item label="入院日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.intime"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.intime" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="入院科室：">
               <el-input v-model="doctorform.indepartment"></el-input>
             </el-form-item>
             <el-form-item label="出院日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.outtime"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.outtime" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="出院科室：">
               <el-input v-model="doctorform.outdepartment"></el-input>
@@ -144,7 +144,7 @@
               <el-input v-model="doctorform.vhospital"></el-input>
             </el-form-item>
             <el-form-item label="门诊日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.mzdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.mzdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="门诊科室：">
               <el-input v-model="doctorform.mzdepartment"></el-input>
@@ -153,7 +153,7 @@
               <el-input v-model="doctorform.mzhospital"></el-input>
             </el-form-item>
             <el-form-item label="急诊日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.emdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="doctorform.emdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="急诊科室：">
               <el-input v-model="doctorform.emdepartment"></el-input>

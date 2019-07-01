@@ -354,6 +354,7 @@ export default {
     handleEdit(index, row) {
       this.$store.state.entryState = row.state;
       this.$store.state.patientid = row.id;
+      this.$store.state.cancerid=row.ctype;
       this.$store.state.edit = true;
       this.$router.push("/infoentry/addpatient?type=basicInfo");
     },

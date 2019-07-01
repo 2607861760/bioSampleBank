@@ -485,7 +485,9 @@ export default {
         }
     },
     fieldchange(data){
-      console.log(data)
+      data.value=null;
+      data.condition=null;
+      data.fieldUnit=null;
       this.zdlist.map(item=>{
         if(data.field ==item.itemValue){
           data['fieldType']=item.fieldType;
@@ -516,12 +518,40 @@ export default {
     remove(node, data) {
       this.$refs.tree.remove(node);
     },
+    arrTostring(arr){
+      arr.forEach(element => {
+        element.option=JSON.stringify(element.option)
+        if(element.children.length>0){
+          this.arrTostring(element.children)
+        }
+      });
+      return arr
+    },
+    stringToarr(string){
+      string.forEach(element => {
+        if(element.option){
+          element.option=JSON.parse(element.option)
+        }
+        if(element.children.length>0){
+          this.stringToarr(element.children)
+        }
+        if(element.fieldType==1){
+          element.value=Number(element.value)
+        }
+        this.zdlist.map(item=>{
+          if(element.field==item.itemValue){
+            element.field=item.itemName
+          }
+        })
+      });
+      return string
+    },
     establish(){
       let obj={
         projectName:this.infoform.projectName,
         projectId:this.$store.state.projectid,
         userId:this.$store.state.userId,
-        list:this.treedata
+        list:this.arrTostring(this.treedata)
       }
       project.submitProStd(obj).then((res)=>{
         if(res.returnCode==0){
@@ -536,7 +566,6 @@ export default {
       this.tableData.splice(index, 1);
     },
     saveProject(){
-      
         this.$refs['form'].validate((valid) => {
         if(valid){
           let obj={
@@ -548,7 +577,7 @@ export default {
           if(this.$store.state.edit){
             project.updateProject(obj).then((res)=>{
             if(res.returnCode==0){
-              
+              this.infoProject(this.$store.state.userId)
               this.current += 1;
             }else{
               this.$message.error(res.msg)
@@ -558,6 +587,7 @@ export default {
             project.saveProject(obj).then((res)=>{
             if(res.returnCode==0){
               this.$store.state.projectid=res.data.id;
+              this.infoProject(this.$store.state.userId)
               this.current += 1;
             }else{
               this.$message.error(res.msg)
@@ -579,20 +609,30 @@ export default {
         } 
       })
     },
+    getInfoProject(createUserId){
+      let obj={
+        createUserId:createUserId
+      }
+      project.infoProject(obj).then((res)=>{
+        if(res.returnCode==0){
+            this.treedata=this.stringToarr(res.data.emodel.list);
+        }
+      })
+    },
     infoProject(){
       let obj={
         id:this.$store.state.projectid
       }
       project.infoProject(obj).then((res)=>{
         if(res.returnCode==0){
-          this.infoform=res.data;
+            this.infoform=res.data;
         }
       })
     }
   },
   mounted(){
     this.getAll();
-    if(this.$store.state.edit){
+    if(this.$store.state.edit==true){
       this.infoProject()
     }
   }

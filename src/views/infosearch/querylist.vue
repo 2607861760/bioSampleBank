@@ -347,7 +347,29 @@ export default {
     })
   },
   mounted(){
-    this.getPatient();
+    // this.getPatient();
+    this.$store.state.querylist.forEach(mitem=>{
+      this.option.forEach(item=>{
+                    if(item.itemValue=='htype' && item.itype==mitem.ctype){
+                      item.itemList.forEach(items=>{
+                        if(items.id==mitem.htype){
+                          mitem.htype=items.itemName
+                        }
+                      })
+                    }
+                    if(item.itemValue=='clinicalStage' && item.itype==mitem.ctype){
+                      item.itemList.forEach(items=>{
+                        if(items.id==mitem.clinicalStage){
+                          mitem.clinicalStage=items.itemName
+                        }
+                      })
+                    }
+                })
+    })
+    
+    
+    this.tableData=this.$store.state.querylist;
+    this.total=this.$store.state.total;
   }
 };
 </script>

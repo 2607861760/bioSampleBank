@@ -77,7 +77,7 @@
           <el-form ref="form" :model="basicform" label-width="150px" label-position="left">
             <el-form-item label="体格检查"></el-form-item>
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.tdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.tdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="身高：">
               <el-input v-model="basicform.height">
@@ -269,7 +269,7 @@
             <template v-if="cancerid==2">
             <el-form-item label="便常规" ></el-form-item>
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.bdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.bdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="颜色：">
               <el-input v-model="basicform.colour"></el-input>
@@ -310,7 +310,7 @@
             </template>
             <el-form-item label="肿瘤标志物"></el-form-item>
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.tagdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.tagdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="糖类抗原CA-199：">
               <el-input v-model="basicform.ca199">
@@ -400,7 +400,7 @@
               <el-input v-model="endoscopeform.njname"></el-input>
             </el-form-item>
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="endoscopeform.njdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="endoscopeform.njdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="肠镜能否通过：">
               <el-radio-group v-model="endoscopeform.ispass">
@@ -449,7 +449,7 @@
         <div v-if="activeName=='pathology'">
           <el-form ref="form" :model="pathologyform" label-width="150px" label-position="left">
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="pathologyform.date"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="pathologyform.date" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="病理号：">
               <el-input v-model="pathologyform.bnum"></el-input>
@@ -1137,7 +1137,7 @@
         <div v-if="activeName=='molecule'">
           <el-form ref="form" :model="moleculeform" label-width="150px" label-position="left">
             <el-form-item label="检查日期：">
-              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="moleculeform.mdate"></el-date-picker>
+              <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="moleculeform.mdate" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
             <el-form-item label="标本类型：">
               <el-select v-model="moleculeform.sampletype" placeholder="请选择...">
