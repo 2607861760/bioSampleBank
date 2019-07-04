@@ -105,6 +105,14 @@ export default {
       common.login(obj).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.userId=res.data.id;
+          this.$store.state.role=res.data.role;
+          this.$store.state.topNavList=[
+            {
+          name: "首页",
+          newname:"首页",
+          path: "/home",
+        }
+          ]
           this.$router.push('/home')
         }else{
           this.$message.error(res.msg)

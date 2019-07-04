@@ -109,7 +109,7 @@
         :unique-opened='true'
         :default-openeds="openeds"
       >
-        <div v-for="(item,index) in menu" :key="index">
+        <div v-for="(item,index) in menu" :key="index" v-if='roleShow(item)'>
           <el-submenu v-if="item.children" :index='String(index)'>
             <template slot="title">
               <div :index="item.path">
@@ -202,7 +202,7 @@
           <div>
             <i class="iconfont el-icon-biorights"></i>
           </div>
-          <div>
+          <div @click="exit">
             <i class="iconfont el-icon-bioset" style="font-size:26px;line-height: 65px;"></i>
           </div>
         </div>
@@ -240,26 +240,31 @@ export default {
         {
           name: "首页",
           icon: "iconfont el-icon-biomain",
-          path: "/home"
+          path: "/home",
+          id:0
         },
         {
           name: "信息录入",
           icon: "iconfont el-icon-biopen",
-          path: "/infoentry"
+          path: "/infoentry",
+          id:1
         },
         {
           name: "查询系统",
           icon: "iconfont el-icon-biosearch",
-          path: "/query"
+          path: "/query",
+          id:2
         },
         {
           name: "科研管理",
           icon: "iconfont el-icon-bioscientific",
-          path: "/scientific"
+          path: "/scientific",
+          id:3
         },
         {
           name: "预览系统",
           icon: "iconfont el-icon-bionews",
+          id:4,
           children:[
             {
               name: "科室样本统计",
@@ -281,6 +286,7 @@ export default {
         {
           name: "权限管理",
           icon: "iconfont el-icon-bioshield",
+          id:5,
           children: [
             {
               name: "角色管理",
@@ -301,7 +307,8 @@ export default {
         },{
           name: "字典管理",
           icon: "iconfont el-icon-zhiyebingbingliguanli",
-          path: "/dict/dict"
+          path: "/dict/dict",
+          id:6
         },
       ],
       topNavList: [
@@ -343,6 +350,19 @@ export default {
     },
   },
   methods: {
+    exit(){
+      this.$store.commit('resetState')
+      this.$router.push('/')
+    },
+    roleShow(item){
+      if(item.id==0){
+        return true
+      }
+      let power=this.$store.state.role.power.split(',');
+      return power.some((items)=>{
+        return items==item.id
+      })
+    },
     delMore(lists,name){
       let newlist=[]
       lists.forEach((item)=>{

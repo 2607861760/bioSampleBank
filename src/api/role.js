@@ -178,4 +178,13 @@ export const role = {
             return Promise.resolve(res.data)
         })
     },
+    /**
+     * 获取部门和角色
+     * @param {*} obj 
+     */
+    getItems() {
+        return $ajax.get(apiUrl.apiUrl + 'user/getItems').then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

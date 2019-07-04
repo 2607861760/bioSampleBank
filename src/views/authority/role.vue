@@ -96,7 +96,7 @@
         <el-table-column type="index" width="50" label="序号"></el-table-column>
         <el-table-column prop="id" label="角色ID"></el-table-column>
         <el-table-column prop="roleName" label="角色名称" sortable></el-table-column>
-        <el-table-column prop="power" label="权限信息" sortable></el-table-column>
+        <!-- <el-table-column prop="power" label="权限信息" sortable></el-table-column> -->
         <el-table-column label="创建时间 ">
           <template slot-scope="scope">
             {{scope.row.createDate | dateFilter}}

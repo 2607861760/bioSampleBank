@@ -15,4 +15,9 @@ export const common = {
             return Promise.resolve(res.data)
         })
     },
+    getSample(obj) {
+        return $ajax.get(apiUrl.apiUrl + 'index/sample', { params: obj }).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

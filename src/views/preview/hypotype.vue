@@ -72,7 +72,7 @@
                     :value="item.id">
                 </el-option>
               </el-select>
-              <el-button size="middle" type="primary" style="margin:0 10px 0 20px;">确定</el-button>
+              <el-button size="middle" type="primary" style="margin:0 10px 0 20px;" @click="submit">确定</el-button>
               <el-button size="middle" @click="reset">重置</el-button>
           </div>
           <div class="process-cont">
@@ -92,11 +92,10 @@ require("echarts/lib/chart/pie");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/lib/component/legend");
+import {common} from 'api/index.js'
 export default {
     data(){
         return{
-            starttime:'',
-            endtime:'',
             activeName:'1',
             title:['髓样癌','粘液腺癌','腺癌','印戒细胞癌','高级别神经内分泌癌','鳞状细胞癌','腺鳞癌','未分化癌','其他','癌，不能分类'],
             ctypelist:[
@@ -108,11 +107,19 @@ export default {
                     name:'乳腺癌',
                     id:3
                 },
-            ]
+            ],
+            ctype:2,
         }
     },
     methods:{
-        drawPie(id,title,data,indata) {
+        submit(){
+            this.getSample(this.ctype)
+        },
+        reset(){
+            this.ctype=2;
+            this.getSample(this.ctype);
+        },
+        drawPie(id,title,data) {
             let myChart = echarts.init(document.getElementById(id));
             myChart.setOption({
                 tooltip: {
@@ -141,10 +148,9 @@ export default {
                     show: false
                 }
             },
-            data:indata
         },
         {
-            name:'访问来源',
+            name:'',
             type:'pie',
             radius: ['40%', '55%'],
             label: {
@@ -193,27 +199,45 @@ export default {
                 })
                 this.drawPie(id,title,item.value,total)
             })
+        },
+        getSample(ctype){
+            let obj={
+                ctype:ctype
+            }
+            common.getSample(obj).then((res)=>{
+                if(res.returnCode==0){
+                    this.title=res.data.map((item)=>{
+                        return item.type
+                    })
+                    let data=res.data.map((item)=>{
+                        let obj={
+                            value:item.num,
+                            name:item.type
+                        }
+                        return obj
+                    })
+                    this.drawPie('charts',this.title,data)
+                }
+            })
         }
     },
+    created(){
+        this.getSample(this.ctype)
+    },
     mounted(){
-        let data=[
-                {value:335, name:'髓样癌'},
-                {value:310, name:'粘液腺癌'},
-                {value:234, name:'腺癌'},
-                {value:135, name:'印戒细胞癌'},
-                {value:1048, name:'高级别神经内分泌癌'},
-                {value:251, name:'鳞状细胞癌'},
-                {value:147, name:'腺鳞癌'},
-                {value:102, name:'未分化癌'},
-                {value:102, name:'其他'},
-                {value:102, name:'癌，不能分类'},
-            ],
-            indata=[
-                {value:335, name:'髓样癌',selected:true},
-                {value:310, name:'粘液腺癌'},
-                {value:234, name:'腺癌'},
-            ];
-        this.drawPie('charts',this.title,data,indata)
+        // let data=[
+        //         {value:335, name:'髓样癌'},
+        //         {value:310, name:'粘液腺癌'},
+        //         {value:234, name:'腺癌'},
+        //         {value:135, name:'印戒细胞癌'},
+        //         {value:1048, name:'高级别神经内分泌癌'},
+        //         {value:251, name:'鳞状细胞癌'},
+        //         {value:147, name:'腺鳞癌'},
+        //         {value:102, name:'未分化癌'},
+        //         {value:102, name:'其他'},
+        //         {value:102, name:'癌，不能分类'},
+        //     ];
+        // this.drawPie('charts',this.title,data)
     }
 };
 </script>

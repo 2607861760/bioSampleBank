@@ -61,7 +61,7 @@
               </p>
               <el-checkbox-group v-model="checkedcol" @change="changecheck">
                   <div v-for="(item,index) in collist" :key="index" style="float:left;width:100px;">
-                    <el-checkbox  :label="item.prop" :checked="item.checked" >{{item.label}}</el-checkbox>
+                    <el-checkbox  :label="item.label" :true-label='item.label' :checked="item.checked" :disabled="checkDis(item)">{{item.label}}</el-checkbox>
                   </div>
               </el-checkbox-group>
             </div>
@@ -71,9 +71,9 @@
             </el-button>
           </el-popover>
 
-          <el-button type="primary" size="medium">
+          <el-button type="primary" size="medium" @click="output">
             导出
-            <i class="iconfont el-icon-biooutput"></i>
+            <i class="iconfont el-icon-biooutput" ></i>
           </el-button>
         </div>
       </div>
@@ -114,62 +114,22 @@ import { infoentry,infosearch } from "api/index.js";
 export default {
   data() {
     return {
-      checkedcol:[{
-          prop: "number",
-          label: "登记号",
-          checked:true
-        },
-        {
-          prop: "ctype",
-          label: "癌种",
-          checked:true
-        },{
-          prop: "genename",
-          label: "基因名",
-          checked:true
-        },
-    ],
+      checkedcol:[],
       tablecol: [
         {
           prop: "number",
           label: "登记号"
         },
         {
-          prop: "age",
-          label: "年龄"
-        },
-        {
           prop: "ctype",
           label: "癌种"
-        },
-        {
-          prop: "htype",
-          label: "病理组织学类型"
-        },
-        {
-          prop: "clinicalStage",
-          label: "分期"
         },
         {
           prop: "gene",
           label: "基因名"
         },
-        {
-          prop: "hgvs",
-          label: "突变位点"
-        }
       ],
-      tableData: [
-        // {
-        //   registration: "201901032578",
-        //   age: "30",
-        //   cancer: "乳腺癌",
-        //   histopathological: "浸润性癌",
-        //   stages: "ⅡA 期",
-        //   genename: "BRCA",
-        //   mutation: "p.R125T"
-        // }
-      ],
+      tableData: [],
       collist:[
          {
           prop: "number",
@@ -276,6 +236,26 @@ export default {
     }
   },
   methods: {
+    output(){
+      console.log(this.checkedcol)
+      let obj={
+        downTiles:this.checkedcol,
+      }
+      Object.assign(obj,this.$store.state.basicform)
+      infosearch.searchDown(obj).then((res)=>{
+        console.log(res)
+      })
+    },
+    checkDis(item) {
+      if (
+        item.prop == "number" ||
+        item.prop == "ctype" ||
+        item.prop == "gene"
+      ) {
+        return true;
+      }
+      return false;
+    },
       toReport(row){
         this.$store.state.patientid=row.id;
         this.$store.state.cancerid=row.ctype;
@@ -290,7 +270,6 @@ export default {
                   }
               })
           })
-        //   console.log(tablecolumn)
           this.tablecol=tablecolumn
       },
       handleSizeChange(val){

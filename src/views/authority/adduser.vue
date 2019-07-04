@@ -20,7 +20,8 @@
 }
 .el-input,
 .el-select,
-.el-date-editor {
+.el-date-editor,
+.el-cascader {
   width: 350px;
 }
 .el-button--primary {
@@ -46,10 +47,19 @@
           <el-input v-model="basicform.username"></el-input>
         </el-form-item>
         <el-form-item label="所属部门：">
-              <el-select v-model="basicform.deptId" placeholder="请选择...">
-                <el-option label="男" value="1"></el-option>
-                <el-option label="女" value="0"></el-option>
-              </el-select>
+                <el-cascader
+                v-model="basicform.deptId"
+                :options="departList"
+                :props="{ 
+                  checkStrictly: true,
+                value:'id',
+                label:'depName',
+                emitPath:false
+                  }"
+                clearable
+                placeholder="请选择..."
+                :show-all-levels="false"
+                ></el-cascader>
             </el-form-item>
         <el-form-item label="邮箱：">
           <el-input v-model="basicform.email"></el-input>
@@ -62,8 +72,12 @@
         </el-form-item>
         <el-form-item label="角色：">
               <el-select v-model="basicform.roleId" placeholder="请选择...">
-                <el-option label="男" value="1"></el-option>
-                <el-option label="女" value="0"></el-option>
+                <el-option 
+                v-for='item in roleList'
+                :key='item.id'
+                :value="item.id"
+                :label="item.roleName"
+                ></el-option>
               </el-select>
             </el-form-item>
     <el-form-item label="数据权限：">
@@ -88,10 +102,14 @@ export default {
   data() {
     return {
         basicform:{},
+        roleList:[],
+        departList:[],
+        deptId:null
     };
   },
   methods: {
     saveUser(){
+      // this.basicform.deptId=this.deptId;
       if(this.$store.state.userid==null){
         role.saveUser(this.basicform).then((res)=>{
         if(res.returnCode==0){
@@ -127,15 +145,34 @@ export default {
       role.getUserInfo(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data;
+          this.basicform.password='';
+          // this.deptId=this.basicform.deptId;
           this.oldbasic=objCopy(this.basicform);
+        }
+      })
+    },
+    getItems(){
+        role.getItems().then((res)=>{
+          if(res.returnCode==0){
+            this.roleList=res.data.roew;
+          }
+        })
+    },
+    getDeptAll(){
+      role.getDeptAll().then((res)=>{
+        if(res.returnCode==0){
+          this.departList=res.data;
         }
       })
     }
   },
   mounted(){
+    this.getItems();
+    this.getDeptAll();
     if(this.$store.state.userid!=null){
       this.getUserInfo()
     }
+    
   }
 };
 </script>

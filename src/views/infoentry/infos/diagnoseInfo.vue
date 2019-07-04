@@ -366,6 +366,7 @@
                 list-type="picture"
                 :file-list="ctfile"
                 :limit='2'
+                accept="image/png,image/jpg"
                 >
                 <el-button size="small" type="primary">选择文件</el-button>
                 </el-upload>
@@ -382,6 +383,7 @@
                 list-type="picture"
                 :file-list="petfile"
                 :limit='2'
+                accept="image/png,image/jpg"
                 >
                 <el-button size="small" type="primary">选择文件</el-button>
                 </el-upload>
@@ -468,6 +470,7 @@
                 list-type="picture"
                 :file-list="isscanfile"
                 :limit='2'
+                accept="image/png,image/jpg"
               >
               <el-button size="small" type="primary">选择文件</el-button>
               </el-upload>
@@ -1479,6 +1482,7 @@
                 list-type="picture"
                 :file-list="mammofile"
                 :limit='2'
+                accept="image/png,image/jpg"
               >
               <el-button size="small" type="primary">选择文件</el-button>
               </el-upload>
@@ -1516,6 +1520,7 @@
                 list-type="picture"
                 :file-list="mrifile"
                 :limit='2'
+                accept="image/png,image/jpg"
               >
               <el-button size="small" type="primary">选择文件</el-button>
               </el-upload>

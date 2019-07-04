@@ -170,14 +170,15 @@
 
 <template>
   <div class="contant">
+    <div v-loading="loading">
     <div class="home-title">
       <div v-for="(item,index) in titleList" :key="index">
         <div class="title-left">
           <p>{{item.name}}</p>
           <div>
             {{item.number}}
-            <i v-if="item.trend" class="iconfont el-icon-bioup"></i>
-            <i v-else class="iconfont el-icon-biodown"></i>
+            <!-- <i v-if="item.trend" class="iconfont el-icon-bioup"></i>
+            <i v-else class="iconfont el-icon-biodown"></i> -->
           </div>
         </div>
         <div class="title-right">
@@ -204,8 +205,8 @@
               <p>{{item.name}}</p>
               <div>
                 <span>{{item.number}}</span>
-                <i v-if="item.trend" class="iconfont el-icon-bioup"></i>
-                <i v-else class="iconfont el-icon-biodown"></i>
+                <!-- <i v-if="item.trend" class="iconfont el-icon-bioup"></i>
+                <i v-else class="iconfont el-icon-biodown"></i> -->
               </div>
             </div>
           </div>
@@ -219,6 +220,7 @@
         </div>
         <div id="piecharts"></div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -294,7 +296,8 @@ export default {
           active:false,
         }
       ],
-      allData:{}
+      allData:{},
+      loading:true,
     };
   },
   methods: {
@@ -480,6 +483,7 @@ export default {
         this.lineList[0].number=res.data.total;
         this.lineList[1].number=res.data.total6;
         this.lineList[2].number=res.data.total3;
+        this.loading=false
       })
     },
     lineChange(item,index){

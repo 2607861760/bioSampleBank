@@ -30,4 +30,22 @@ export const infosearch = {
             return Promise.resolve(res.data)
         })
     },
+    /**
+     * 药物查找
+     * @param {*} obj 
+     */
+    getNameByName(obj) {
+        return $ajax.get(apiUrl.apiUrl + 'medication/getNameByName', { params: obj }).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    /**
+     * 导出
+     * @param {*} obj 
+     */
+    searchDown(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'search/down', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

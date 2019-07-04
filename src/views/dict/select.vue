@@ -206,7 +206,7 @@ export default {
         }
 
       })
-      this.addguo()
+      // this.addguo()
       }
       
     },

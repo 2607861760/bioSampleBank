@@ -99,6 +99,7 @@ require("echarts/lib/chart/pie");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/lib/component/legend");
+import {common} from 'api/index.js'
 export default {
     data(){
         return{
@@ -683,7 +684,11 @@ export default {
                 })
                 this.drawPie(id,title,item.value,total)
             })
-        }
+        },
+        
+    },
+    created(){
+        
     },
     mounted(){
         this.drawPic(this.charts,this.title)

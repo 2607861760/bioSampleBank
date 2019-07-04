@@ -162,7 +162,23 @@
             </el-form-item>
             <el-divider></el-divider>
             <el-form-item label="用药名称：">
-              <el-input v-model="basicform.medication" placeholder="请输入用药名称"></el-input>
+              <!-- <el-input v-model="basicform.medication" placeholder="请输入用药名称" ></el-input> -->
+              <el-select
+                v-model="basicform.medication"
+                filterable
+                allow-create
+                remote
+                default-first-option
+                placeholder="请输入用药名称"
+                :remote-method="getNameByName"
+                >
+                <el-option
+                  v-for="item in medicationoptions"
+                  :key="item.itemId"
+                  :label="item.itemName"
+                  :value="item.itemId">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button size="medium" @click="reset">重置</el-button>
@@ -230,6 +246,7 @@ export default {
       // clinicalstagesList: ["Stage 0", "Stage Ⅰ","Stage ⅡA","Stage ⅡB","Stage ⅢA","Stage ⅢB","Stage ⅢC","Stage ⅣA","Stage ⅣB","Stage ⅣC"],
       // specimenList: ["粗针穿刺活检标本", "真空辅助微创活检标本","乳腺肿物切除标本","乳腺病变保乳切除标本","全乳切除标本（包括单纯切除术和改良根治术）","前哨淋巴结活检标本","腋窝淋巴结标本"],
       // tumourstagesList: ["0期TisN0M0", "Ⅰ期 T1N0M0","ⅠA期T1N0M0","ⅠB期 T1N0M0/T1N1miM0","ⅡA期 T0N1M0/T1N1M0/T2N0M0","ⅡB期 T2N1M0/T3N0M0","ⅢA期 T0N2M0/T1N2M0/T2N2M0/T3N1M0/T3N2M0","ⅢB期 T4N0M0/T4N1M0/T4N2M0","ⅢC期 任何T/N3M0","Ⅳ期 任何T/任何N/M1"],
+      medicationoptions:[]
     };
   },
   methods: {
@@ -296,6 +313,22 @@ export default {
       return year+'-'+mouth+'-'+day
       }
     },
+    getNameByName(query){
+
+      if(query && query!=''){
+        let obj={
+        name:query
+      }
+      infosearch.getNameByName(obj).then((res)=>{
+        if(res.returnCode==0){
+          if(res.data.length>0){
+            this.medicationoptions=res.data;
+          }
+        }
+      })
+      }
+      
+    },
     query(){
       // console.log(this.samdate.start)
       // this.samdate.start=this.dateFilter(this.samdate.start)
@@ -316,11 +349,17 @@ export default {
         offset:1,
         size:10
       }
+      this.$store.state.basicform=this.basicform;
       infosearch.searchList(pagelist,this.basicform).then((res)=>{
         if(res.returnCode==0){
-          this.$store.state.querylist=res.data.modelList;
+          if(res.data.modelList.length>0){
+            this.$store.state.querylist=res.data.modelList;
           this.$store.state.total=res.data.total;
           this.$router.push('/query/queryinfo')
+          }else{
+            this.$message.warning('暂无数据！')
+          }
+          
         }
       })
       
