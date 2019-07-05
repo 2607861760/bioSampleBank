@@ -61,7 +61,7 @@
               </p>
               <el-checkbox-group v-model="checkedcol" @change="changecheck">
                   <div v-for="(item,index) in collist" :key="index" style="float:left;width:100px;">
-                    <el-checkbox  :label="item.label" :true-label='item.label' :checked="item.checked" :disabled="checkDis(item)">{{item.label}}</el-checkbox>
+                    <el-checkbox :label="item.label" :checked="item.checked" :disabled="checkDis(item)">{{item.label}}</el-checkbox>
                   </div>
               </el-checkbox-group>
             </div>
@@ -71,10 +71,10 @@
             </el-button>
           </el-popover>
 
-          <el-button type="primary" size="medium" @click="output">
+          <!-- <el-button type="primary" size="medium" @click="output">
             导出
             <i class="iconfont el-icon-biooutput" ></i>
-          </el-button>
+          </el-button> -->
         </div>
       </div>
       <div class="process-table">
@@ -204,7 +204,8 @@ export default {
       current:1,
       pageSize:10,
       total:0,
-      option:[]
+      option:[],
+      url:'http://42.123.125.101:82/excel/'
     };
   },
   filters:{
@@ -237,13 +238,27 @@ export default {
   },
   methods: {
     output(){
-      console.log(this.checkedcol)
       let obj={
         downTiles:this.checkedcol,
       }
       Object.assign(obj,this.$store.state.basicform)
       infosearch.searchDown(obj).then((res)=>{
-        console.log(res)
+        if(res.returnCode==0){
+          let filePath=this.url+res.data.filename;
+          // console.log(filePath)
+          // var adown=document.createElement('a');
+          // adown.download=res.data.filename;
+          // adown.href=filePath;
+          // adown.click()
+          var elemIF = document.createElement('iframe');
+                elemIF.src = filePath;
+                elemIF.style.display = 'none';
+                document.body.appendChild(elemIF);
+                // 防止下载两次
+                setTimeout(function() {
+                   document.body.removeChild(elemIF)
+                }, 1000);
+        }
       })
     },
     checkDis(item) {
@@ -263,9 +278,11 @@ export default {
       },
       changecheck(){
           let tablecolumn=[]
+          console.log(this.checkedcol)
+          
           this.checkedcol.forEach(item=>{
               this.collist.forEach(items=>{
-                  if(item==items.prop){
+                  if(item==items.label){
                     tablecolumn.push(items)
                   }
               })

@@ -76,22 +76,22 @@ export default {
         rolenoteList:[
             {
                 name:'信息录入',
-                id:1
+                id:'1'
             },{
                 name:'查询系统',
-                id:2
+                id:'2'
             },{
                 name:'科研管理',
-                id:3
+                id:'3'
             },{
                 name:'预览系统',
-                id:4
+                id:'4'
             },{
                 name:'权限管理',
-                id:5
+                id:'5'
             },{
                 name:'字典管理',
-                id:6
+                id:'6'
             }
         ]
     };
@@ -137,7 +137,7 @@ export default {
         if(res.returnCode==0){
           this.basicform=res.data;
           this.oldbasic=objCopy(this.basicform);
-          this.powerlist=this.basicform.power.split(',')
+          this.powerlist=this.basicform.power.split(',');
           this.oldpowerlist=this.powerlist;
         }
       })

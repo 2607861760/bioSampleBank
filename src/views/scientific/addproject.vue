@@ -170,7 +170,7 @@
         <div class="standard-title">
           <div class="condition">条件</div>
           <div class="clear">
-            <el-button size="middle">清空</el-button>
+            <el-button size="middle" @click="clear">清空</el-button>
           </div>
         </div>
         <div>
@@ -183,7 +183,7 @@
           >
             <div class="custom-tree-node" slot-scope="{ node, data }">
               <div class="tree-legic">
-                <el-select v-model="data.logic" placeholder="逻辑关系">
+                <el-select v-model="data.logic" placeholder="逻辑关系" v-if='data.disabled || data.logic==null'>
                   <el-option
                     v-for="item in legiclist"
                     :key="item.id"
@@ -233,7 +233,7 @@
                 </span>
               </div>
               <div class="delcont">
-                <el-button type="text" size="mini" @click="() => remove(node, data)">
+                <el-button type="text" size="mini" @click="() => remove(node, data)" v-if='data.disabled || data.logic==null'>
                   <i class="iconfont el-icon-biominus"></i>
                 </el-button>
               </div>
@@ -243,11 +243,11 @@
       </div>
       <div class="input">
         <el-popover placement="bottom-start" width="400" trigger="click">
-          <el-checkbox-group v-model="checkList">
+          <el-radio-group v-model="checkList" @change='inputChange'>
             <p v-for="(item,index) in inputlist" :key="index" style="padding-top:10px;">
-              <el-checkbox :label="item.name"></el-checkbox>
+              <el-radio :label="item.projectName"></el-radio>
             </p>
-          </el-checkbox-group>
+          </el-radio-group>
           <div class="input-btn" slot="reference">导入</div>
         </el-popover>
       </div>
@@ -264,6 +264,7 @@ export default {
     return {
       current: 0,
       infoform: {},
+      checkList:[],
       ctypelist:[
         {
           id:1,
@@ -336,6 +337,7 @@ export default {
           field: "",
           condition: null,
           value: "",
+          disabled:false,
           // children: [
           //   {
           //     logic: "and",
@@ -465,11 +467,25 @@ export default {
         condition: 0,
         value: "",
         type: "",
+        disabled:true
       },
       id:1000
     };
   },
   methods: {
+    clear(){
+      this.treedata=[
+        {
+          type: "",
+          logic: "",
+          field: "",
+          condition: null,
+          value: "",
+          disabled:false,
+        }
+      ]
+      this.establish()
+    },
     remoteMethod(query){
       let _this=this;
       _this.zdlists = [];
@@ -520,10 +536,13 @@ export default {
     },
     arrTostring(arr){
       arr.forEach(element => {
-        element.option=JSON.stringify(element.option)
-        if(element.children.length>0){
-          this.arrTostring(element.children)
+        if(element.option){
+          element.option=JSON.stringify(element.option)
+          if(element.children.length>0){
+            this.arrTostring(element.children)
+          }
         }
+        
       });
       return arr
     },
@@ -532,7 +551,7 @@ export default {
         if(element.option){
           element.option=JSON.parse(element.option)
         }
-        if(element.children.length>0){
+        if(element.children && element.children.length>0){
           this.stringToarr(element.children)
         }
         if(element.fieldType==1){
@@ -577,7 +596,7 @@ export default {
           if(this.$store.state.edit){
             project.updateProject(obj).then((res)=>{
             if(res.returnCode==0){
-              this.infoProject(this.$store.state.userId)
+              this.getInfoProject(this.$store.state.userId,this.$store.state.projectid)
               this.current += 1;
             }else{
               this.$message.error(res.msg)
@@ -609,13 +628,17 @@ export default {
         } 
       })
     },
-    getInfoProject(createUserId){
+    getInfoProject(createUserId,projectid){
       let obj={
-        createUserId:createUserId
+        createUserId:createUserId,
+        id:projectid
       }
       project.infoProject(obj).then((res)=>{
         if(res.returnCode==0){
             this.treedata=this.stringToarr(res.data.emodel.list);
+            console.log(this.treedata)
+            this.inputlist=res.data.emodels;
+            console.log(this.inputlist)
         }
       })
     },
@@ -628,6 +651,16 @@ export default {
             this.infoform=res.data;
         }
       })
+    },
+    inputChange(){
+      if(this.checkList){
+        this.inputlist.find(item=>{
+            if(item.projectName==this.checkList){
+              this.getInfoProject(this.$store.state.userId,item.projectId)
+            }
+        })
+      }
+      
     }
   },
   mounted(){

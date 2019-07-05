@@ -77,7 +77,7 @@
           @click="addDict"
         >新建</el-button>
       </div>
-      <div class="btn-right">
+      <!-- <div class="btn-right">
         <div>
           <el-input
             placeholder="请选择登记号、癌种"
@@ -85,7 +85,7 @@
             suffix-icon="iconfont el-icon-biosearch"
           ></el-input>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="info-table">
       <el-table :data="tableData" height="550" border style="width: 100%">

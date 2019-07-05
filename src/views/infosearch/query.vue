@@ -186,12 +186,12 @@
             </el-form-item>
         </el-form>
       </div>
-      <div class="search-footer" @click="filtrate">
+      <!-- <div class="search-footer" > -->
         <!-- <div> -->
-        <i :class="filtrateClass"></i>
-        <span>自定义筛选</span>
+        <!-- <i :class="filtrateClass"></i>
+        <span>自定义筛选</span> -->
         <!-- </div> -->
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>

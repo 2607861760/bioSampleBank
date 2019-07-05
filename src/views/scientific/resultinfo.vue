@@ -55,10 +55,10 @@
           <el-button size="small" plain @click='mysample'>我的样本</el-button>
           <el-button size="small" plain @click="othersample">参与人样本</el-button>
 
-          <el-button type="primary" size="medium">
+          <!-- <el-button type="primary" size="medium">
             导出
             <i class="iconfont el-icon-biooutput"></i>
-          </el-button>
+          </el-button> -->
         </div>
       </div>
       <div class="process-table">
