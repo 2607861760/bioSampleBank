@@ -115,14 +115,12 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="samdate.start"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
               <span>到</span>
               <el-date-picker
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="samdate.end"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-divider></el-divider>

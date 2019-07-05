@@ -118,7 +118,7 @@
       </div>
       <div class="audit-col">
         <span class="info-label">申请加入时间：</span>
-        <span class="info-text">{{basicform.joindate}}</span>
+        <span class="info-text">{{basicform.joindate | dateFilter}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">联系方式：</span>
@@ -172,6 +172,17 @@ export default {
         ]
       }
     };
+  },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth()+1,
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
   },
   methods: {
     saveProApp(){

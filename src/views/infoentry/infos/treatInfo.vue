@@ -284,7 +284,6 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="evaluationform.assdate"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="靶病灶评估：">
@@ -317,7 +316,6 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="evaluationform.nassdate"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="肿瘤标记物评估：">

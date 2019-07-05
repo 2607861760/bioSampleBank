@@ -107,7 +107,6 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="followform.diedate"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="是否复发：">
@@ -121,7 +120,6 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="followform.recdate"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="肿瘤进展情况：">
@@ -140,7 +138,6 @@
                 type="date"
                 placeholder="yyyy/mm/dd"
                 v-model="followform.transferdate"
-                value-format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="转移部位：">

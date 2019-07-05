@@ -157,7 +157,7 @@ export default {
       if(val && (val!=null || val!='')){
         let date=new Date(val),
         year=date.getFullYear(),
-        mouth=date.getMonth(),
+        mouth=date.getMonth()+1,
         day=date.getDay();
       return year+'/'+mouth+'/'+day
       }

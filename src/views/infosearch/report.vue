@@ -1705,28 +1705,7 @@ export default {
         mouth=date.getMonth()+1,
         day=date.getDay();
       return year+'/'+mouth+'/'+day
-      //       var o = {   
-      //         ""
-      //     "M+" : date.getMonth()+1,                 //月份   
-      //     "d+" : date.getDate(),                    //日
-      //     "h+" : date.getHours(),                   //小时   
-          // "m+" : this.getMinutes(),                 //分   
-          // "s+" : this.getSeconds(),                 //秒   
-          // "q+" : Math.floor((this.getMonth()+3)/3), //季度   
-          // "S"  : this.getMilliseconds()             //毫秒   
-        // };   
-        // console.log(o)
-        // if(/(y+)/.test(date))   
-        //   date=date.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));   
-        // for(var k in o)   
-        //   if(new RegExp("("+ k +")").test(date))   
-        // date = date.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
-        // console.log(date)  
-        // return date;   
       }
-  
-
-
     },
     rhFilter(val){
       if(val==0){

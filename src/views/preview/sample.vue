@@ -67,9 +67,9 @@
       <div class="process-inner">
           <div class="process-time">
               <span>时间段：</span>
-              <el-date-picker size="middle" v-model="starttime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker size="middle" v-model="starttime" type="date" placeholder="选择日期"></el-date-picker>
               <span style="padding:0 10px;">到</span>
-              <el-date-picker size="middle" v-model="endtime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker size="middle" v-model="endtime" type="date" placeholder="选择日期"></el-date-picker>
               <el-button size="middle" type="primary" style="margin:0 10px 0 20px;">确定</el-button>
               <el-button size="middle">重置</el-button>
           </div>
