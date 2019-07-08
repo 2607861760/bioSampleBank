@@ -201,7 +201,7 @@
                 <el-select v-model="data.field" filterable
     remote
     reserve-keyword
-    :remote-method="remoteMethod" placeholder="请选择字段" @change="fieldchange(data)">
+    :remote-method="remoteMethod" placeholder="请选择字段"  @focus="fieldfocus()" @change="fieldchange(data)">
                   <el-option
                     v-for="item in zdlists"
                     :key="item.itemValue"
@@ -500,6 +500,9 @@ export default {
           }, 200);
         }
     },
+    fieldfocus(){
+      this.zdlists=this.zdlist;
+    },
     fieldchange(data){
       data.value=null;
       data.condition=null;
@@ -542,7 +545,7 @@ export default {
             this.arrTostring(element.children)
           }
         }
-        
+
       });
       return arr
     },
@@ -613,19 +616,19 @@ export default {
             }
         })
           }
-          
+
         }else{
           return false
         }
-        
+
       })
-      
+
     },
     getAll(){
       dict.getAll().then((res)=>{
         if(res.returnCode==0){
           this.zdlist=res.data;
-        } 
+        }
       })
     },
     getInfoProject(createUserId,projectid){
@@ -660,7 +663,7 @@ export default {
             }
         })
       }
-      
+
     }
   },
   mounted(){
