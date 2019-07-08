@@ -48,4 +48,13 @@ export const infosearch = {
             return Promise.resolve(res.data)
         })
     },
+    /**
+     * 报告导出
+     * @param {*} obj 
+     */
+    patientDown(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'patient/down', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
 }

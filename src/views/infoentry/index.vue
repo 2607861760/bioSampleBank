@@ -132,7 +132,7 @@
           size="medium"
           @click="addPatient"
         >新建</el-button>
-        <!-- <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button> -->
+        <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button>
       </div>
       <div class="btn-right">
         <div>
@@ -220,12 +220,23 @@
         <div class="input-title">请上传文件</div>
         <div class="choice-file">
           <div style="width:200px;float:left;">
-            <el-input v-model="input" size="medium"></el-input>
+            <el-input v-model="fileLists" size="medium"></el-input>
           </div>
-          <el-button size="medium">浏览</el-button>
+          <el-upload
+            style="float:left;"
+            class="upload-demo"
+            list-type="picture"
+            :limit='2'
+            ref="upload"
+            action="/1.0/upload/excel"
+            :file-list="fileList"
+            :on-change="handlePreview"
+            :auto-upload="false">
+            <el-button slot="trigger" size="medium">浏览</el-button>
+          </el-upload>
           <span></span>
           <div style="float:right;">
-            <el-button size="medium">上传文件</el-button>
+            <el-button size="medium" @click="submitUpload">上传文件</el-button>
           </div>
         </div>
         <div class="choice-file">
@@ -317,7 +328,9 @@ export default {
       ],
       choiceNum: null,
       inputModel: false,
-      sexlist:{}
+      sexlist:{},
+      fileList:[],
+      fileLists:''
     };
   },
   filters: {
@@ -342,6 +355,16 @@ export default {
     }
   },
   methods: {
+    submitUpload(){
+      this.$refs.upload.submit();
+    },
+    handlePreview(file,fileList) {
+        fileList.map((item=>{
+          if(item.status=="ready"){
+            this.fileLists+=item.name+','
+          }
+        }))
+    },
     search(){
       if(this.ing){
         this.getPatient(1)

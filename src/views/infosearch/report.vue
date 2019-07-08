@@ -104,10 +104,10 @@
             </el-button>
           </el-popover>
 
-          <!-- <el-button type="primary" size="medium">
+          <el-button type="primary" size="medium" @click='output'>
             导出
             <i class="iconfont el-icon-biooutput"></i>
-          </el-button> -->
+          </el-button>
         </div>
       </div>
       <div class="process-main">
@@ -1694,7 +1694,8 @@ export default {
       transferbwlist:[],
       progresslist:[],
       followwaylist:[],
-      cancerid:0
+      cancerid:0,
+      url:'http://42.123.125.101:82/excel/'
     };
   },
   filters:{
@@ -1796,6 +1797,32 @@ export default {
     }
   },
   methods: {
+    output(){
+      let title=this.checkedcol.map((item)=>{
+        this.collist.map((items)=>{
+          if(item==items.prop){
+            return items.label
+          }
+        })
+      })
+      let obj={
+        "id":this.$store.state.patientid,
+        "titles":title
+      }
+      infosearch.patientDown(obj).then((res)=>{
+        if(res.returnCode==0){
+          let filePath=this.url+res.data.filename;
+          var elemIF = document.createElement('iframe');
+                elemIF.src = filePath;
+                elemIF.style.display = 'none';
+                document.body.appendChild(elemIF);
+                // 防止下载两次
+                setTimeout(function() {
+                   document.body.removeChild(elemIF)
+                }, 1000);
+        }
+      })
+    },
     checkDis(item) {
       if (
         item.prop == "basic" ||
