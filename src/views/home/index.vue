@@ -203,7 +203,7 @@
             <i class="iconfont el-icon-biorights"></i>
           </div>
           <div @click="exit">
-            <i class="iconfont el-icon-bioset" style="font-size:26px;line-height: 65px;"></i>
+            <i class="el-icon-switch-button" style="font-size:26px;line-height: 65px;"></i>
           </div>
         </div>
       </el-header>
@@ -266,11 +266,11 @@ export default {
           icon: "iconfont el-icon-bionews",
           id:4,
           children:[
-            {
-              name: "科室样本统计",
-              icon: "",
-              path: "/preview/sampleStatic"
-            },
+            // {
+            //   name: "科室样本统计",
+            //   icon: "",
+            //   path: "/preview/sampleStatic"
+            // },
             {
               name: "病人数统计",
               icon: "",

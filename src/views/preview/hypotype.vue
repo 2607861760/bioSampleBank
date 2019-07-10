@@ -59,7 +59,7 @@
     <div class="process">
       <div class="title">
         <i class="iconfont el-icon-biosign"></i>
-        <span>本院科室样本统计</span>
+        <span>样本亚型统计</span>
       </div>
       <div class="process-inner">
           <div class="process-time">

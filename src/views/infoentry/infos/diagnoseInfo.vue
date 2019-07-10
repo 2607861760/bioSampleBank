@@ -360,7 +360,7 @@
               <el-form-item>
                 <el-upload
                 class="upload-demo"
-                action="/1.0/upload/upload"
+                action="http://42.123.125.101:8091/1.0/upload/upload"
                 multiple
                 :on-success='ctchoice'
                 list-type="picture"
@@ -377,7 +377,7 @@
               <el-form-item>
                 <el-upload
                 class="upload-demo"
-                action="/1.0/upload/upload"
+                action="http://42.123.125.101:8091/1.0/upload/upload"
                 multiple
                 :on-success='petchoice'
                 list-type="picture"
@@ -464,7 +464,7 @@
             <el-form-item label="电子切片扫描：">
               <el-upload
                 class="upload-demo"
-                action="/1.0/upload/upload"
+                action="http://42.123.125.101:8091/1.0/upload/upload"
                 multiple
                 :on-success='isscanchoice'
                 list-type="picture"
@@ -1476,7 +1476,7 @@
             <el-form-item>
               <el-upload
                 class="upload-demo"
-                action="/1.0/upload/upload"
+                action="http://42.123.125.101:8091/1.0/upload/upload"
                 multiple
                 :on-success='mammochoice'
                 list-type="picture"
@@ -1514,7 +1514,7 @@
             <el-form-item>
               <el-upload
                 class="upload-demo"
-                action="/1.0/upload/upload"
+                action="http://42.123.125.101:8091/1.0/upload/upload"
                 multiple
                 :on-success='mrichoice'
                 list-type="picture"

@@ -248,7 +248,7 @@
               <el-radio :label="item.projectName"></el-radio>
             </p>
           </el-radio-group>
-          <div class="input-btn" slot="reference">导入</div>
+          <!-- <div class="input-btn" slot="reference">导入</div> -->
         </el-popover>
       </div>
       <div class="establish">

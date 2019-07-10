@@ -104,10 +104,10 @@
             </el-button>
           </el-popover>
 
-          <el-button type="primary" size="medium" @click='output'>
+          <!-- <el-button type="primary" size="medium" @click='output'>
             导出
             <i class="iconfont el-icon-biooutput"></i>
-          </el-button>
+          </el-button> -->
         </div>
       </div>
       <div class="process-main">
