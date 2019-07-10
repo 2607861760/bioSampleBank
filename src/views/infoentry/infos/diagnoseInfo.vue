@@ -390,7 +390,7 @@
               </el-form-item>
             </div>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveBasic" size="medium" v-if='bsave'>保存</el-button>
               <el-button size="medium" @click="updateBasicCheck" v-else>编辑</el-button>
             </el-form-item>
@@ -442,7 +442,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveEndoscope" size="medium" v-if='esave'>保存</el-button>
               <el-button size="medium" @click="updateEndoscope" v-else>编辑</el-button>
             </el-form-item>
@@ -1176,18 +1176,167 @@
                 <el-radio :label="1" :value="1">已检测</el-radio>
               </el-radio-group>
             </el-form-item>
-            
+
               <div v-if="moleculeform.mlpa=='1'">
-              <el-form-item >
-                <el-select v-model="moleculeform.mlpagene" placeholder="请选择...">
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlpagene']" :key="index"></el-option>
-              </el-select>
-              </el-form-item>
-              <el-form-item>
-                <el-select v-model="moleculeform.mlparesult" placeholder="请选择...">
-                <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
-              </el-select>
-              </el-form-item>
+                <div v-if='cancerid==3'>
+                  <el-form-item label="">
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">BRCA1</el-label>
+                      <el-select v-model="moleculeform.BRCA1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">BRCA2</el-label>
+                      <el-select v-model="moleculeform.BRCA2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">CHEK2</el-label>
+                      <el-select v-model="moleculeform.CHEK2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">ATM</el-label>
+                      <el-select v-model="moleculeform.ATM" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">PALB2</el-label>
+                      <el-select v-model="moleculeform.PALB2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">BRIP1</el-label>
+                      <el-select v-model="moleculeform.BRIP1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">TP53</el-label>
+                      <el-select v-model="moleculeform.TP53" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">BARD1</el-label>
+                      <el-select v-model="moleculeform.BARD1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">PTEN</el-label>
+                      <el-select v-model="moleculeform.PTEN" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">STK11</el-label>
+                      <el-select v-model="moleculeform.STK11" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">CDH1</el-label>
+                      <el-select v-model="moleculeform.CDH1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">RAD50</el-label>
+                      <el-select v-model="moleculeform.RAD50" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">RAD51C</el-label>
+                      <el-select v-model="moleculeform.RAD51C" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">PMS2</el-label>
+                      <el-select v-model="moleculeform.PMS2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">PMS1</el-label>
+                      <el-select v-model="moleculeform.PMS1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">NBN</el-label>
+                      <el-select v-model="moleculeform.NBN" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">其他</el-label>
+                      <el-select v-model="moleculeform.other" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                  </el-form-item>
+                </div>
+                <div v-if='cancerid==2'>
+                  <el-form-item label="">
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">MLH1</el-label>
+                      <el-select v-model="moleculeform.MLH1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">PMS2</el-label>
+                      <el-select v-model="moleculeform.PMS2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">MSH2</el-label>
+                      <el-select v-model="moleculeform.MSH2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block;">MLH6</el-label>
+                      <el-select v-model="moleculeform.MLH6" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">EPCAM</el-label>
+                      <el-select v-model="moleculeform.EPCAM" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">BRCA1</el-label>
+                      <el-select v-model="moleculeform.BRCA1" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">BRCA2</el-label>
+                      <el-select v-model="moleculeform.BRCA2" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+                    <p style="margin-top:10px;">
+                      <el-label style="min-width: 80px;display:inline-block; ">其他</el-label>
+                      <el-select v-model="moleculeform.other" placeholder="请选择...">
+                        <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
+                      </el-select>
+                    </p>
+
+                  </el-form-item>
+                </div>
             </div>
             <el-form-item label="NGS检测：">
               <el-radio-group v-model="moleculeform.ngsjc">
@@ -1196,7 +1345,7 @@
               </el-radio-group>
             </el-form-item>
             <div v-if="moleculeform.ngsjc=='0'">
-              
+
               <el-form-item>
                 <el-form-item label="NGS平台：">
                   <el-radio-group v-model="moleculeform.ngspt">
@@ -1260,7 +1409,7 @@
                 </el-form-item>
                 </div>
                 </el-form-item>
-              
+
             </div>
             <el-form-item label="其他代表性基因突变结果："></el-form-item>
             <el-form-item label="检测平台：">
@@ -1462,7 +1611,7 @@
               <div></div>
             </div>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveMolecule" size="medium" v-if='msave'>保存</el-button>
               <el-button size="medium" @click="updateMolDetection" v-else>编辑</el-button>
             </el-form-item>
@@ -1696,7 +1845,7 @@ export default {
         ? this.checkResultList.splice(index + 1, 0, {})
         : this.checkResultList.splice(index + 1, n);
       }
-      
+
     },
     prinaturechange(val){
       console.log(val)
@@ -1756,7 +1905,7 @@ export default {
         mri.push(item.url)
       })
       }
-      
+
       this.basicform["ct"]=String(ct)
       this.basicform["pet"]=String(pet)
       this.basicform["mammoPath"]=String(mammo)
@@ -1786,7 +1935,7 @@ export default {
               this.ctfile.push({url:item})
             })
             }
-            
+
            if(this.basicform.pet && (this.basicform.pet!=null || this.basicform.pet!='')){
               let pet=[];
             pet=this.basicform.pet.split(',');
@@ -2121,7 +2270,7 @@ export default {
       if(this.basicform.weight){
         this.basicform.weight=parseFloat(this.basicform.weight)
       }
-      
+
     },
     "basicform.bmi":function(){
       if(this.basicform.bmi){
