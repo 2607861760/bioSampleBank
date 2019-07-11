@@ -30,8 +30,8 @@
       & > div.el-divider {
         padding: 0;
       }
-       
-      
+
+
     }
     .main-breast{
       display: block;
@@ -1009,7 +1009,111 @@
             </div>
             <div>
               <span class="info-label">MLPA：</span>
-              <span class="info-text">{{moleculeform.mlpagene}}</span>
+              <div v-if='cancerid==3'>
+                <div>
+                <span class="info-label">BRCA1：</span>
+                <span class="info-text">{{moleculeform.BRCA1}}</span>
+                </div>
+                <div>
+                <span class="info-label">BRCA2：</span>
+                <span class="info-text">{{moleculeform.BRCA2}}</span>
+                </div>
+                <div>
+                <span class="info-label">CHEK2：</span>
+                <span class="info-text">{{moleculeform.CHEK2}}</span>
+                </div>
+                <div>
+                <span class="info-label">ATM：</span>
+                <span class="info-text">{{moleculeform.ATM}}</span>
+                </div>
+                <div>
+                <span class="info-label">PALB2：</span>
+                <span class="info-text">{{moleculeform.PALB2}}</span>
+                </div>
+                <div>
+                <span class="info-label">BRIP1：</span>
+                <span class="info-text">{{moleculeform.BRIP1}}</span>
+                </div>
+                <div>
+                <span class="info-label">TP53：</span>
+                <span class="info-text">{{moleculeform.TP53}}</span>
+                </div>
+                <div>
+                <span class="info-label">BARD1：</span>
+                <span class="info-text">{{moleculeform.BARD1}}</span>
+                </div>
+                <div>
+                <span class="info-label">PTEN：</span>
+                <span class="info-text">{{moleculeform.PTEN}}</span>
+                </div>
+                <div>
+                <span class="info-label">STK11：</span>
+                <span class="info-text">{{moleculeform.STK11}}</span>
+                </div>
+                <div>
+                <span class="info-label">CDH1：</span>
+                <span class="info-text">{{moleculeform.CDH1}}</span>
+                </div>
+                <div>
+                <span class="info-label">RAD50：</span>
+                <span class="info-text">{{moleculeform.RAD50}}</span>
+                </div>
+                <div>
+                <span class="info-label">RAD51C：</span>
+                <span class="info-text">{{moleculeform.RAD51C}}</span>
+                </div>
+                <div>
+                <span class="info-label">PMS2：</span>
+                <span class="info-text">{{moleculeform.PMS2}}</span>
+                </div>
+                <div>
+                <span class="info-label">PMS1：</span>
+                <span class="info-text">{{moleculeform.PMS1}}</span>
+                </div>
+                <div>
+                <span class="info-label">NBN：</span>
+                <span class="info-text">{{moleculeform.NBN}}</span>
+                </div>
+                <div>
+                <span class="info-label">其他：</span>
+                <span class="info-text">{{moleculeform.other}}</span>
+                </div>
+
+              </div>
+              <div v-if='cancerid==2'>
+                <div>
+                <span class="info-label">MLH1：</span>
+                <span class="info-text">{{moleculeform.MLH1}}</span>
+                </div>
+                <div>
+                <span class="info-label">PMS2：</span>
+                <span class="info-text">{{moleculeform.PMS2}}</span>
+                </div>
+                <div>
+                <span class="info-label">MSH2：</span>
+                <span class="info-text">{{moleculeform.MSH2}}</span>
+                </div>
+                <div>
+                <span class="info-label">MSH6：</span>
+                <span class="info-text">{{moleculeform.MSH6}}</span>
+                </div>
+                <div>
+                <span class="info-label">EPCAM：</span>
+                <span class="info-text">{{moleculeform.EPCAM}}</span>
+                </div>
+                <div>
+                <span class="info-label">BRCA1：</span>
+                <span class="info-text">{{moleculeform.BRCA1}}</span>
+                </div>
+                <div>
+                <span class="info-label">BRCA2：</span>
+                <span class="info-text">{{moleculeform.BRCA2}}</span>
+                </div>
+                <div>
+                <span class="info-label">其他：</span>
+                <span class="info-text">{{moleculeform.other}}</span>
+                </div>
+            </div>
             </div>
           </div>
           <div>
@@ -1929,7 +2033,7 @@ export default {
                 lists:this.dprimarylist,
                 val:'dprimary'
               },
-              
+
               {
                 lists:this.chprogrammelist,
                 val:'chprogramme'
@@ -2390,18 +2494,18 @@ export default {
     if(this.cancerid==3){
       this.collist.forEach((item,index)=>{
         if(item.prop=='endoscope'){
-          this.collist.splice(index,1); 
+          this.collist.splice(index,1);
         }
       })
     }else if(this.cancerid==2){
       this.collist.forEach((item,index)=>{
         if(item.prop=='assist'){
-          this.collist.splice(index,1); 
+          this.collist.splice(index,1);
         }
       })
     }
     this.detailPatient()
-   
+
   }
 };
 </script>
