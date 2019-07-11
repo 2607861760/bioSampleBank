@@ -93,7 +93,7 @@
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="therapyform.cenddate"></el-date-picker>
             </el-form-item>
             <el-form-item label="药物单次剂量：">
-              <el-input v-model="therapyform.conedose">
+              <el-input v-model="therapyform.conedose" type="number" >
                 <template slot="suffix">mg</template>
               </el-input>
             </el-form-item>
@@ -103,7 +103,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="用药频次：">
-              <el-input v-model="therapyform.cdrugrate">
+              <el-input v-model="therapyform.cdrugrate" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))">
                 <template slot="suffix">次</template>
               </el-input>
             </el-form-item>
@@ -117,14 +117,14 @@
             <el-form-item label="靶点：">
               <el-checkbox-group v-model="targetlist">
               <div v-if="cancerid==2">
-                
+
               <p>
                 <el-checkbox label="EGFR" value='EGFR' :disabled="disEGFR">EGFR</el-checkbox>
               </p>
               <p>
                 <el-checkbox label="VEGF" value='VEGF' :disabled="disVEGF">VEGF</el-checkbox>
               </p>
-              
+
               </div>
               <div v-if="cancerid==3">
                 <p>
@@ -162,7 +162,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="药物单次剂量：">
-              <el-input v-model="therapyform.tonedose">
+              <el-input v-model="therapyform.tonedose" type="number" >
                 <template slot="suffix">mg</template>
               </el-input>
             </el-form-item>
@@ -172,7 +172,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="用药频次：">
-              <el-input v-model="therapyform.tdrugrate">
+              <el-input v-model="therapyform.tdrugrate" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))">
                 <template slot="suffix">次</template>
               </el-input>
             </el-form-item>
@@ -232,7 +232,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="药物单次剂量：">
-              <el-input v-model="therapyform.immonedose">
+              <el-input v-model="therapyform.immonedose" type="number" >
                 <template slot="suffix">mg</template>
               </el-input>
             </el-form-item>
@@ -242,7 +242,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="用药频次：">
-              <el-input v-model="therapyform.immdrugrate">
+              <el-input v-model="therapyform.immdrugrate" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))">
                 <template slot="suffix">次</template>
               </el-input>
             </el-form-item>
@@ -253,7 +253,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveTherapy" size="medium" v-if='tsave'>保存</el-button>
               <el-button size="medium" @click="updateMedication" v-else>编辑</el-button>
             </el-form-item>
@@ -330,7 +330,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveEvaluation" size="medium" v-if='esave'>保存</el-button>
               <el-button size="medium" @click="updateAssess" v-else>编辑</el-button>
             </el-form-item>
@@ -386,7 +386,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              
+
               <el-button type="primary" @click="saveSymptoms" size="medium" v-if='ssave'>保存</el-button>
               <el-button size="medium" @click="updateClinical" v-else>编辑</el-button>
             </el-form-item>
@@ -614,7 +614,7 @@ export default {
           this.$message.error(res.msg);
         }
       })
-      
+
     },
     assessInfo(){
       let obj={
@@ -659,7 +659,7 @@ export default {
           this.$message.error(res.msg);
         }
       })
-      
+
     },
     clinicalInfo(){
       let obj={

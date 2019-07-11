@@ -1305,8 +1305,8 @@
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">MLH6</el-label>
-                      <el-select v-model="moleculeform.MLH6" placeholder="请选择...">
+                      <el-label style="min-width: 80px;display:inline-block;">MSH6</el-label>
+                      <el-select v-model="moleculeform.MSH6" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>

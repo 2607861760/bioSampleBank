@@ -186,8 +186,9 @@ export default {
   },
   methods: {
     saveProApp(){
+        console.log(this.$store.state);
       this.basicform['projectId']=this.$store.state.projectid;
-      this.basicform['applicantId']=this.$store.state.userid;
+      this.basicform['applicantId']=this.$store.state.userId;
       this.$refs['form'].validate((valid)=>{
         if(valid){
           project.saveProApp(this.basicform).then((res)=>{
@@ -216,7 +217,7 @@ export default {
     }
   },
   created() {
-    
+
     this.audit = this.$store.state.audit;
     if(this.audit){
 

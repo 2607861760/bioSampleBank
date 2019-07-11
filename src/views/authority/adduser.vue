@@ -40,6 +40,7 @@
       <el-form
         ref="form"
         :model="basicform"
+        :rules="basicrules"
         label-width="100px"
         label-position="left"
       >
@@ -50,7 +51,7 @@
                 <el-cascader
                 v-model="basicform.deptId"
                 :options="departList"
-                :props="{ 
+                :props="{
                   checkStrictly: true,
                 value:'id',
                 label:'depName',
@@ -61,7 +62,7 @@
                 :show-all-levels="false"
                 ></el-cascader>
             </el-form-item>
-        <el-form-item label="邮箱：">
+        <el-form-item label="邮箱：" prop="email">
           <el-input v-model="basicform.email"></el-input>
         </el-form-item>
         <el-form-item label="手机号：">
@@ -72,7 +73,7 @@
         </el-form-item>
         <el-form-item label="角色：">
               <el-select v-model="basicform.roleId" placeholder="请选择...">
-                <el-option 
+                <el-option
                 v-for='item in roleList'
                 :key='item.id'
                 :value="item.id"
@@ -89,7 +90,7 @@
         <el-form-item>
             <el-button type="primary" @click="saveUser" size="medium">确认</el-button>
           <el-button size="medium">取消</el-button>
-          
+
         </el-form-item>
       </el-form>
     </div>
@@ -100,34 +101,61 @@ import {role} from 'api/index.js'
 import {objCopy} from 'base/js/common.js';
 export default {
   data() {
+    var checkEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback();
+      }
+      if (value) {
+        setTimeout(() => {
+          var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+          if (!reg.test(value)) {
+            callback(new Error('请输入有效的电子邮箱！'));
+          } else {
+            callback();
+          }
+        }, 500);
+      }
+    };
     return {
+
         basicform:{},
         roleList:[],
         departList:[],
-        deptId:null
+        deptId:null,
+        basicrules: {
+          email: [{validator: checkEmail,required: true, message: "请输入有效的电子邮箱" }],
+        },
     };
   },
   methods: {
     saveUser(){
       // this.basicform.deptId=this.deptId;
-      if(this.$store.state.userid==null){
-        role.saveUser(this.basicform).then((res)=>{
-        if(res.returnCode==0){
-          this.$router.push('/authority/user');
-        }else{
-          this.$message.error(res.msg)
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if(this.$store.state.userid==null){
+            role.saveUser(this.basicform).then((res)=>{
+              if(res.returnCode==0){
+                this.$router.push('/authority/user');
+              }else{
+                this.$message.error(res.msg)
+              }
+            })
+          }else{
+            role.updateUser(this.basicform).then((res)=>{
+              if(res.returnCode==0){
+                this.$router.push('/authority/user');
+              }else{
+                this.$message.error(res.msg)
+              }
+            })
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
         }
-      })
-      }else{
-        role.updateUser(this.basicform).then((res)=>{
-        if(res.returnCode==0){
-          this.$router.push('/authority/user');
-        }else{
-          this.$message.error(res.msg)
-        }
-      })
-      }
-      
+      });
+
+
     },
     cancel(){
       this.basicform={};
@@ -136,7 +164,7 @@ export default {
       }else{
         this.basicform=this.oldbasic;
       }
-      
+
     },
     getUserInfo(){
       let obj={
@@ -172,7 +200,7 @@ export default {
     if(this.$store.state.userid!=null){
       this.getUserInfo()
     }
-    
+
   }
 };
 </script>
