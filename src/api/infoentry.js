@@ -19,7 +19,7 @@ export const infoentry = {
     },
     /**
      * 病人信息
-     * @param {*} obj 
+     * @param {*} obj
      */
     savePatient(obj) {
         return $ajax.post(apiUrl.apiUrl + 'patient/save', obj).then(function(res) {
@@ -38,7 +38,7 @@ export const infoentry = {
     },
     /**
      * 就诊信息
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveVisit(obj) {
         return $ajax.post(apiUrl.apiUrl + 'visit/save', obj).then(function(res) {
@@ -57,7 +57,7 @@ export const infoentry = {
     },
     /**
      * 现病史
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveDesHistory(obj) {
         return $ajax.post(apiUrl.apiUrl + 'desHistory/save', obj).then(function(res) {
@@ -76,7 +76,7 @@ export const infoentry = {
     },
     /**
      * 家族史
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveFamilyHistory(obj) {
         return $ajax.post(apiUrl.apiUrl + 'familyHistory/save', obj).then(function(res) {
@@ -95,7 +95,7 @@ export const infoentry = {
     },
     /**
      * 基本检查
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveBasicCheck(obj) {
         return $ajax.post(apiUrl.apiUrl + 'basicCheck/save', obj).then(function(res) {
@@ -112,9 +112,28 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
+  /**
+   * 辅助检查
+   * @param {*} obj
+   */
+  saveAssist(obj) {
+    return $ajax.post(apiUrl.apiUrl + 'auxCheck/save', obj).then(function(res) {
+      return Promise.resolve(res.data)
+    })
+  },
+  assistInfo(obj) {
+    return $ajax.post(apiUrl.apiUrl + 'auxCheck/info', obj).then(function(res) {
+      return Promise.resolve(res.data)
+    })
+  },
+  updateAssist(obj) {
+    return $ajax.post(apiUrl.apiUrl + 'auxCheck/update', obj).then(function(res) {
+      return Promise.resolve(res.data)
+    })
+  },
     /**
      * 内镜检查
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveIntroscope(obj) {
         return $ajax.post(apiUrl.apiUrl + 'introscope/save', obj).then(function(res) {
@@ -133,7 +152,7 @@ export const infoentry = {
     },
     /**
      * 病理检查
-     * @param {*} obj  
+     * @param {*} obj
      */
     savePathologic(obj) {
         return $ajax.post(apiUrl.apiUrl + 'pathologic/save', obj).then(function(res) {
@@ -151,8 +170,8 @@ export const infoentry = {
         })
     },
     /**
-     * 病理检查 
-     * @param {*} obj 
+     * 病理检查
+     * @param {*} obj
      */
     saveMolDetection(obj) {
         return $ajax.post(apiUrl.apiUrl + 'molDetection/save', obj).then(function(res) {
@@ -171,7 +190,7 @@ export const infoentry = {
     },
     /**
      * 药物治疗
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveMedication(obj) {
         return $ajax.post(apiUrl.apiUrl + 'medication/save', obj).then(function(res) {
@@ -190,7 +209,7 @@ export const infoentry = {
     },
     /**
      * 疗效评估
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveAssess(obj) {
         return $ajax.post(apiUrl.apiUrl + 'assess/save', obj).then(function(res) {
@@ -209,7 +228,7 @@ export const infoentry = {
     },
     /**
      * 疗效评估
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveClinical(obj) {
         return $ajax.post(apiUrl.apiUrl + 'clinical/save', obj).then(function(res) {
@@ -228,7 +247,7 @@ export const infoentry = {
     },
     /**
      * 随访信息
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveFollowUp(obj) {
         return $ajax.post(apiUrl.apiUrl + 'followUp/save', obj).then(function(res) {
@@ -247,7 +266,7 @@ export const infoentry = {
     },
     /**
      * 样本库
-     * @param {*} obj 
+     * @param {*} obj
      */
     saveBank(obj) {
         return $ajax.post(apiUrl.apiUrl + 'bank/save', obj).then(function(res) {

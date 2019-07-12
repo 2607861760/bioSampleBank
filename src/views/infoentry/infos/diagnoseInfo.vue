@@ -1637,12 +1637,12 @@
               </el-upload>
             </el-form-item>
             <el-form-item label="有无异常情况：">
-              <el-radio-group v-model="assistform.unusual">
+              <el-radio-group v-model="assistform.abnormal">
                 <el-radio :label="0" :value="0">是</el-radio>
                 <el-radio :label="1" :value="1">否</el-radio>
               </el-radio-group>
             </el-form-item>
-            <template v-if='assistform.unusual==0'>
+            <template v-if='assistform.abnormal==0'>
             <el-form-item>
               <el-select v-model="assistform.calcification" placeholder="钙化">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['calcification']" :key="index"></el-option>
@@ -1686,7 +1686,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveAssist" size="medium" v-if='ssave'>保存</el-button>
-              <el-button size="medium" v-else>编辑</el-button>
+              <el-button size="medium" @click="updateAssist" v-else>编辑</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -1775,7 +1775,7 @@ export default {
       mrifile:[],
       mammofile:[],
       isscanfile:[],
-      imgurl:'http://42.123.125.101:82/',
+      imgurl:'http://42.123.125.101:82/img/',
       cancerid:0,
       optionlist:{},
       mtumloc:[],
@@ -1872,7 +1872,8 @@ export default {
       if(this.$store.state.entryState>=5 && val.name=="basic"){
         this.basicCheckInfo()
       }else if(this.$store.state.entryState>=6 && (val.name=='endoscope' || val.name=='assist')){
-          this.introscopeInfo()
+          this.introscopeInfo();
+          this.assistInfo();
       }else if(this.$store.state.entryState>=7 && val.name=="pathology"){
         this.pathologicInfo()
       }else if(this.$store.state.entryState>=8 && val.name=="molecule"){
@@ -2010,8 +2011,64 @@ export default {
       });
     },
     saveAssist() {
-      this.$store.state.entryState=6;
-      this.entry=this.$store.state.entryState;
+      this.assistform["pid"] = this.$store.state.patientid;
+      let mammoPath=[];
+      this.mammofile.map(item=>{
+        mammoPath.push(item.url)
+      })
+      this.assistform["mammoPath"]=String(mammoPath);
+      let mriPath=[];
+      this.mrifile.map(item=>{
+        mriPath.push(item.url)
+      })
+      this.assistform["mriPath"]=String(mriPath);
+      infoentry.saveAssist(this.assistform).then(res => {
+        if (res.returnCode == 0) {
+          this.$store.state.entryState=6;
+          this.entry=this.$store.state.entryState;
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    assistInfo() {
+      let obj={
+        pid:this.$store.state.patientid
+      }
+      infoentry.assistInfo(obj).then((res)=>{
+        if(res.returnCode==0){
+          if(res.data!=null){
+            this.assistform=res.data;
+          }
+        }else{
+          this.$message.error(res.msg);
+        }
+      })
+    },
+    updateAssist() {
+      this.assistform["pid"] = this.$store.state.patientid;
+      this.assistform["id"] = this.$store.state.userId;
+      let mammoPath=[];
+      this.mammofile.map(item=>{
+        mammoPath.push(item.url)
+      })
+      this.assistform["mammoPath"]=String(mammoPath);
+      let mriPath=[];
+      this.mrifile.map(item=>{
+        mriPath.push(item.url)
+      })
+      this.assistform["mriPath"]=String(mriPath);
+      infoentry.updateAssist(this.assistform).then(res => {
+        if (res.returnCode == 0) {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+          this.assistInfo()
+        }else{
+          this.$message.error(res.msg);
+        }
+      });
     },
     saveEndoscope() {
       this.endoscopeform["pid"] = this.$store.state.patientid;
