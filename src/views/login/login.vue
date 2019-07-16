@@ -74,7 +74,7 @@
            <el-input placeholder="请输入用户名" prefix-icon="iconfont el-icon-biouser" v-model="email"></el-input>
         </div>
        <div class="login-input">
-           <el-input placeholder="请输入密码" prefix-icon="iconfont el-icon-biopassword" v-model="password"></el-input>
+           <el-input placeholder="请输入密码" type="password" prefix-icon="iconfont el-icon-biopassword" v-model="password"></el-input>
         </div>
         <!-- <div class="login-input remember">
           <el-checkbox>记住密码</el-checkbox>

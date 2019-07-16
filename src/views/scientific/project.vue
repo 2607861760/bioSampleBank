@@ -89,9 +89,10 @@
         <div>
           <el-input
             placeholder="请输入项目名称、负责人..."
-            size="small"
-            suffix-icon="iconfont el-icon-biosearch"
-          ></el-input>
+            size="small" v-model="searchInput"
+          >
+            <el-button slot="append" icon="iconfont el-icon-biosearch" @click="getProjectSearchList"></el-button>
+          </el-input>
         </div>
       </div>
     </div>
@@ -193,7 +194,8 @@ export default {
       pageSize:10,
       current:1,
       total:0,
-      type:0
+      type:0,
+      searchInput:'',
     };
   },
   filters:{
@@ -220,7 +222,7 @@ export default {
           this.$message.error(res.msg)
         }
       })
-      
+
     },
     handleQuery(index, row){
       this.$store.state.projectid=row.project.id;
@@ -292,6 +294,26 @@ export default {
         offset:this.current,
         size:this.pageSize
       }
+      project.getProjectList(pagelist,obj).then((res)=>{
+        if(res.returnCode==0){
+          this.tableData=res.data.modelList;
+          this.total=res.data.total;
+          console.log(this.tableData)
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    getProjectSearchList(){
+      let obj={
+          userId:this.$store.state.userId,
+          type:this.type,
+          principal:this.searchInput,
+        },
+        pagelist={
+          offset:this.current,
+          size:this.pageSize
+        }
       project.getProjectList(pagelist,obj).then((res)=>{
         if(res.returnCode==0){
           this.tableData=res.data.modelList;
