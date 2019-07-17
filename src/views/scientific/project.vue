@@ -91,7 +91,7 @@
             placeholder="请输入项目名称、负责人..."
             size="small" v-model="searchInput"
           >
-            <el-button slot="append" icon="iconfont el-icon-biosearch" @click="getProjectList"></el-button>
+            <el-button slot="append" icon="iconfont el-icon-biosearch" @click="getProjectSearchList"></el-button>
           </el-input>
         </div>
       </div>
@@ -214,7 +214,7 @@ export default {
       let obj={
         id:row.project.id
       }
-      project.detailProject(obj).then((res)=>{
+      project.infoProApp(obj).then((res)=>{
         if(res.returnCode==0){
           this.$store.state.infoform=res.data;
           this.$router.push('/scientific/projectinfo')
@@ -289,7 +289,7 @@ export default {
       let obj={
         userId:this.$store.state.userId,
         type:this.type,
-         principal:this.searchInput,
+          principal:this.searchInput,
       },
       pagelist={
         offset:this.current,
@@ -305,6 +305,26 @@ export default {
         }
       })
     },
+    getProjectSearchList(){
+      let obj={
+          userId:this.$store.state.userId,
+          type:this.type,
+          principal:this.searchInput,
+        },
+        pagelist={
+          offset:this.current,
+          size:this.pageSize
+        }
+      project.getProjectList(pagelist,obj).then((res)=>{
+        if(res.returnCode==0){
+          this.tableData=res.data.modelList;
+          this.total=res.data.total;
+          console.log(this.tableData)
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    }
   },
   mounted(){
     this.getProjectList()

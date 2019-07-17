@@ -65,10 +65,10 @@
             <el-form-item label="化疗药物：">
               <el-radio-group v-model="therapyform.chemodrugs">
                 <el-form-item>
-                  <el-radio :label="0" :value="0">无化疗</el-radio>
+                  <el-radio label="0" :value="0">无化疗</el-radio>
                 </el-form-item>
                 <el-form-item>
-                  <el-radio :label="1" :value="1">有化疗</el-radio>
+                  <el-radio label="1" :value="1">有化疗</el-radio>
                 </el-form-item>
                 <div v-if="therapyform.chemodrugs==1">
                   <el-select v-model="therapyform.drug" placeholder="请选择化疗药物">
@@ -76,10 +76,10 @@
               </el-select>
                 </div>
                 <el-form-item>
-                  <el-radio :label="3" :value="3">未知化疗史</el-radio>
+                  <el-radio label="3" :value="3">未知化疗史</el-radio>
                 </el-form-item>
                 <el-form-item>
-                  <el-radio :label="4" :value="4">其他</el-radio>
+                  <el-radio label="4" :value="4">其他</el-radio>
                 </el-form-item>
                 <div v-if="therapyform.chemodrugs==4">
                   <el-input v-model="therapyform.drugother" placeholder="请输入其他药物"></el-input>
@@ -93,7 +93,7 @@
               <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="therapyform.cenddate"></el-date-picker>
             </el-form-item>
             <el-form-item label="药物单次剂量：">
-              <el-input v-model="therapyform.conedose" type="number" >
+              <el-input v-model="therapyform.conedose" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" >
                 <template slot="suffix">mg</template>
               </el-input>
             </el-form-item>
@@ -162,7 +162,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="药物单次剂量：">
-              <el-input v-model="therapyform.tonedose" type="number" >
+              <el-input v-model="therapyform.tonedose" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" >
                 <template slot="suffix">mg</template>
               </el-input>
             </el-form-item>
@@ -231,7 +231,7 @@
                 v-model="therapyform.immenddate"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="药物单次剂量：">
+            <el-form-item label="药物单次剂量：" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))">
               <el-input v-model="therapyform.immonedose" type="number" >
                 <template slot="suffix">mg</template>
               </el-input>

@@ -69,7 +69,7 @@
           <el-input v-model="basicform.applyReason" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="预计提供样本数：">
-          <el-input v-model="basicform.sampleCount" placeholder="请输入">
+          <el-input v-model="basicform.sampleCount" placeholder="请输入" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" >
             <template slot="suffix">例</template>
           </el-input>
         </el-form-item>
