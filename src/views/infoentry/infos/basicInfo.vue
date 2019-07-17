@@ -271,7 +271,7 @@ export default {
               type: "historyInfo"
             }
           });
-          
+
         }else{
           this.$message.error(res.msg);
         }
@@ -308,11 +308,11 @@ export default {
     },
     getDocotorInfo(){
       let obj={
-        id:this.$store.state.patientid
+        pid:this.$store.state.patientid
       }
       infoentry.visitInfo(obj).then((res)=>{
         if(res.returnCode==0){
-          this.basicform=res.data;
+          this.doctorform=res.data;
         }else{
           this.$message.error(res.msg);
         }
@@ -326,7 +326,7 @@ export default {
             type: 'success'
           });
           this.getDocotorInfo()
-          
+
         }else{
           this.$message.error(res.msg);
         }
