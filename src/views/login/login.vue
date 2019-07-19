@@ -71,11 +71,11 @@
           <img src="static/img/logo.png">
         </div>
         <div class="login-input">
-           <el-input placeholder="请输入用户名" prefix-icon="iconfont el-icon-biouser" v-model="email"></el-input>
+          <el-input placeholder="请输入邮箱" prefix-icon="iconfont el-icon-biouser" v-model="email" @keyup.enter.native="login"></el-input>
         </div>
        <div class="login-input">
-           <el-input placeholder="请输入密码" type="password" prefix-icon="iconfont el-icon-biopassword" v-model="password"></el-input>
-        </div>
+         <el-input placeholder="请输入密码" type="password" prefix-icon="iconfont el-icon-biopassword" v-model="password" @keyup.enter.native="login"></el-input>
+       </div>
         <!-- <div class="login-input remember">
           <el-checkbox>记住密码</el-checkbox>
         </div> -->
