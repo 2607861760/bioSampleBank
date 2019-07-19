@@ -187,6 +187,7 @@ export default {
         flag:this.flag
       },
       multiple=[];
+      console.log(this.multipleSelection);
       this.multipleSelection.map(item=>{
         multiple.push(item.id)
       })

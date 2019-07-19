@@ -94,35 +94,35 @@
     <div class="info-table" v-if="audit==true">
       <div class="audit-col">
         <span class="info-label">姓名：</span>
-        <span class="info-text">{{basicform.name}}</span>
+        <span class="info-text">{{basicform.applyName}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">工作单位：</span>
-        <span class="info-text">{{basicform.organization}}</span>
+        <span class="info-text">{{basicform.hospital}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">所属科室：</span>
-        <span class="info-text">{{basicform.administrative}}</span>
+        <span class="info-text">{{basicform.dept}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">研究领域：</span>
-        <span class="info-text">{{basicform.research}}</span>
+        <span class="info-text">{{basicform.realm}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">申请加入原因：</span>
-        <span class="info-text">{{basicform.reason}}</span>
+        <span class="info-text">{{basicform.applyReason}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">预计提供样本数：</span>
-        <span class="info-text">{{basicform.samplenum}}例</span>
+        <span class="info-text">{{basicform.sampleCount}}例</span>
       </div>
       <div class="audit-col">
         <span class="info-label">申请加入时间：</span>
-        <span class="info-text">{{basicform.joindate | dateFilter}}</span>
+        <span class="info-text">{{basicform.joinTime | dateFilter}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">联系方式：</span>
-        <span class="info-text">{{basicform.phone}}</span>
+        <span class="info-text">{{basicform.tel}}</span>
       </div>
       <div class="audit-col">
         <span class="info-label">Email：</span>
@@ -130,12 +130,12 @@
       </div>
       <div class="audit-col">
         <span class="info-label">相关领域科研情况：</span>
-        <span class="info-text">{{basicform.scientific}}</span>
+        <span class="info-text">{{basicform.situation}}</span>
       </div>
       <div class="audit-col">
-        <el-button type="primary" @click="saveBasic" size="medium">同意</el-button>
-        <el-button type="danger" @click="saveBasic" size="medium">驳回</el-button>
-        <el-button size="medium">取消</el-button>
+        <el-button type="primary" size="medium" @click="submitProApp(1)">同意</el-button>
+        <el-button type="danger" size="medium" @click="submitProApp(2)">驳回</el-button>
+        <el-button size="medium"  @click="exit()">取消</el-button>
       </div>
     </div>
   </div>
@@ -210,17 +210,36 @@ export default {
       project.infoProApp(obj).then((res)=>{
         if(res.returnCode==0){
           this.basicform=res.data
+          console.log(this.basicform)
         }else{
           this.$message.error(res.msg)
         }
       })
-    }
+    },
+    submitProApp(flag){
+      let obj={
+          projectId:this.$store.state.projectid,
+          flag:flag
+        },
+        multiple=[];
+        multiple.push(this.basicform.id);
+      obj['idList']=multiple
+      project.submitProApp(obj).then((res)=>{
+        if(res.returnCode==0){
+          this.$router.push("/scientific/auditinfo");
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    exit(){this.$router.push("/scientific/auditinfo");}
   },
   created() {
 
     this.audit = this.$store.state.audit;
-    if(this.audit){
 
+    if(this.audit){
+      this.infoProApp();
     }
     // for (var a = 0; a < datas.length; a++) {
     //   var playPeriodStart1='datas['+a+'].packageList[0].playPeriodStart';

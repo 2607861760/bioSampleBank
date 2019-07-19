@@ -204,11 +204,12 @@
     :remote-method="remoteMethod" placeholder="请选择字段"  @focus="fieldfocus()" @change="fieldchange(data)">
                   <el-option
                     v-for="item in zdlists"
-                    :key="item.itemValue"
+                    :key="item.index"
                     :label="item.itemName"
                     :value="item.itemValue"
                   ></el-option>
                 </el-select>
+
                 <el-select v-model="data.condition" placeholder="条件">
                   <el-option
                     v-for="item in tjlist"
@@ -504,6 +505,7 @@ export default {
       this.zdlists=this.zdlist;
     },
     fieldchange(data){
+        console.log(data);
       data.value=null;
       data.condition=null;
       data.fieldUnit=null;
@@ -541,9 +543,11 @@ export default {
       arr.forEach(element => {
         if(element.option){
           element.option=JSON.stringify(element.option)
-          if(element.children.length>0){
-            this.arrTostring(element.children)
-          }
+
+          console.log(element.children);
+//          if(element.children.length>0){
+//            this.arrTostring(element.children)
+//          }
         }
 
       });
