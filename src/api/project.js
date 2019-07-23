@@ -63,4 +63,10 @@ export const project = {
             return Promise.resolve(res.data)
         })
     },
+
+    infoProject(obj) {
+      return $ajax.post(apiUrl.apiUrl + 'project/info', obj).then(function(res) {
+        return Promise.resolve(res.data)
+      })
+    },
 }

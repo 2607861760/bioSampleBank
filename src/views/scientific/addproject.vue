@@ -543,13 +543,17 @@ export default {
       arr.forEach(element => {
         if(element.option){
           element.option=JSON.stringify(element.option)
-
-          console.log(element.children);
-//          if(element.children.length>0){
-//            this.arrTostring(element.children)
-//          }
         }
+        if(element.children && element.children.length>0){
+          element.children.forEach(elements => {
+            if(elements.option){
+              elements.option=JSON.stringify(elements.option)
+              this.arrTostring(elements.children)
+            }
 
+          })
+
+        }
       });
       return arr
     },
@@ -582,6 +586,7 @@ export default {
       project.submitProStd(obj).then((res)=>{
         if(res.returnCode==0){
           console.log(res)
+          this.$router.push("/scientific");
         }
       })
     },

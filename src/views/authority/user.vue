@@ -1,3 +1,4 @@
+
 <style lang="scss" scoped>
 @import "../../base/css/base-var.scss";
 .contant {
@@ -107,8 +108,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" class="edit" style="padding:9px 15px;" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-            <el-button type="danger" size="small" class="delete"  style="padding:9px 15px;" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button type="primary" size="small" class="edit" style="padding:4px 8px;" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+            <el-button type="danger" size="small" class="delete"  style="margin:0;padding:4px 8px;" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -253,4 +254,6 @@ export default {
   }
 };
 </script>
+
+
 

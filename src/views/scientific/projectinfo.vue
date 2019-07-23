@@ -30,8 +30,8 @@
       & > div.el-divider {
         padding: 0;
       }
-       
-      
+
+
     }
     .main-breast{
       display: block;
@@ -128,7 +128,7 @@
         <div class="main-title">项目入组标准</div>
         <div class="main-info">
           <div>
-            <el-table :data="newtruptable" height="300" border style="width: 100%">
+            <el-table :data="newtruptable" height="300" row-key="id" border style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
               <el-table-column prop='logic' label="逻辑关系"></el-table-column>
               <el-table-column prop="field" label="字段信息"></el-table-column>
@@ -141,10 +141,10 @@
           <div>
             <el-table :data="persontable" height="300" border style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column prop="relationship" label="工作单位"></el-table-column>
-              <el-table-column prop="tumour" label="所属科室"></el-table-column>
-              <el-table-column prop="cancerage" label="姓名"></el-table-column>
-              <el-table-column prop="cancerage" label="提供样本数"></el-table-column>
+              <el-table-column prop="hospital" label="工作单位"></el-table-column>
+              <el-table-column prop="dept" label="所属科室"></el-table-column>
+              <el-table-column prop="applyName" label="姓名"></el-table-column>
+              <el-table-column prop="sampleCount" label="提供样本数"></el-table-column>
             </el-table>
           </div>
         </div>
@@ -204,48 +204,47 @@ export default {
       dict.getAll().then((res)=>{
         if(res.returnCode==0){
           this.zdlist=res.data;
+          console.log(JSON.stringify(this.zdlist));
           callback()
-        } 
+        }
       })
     },
-    geinfo(){
-      this.infoform=this.$store.state.infoform.projectModel.project;
-    this.truptable=this.$store.state.infoform.stdList;
-    this.persontable=this.$store.state.infoform.appList;
-    if(this.truptable){
-      this.newtruptable=this.truptable.map(item=>{
-      if(item.logic=='and'){
-        item.logic='并'
-      }else if(item.logic=='or'){
-        item.logic='或'
-      }
-      item.value=item.value;
-      this.zdlist.map(items=>{
-        if(items.itemValue==item.field && items.fieldType==1){
-          items.itemList.map(ite=>{
-            if(ite.id==item.value){
-              item.value=ite.itemName
+    newTable(e){
+      if(e){
+        e.map(item=>{
+          if(item.logic=='and'){
+            item.logic='并'
+          }else if(item.logic=='or'){
+            item.logic='或'
+          }
+          let optionlist=JSON.parse(item.option);
+          optionlist.map(items=>{
+            if(items.id==item.value){
+              item.value=items.itemName
             }
           })
-        }
-      })
-      this.zdlist.map(items=>{
-        if(items.itemValue==item.field){
-          item.field=items.itemName
-        }
-      })
-      
-      return item
-    })
-    }
-    
+          this.zdlist.map(items=>{
+            if(items.itemValue==item.field){
+              item.field=items.itemName
+            }
+          })
+          return item
+        })
+      }
+    },
+    geinfo(){
+        console.log(this.$store.state.infoform.emodel);
+       this.infoform=this.$store.state.infoform;
+       this.newtruptable=this.$store.state.infoform.emodel.list;
+       this.persontable=this.$store.state.infoform.applications;
+       this.newTable(this.$store.state.infoform.emodel.list);
     }
   },
   created(){
     this.getAll(this.geinfo)
   },
   mounted() {
-    
+
   }
 };
 </script>

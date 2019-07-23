@@ -214,8 +214,9 @@ export default {
       let obj={
         id:row.project.id
       }
-      project.infoProApp(obj).then((res)=>{
+      project.infoProject(obj).then((res)=>{
         if(res.returnCode==0){
+            console.log(res.data)
           this.$store.state.infoform=res.data;
           this.$router.push('/scientific/projectinfo')
         }else{
