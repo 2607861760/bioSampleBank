@@ -68,10 +68,14 @@
     </div>
     <div class="info-table">
       <el-table :data="tableData" height="550" border style="width: 100%">
-        <el-table-column prop="registration" label="登记号"></el-table-column>
-        <el-table-column prop="name" label="操作人"></el-table-column>
-        <el-table-column prop="uptime" label="上传时间"></el-table-column>
-        <el-table-column prop="lasttime" label="最后修改时间" v-if='upState==true'></el-table-column>
+        <el-table-column prop="number" label="登记号"></el-table-column>
+        <el-table-column prop="username" label="姓名"></el-table-column>
+        <el-table-column prop="add_user_name" label="操作人"></el-table-column>
+        <el-table-column label="上传时间">
+          <template slot-scope="scope">
+            {{scope.row.addtime |dateFilter}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope" >
               <div v-if='upState==true'>
@@ -115,54 +119,121 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="current"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {infoentry} from 'api/infoentry';
 export default {
   data() {
     return {
       tableData: [
-        {
-          registration: "201901032578",
-          name: "111",
-          uptime: "2019-10-18",
-          lasttime: "2019-10-19",
-        },
-        {
-          registration: "201901032578",
-          name: "111",
-          uptime: "2019-10-18",
-          lasttime: "2019-10-19",
-        },
-        {
-          registration: "201901032578",
-          name: "111",
-          uptime: "2019-10-18",
-          lasttime: "2019-10-19",
-        },
-        {
-          registration: "201901032578",
-          name: "111",
-          uptime: "2019-10-18",
-          lasttime: "2019-10-19",
-        }
+        // {
+        //   registration: "201901032578",
+        //   name: "111",
+        //   uptime: "2019-10-18",
+        //   lasttime: "2019-10-19",
+        // },
+        // {
+        //   registration: "201901032578",
+        //   name: "111",
+        //   uptime: "2019-10-18",
+        //   lasttime: "2019-10-19",
+        // },
+        // {
+        //   registration: "201901032578",
+        //   name: "111",
+        //   uptime: "2019-10-18",
+        //   lasttime: "2019-10-19",
+        // },
+        // {
+        //   registration: "201901032578",
+        //   name: "111",
+        //   uptime: "2019-10-18",
+        //   lasttime: "2019-10-19",
+        // }
       ],
-      upState:true
+      upState:true,
+      current:1,
+      pageSize:10,
+      total:0
     };
+  },
+  filters:{
+    dateFilter(val){
+      if(val && (val!=null || val!='')){
+        let date=new Date(val),
+        year=date.getFullYear(),
+        mouth=date.getMonth()+1,
+        day=date.getDay();
+      return year+'/'+mouth+'/'+day
+      }
+    },
+  },
+  watch:{
+    upState(val){
+      this.current=1
+      this.pageSize=10
+      this.getUploadRecord(val)
+    }
   },
   methods: {
       handleCheck(index,row){
+        this.$store.state.patientid=row.pid;
+        this.$router.push('/query/report')
       },
-      handleEdit(index, row) {},
-    handleDelete(index, row) {},
+      handleEdit(index, row) {
+        this.$store.state.entryState = 14;
+        this.$store.state.patientid = row.pid;
+        this.$router.push('/infoentry/addpatient')
+      },
+      handleDelete(index, row) {
+        let obj={
+          id:row.pid
+        }
+        infoentry.deleteRecord(obj).then((res)=>{
+          if(res.returnCode==0){
+            this.getUploadRecord(this.upState)
+          }else{
+            this.$message.error(res.msg)
+          }
+        })
+      },
+      handleSizeChange(val){
+        this.pageSize=val;
+        this.getUploadRecord(this.upState)
+      },
+      handleCurrentChange(val){
+        this.current=val;
+        this.getUploadRecord(this.upState)
+      },
+      getUploadRecord(status){
+        let obj={
+           page:this.current,
+           pagesize:this.pageSize,
+           uid:this.$store.state.userId,
+           ctype:this.$store.state.cancerid,
+           status:status?1:0
+        }
+        infoentry.getUploadRecord(obj).then((res)=>{
+          if(res.returnCode==0){
+            this.tableData=res.data.list;
+            this.total=res.data.total;
+          }else{
+            this.$message.error(res.msg)
+          }
+        })
+      }
+  },
+  created(){
+    this.getUploadRecord(true)
   }
 };
 </script>

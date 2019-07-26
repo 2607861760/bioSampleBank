@@ -33,9 +33,9 @@
     color: $maincolor;
   }
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 </style>
 
@@ -71,10 +71,10 @@
             </el-button>
           </el-popover>
 
-          <!-- <el-button type="primary" size="medium" @click="output">
+          <el-button type="primary" size="medium" @click="output">
             导出
             <i class="iconfont el-icon-biooutput" ></i>
-          </el-button> -->
+          </el-button>
         </div>
       </div>
       <div class="process-table">
@@ -205,7 +205,7 @@ export default {
       pageSize:10,
       total:0,
       option:[],
-      url:'http://42.123.125.101:82/excel/'
+      url:'http://42.123.125.101:83'
     };
   },
   filters:{

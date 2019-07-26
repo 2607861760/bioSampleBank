@@ -32,9 +32,9 @@
 .el-textarea {
   width: 350px;
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 </style>
 <template>
@@ -447,6 +447,8 @@ export default {
           this.$store.state.entryState=3;
           this.disabled=false;
           this.entry=this.$store.state.entryState;
+        }else{
+          this.$message.error(res.msg)
         }
       });
     },
@@ -486,6 +488,8 @@ export default {
               type: "diagnoseInfo"
             }
           });
+        }else{
+          this.$message.error(res.msg)
         }
       });
     },

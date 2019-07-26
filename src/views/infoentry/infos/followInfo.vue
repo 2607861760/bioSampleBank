@@ -34,9 +34,9 @@
 // .el-date-editor{
 // width: 350px !important;
 // }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 .el-input__prefix{
     right:5px;
@@ -225,7 +225,7 @@ export default {
       this.followform['pid']=this.$store.state.patientid;
       infoentry.saveFollowUp(this.followform).then((res)=>{
         if(res.returnCode==0){
-          this.$store.state.entryState=11;
+          this.$store.state.entryState=12;
           this.$store.state.tabState=6;
           this.$router.push({
             path: "/infoentry/addpatient",
@@ -248,11 +248,19 @@ export default {
         if(res.returnCode==0){
           if(res.data!=null){
             this.followform=res.data;
-            if(this.therapyform.target && (this.followform.os!=null || this.followform.os!='')){
+            if(this.followform.os!=null && this.followform.os!=''){
               this.liveanallist.push('0')
+            }else{
+              this.liveanallist = this.liveanallist.filter(function(item) {
+                return item != "0"
+             });
             }
-            if(this.therapyform.target && (this.followform.pfs!=null || this.followform.pfs!='')){
+            if(this.followform.pfs!=null && this.followform.pfs!=''){
               this.liveanallist.push('1')
+            }else{
+              this.liveanallist = this.liveanallist.filter(function(item) {
+                return item != "1"
+             });
             }
           }
         }else{

@@ -111,7 +111,7 @@
           <template slot-scope="scope">
             <el-button type="success" size="small" plain class="check"  @click="handleCheck(scope.$index, scope.row)">查看</el-button>
             <el-button type="primary" size="small" class="query" @click="handleQuery(scope.$index, scope.row)" v-if='scope.row.roleType!=2'>查询</el-button>
-            <el-badge :value="scope.row.reviewCount" class="item">
+            <el-badge :value="scope.row.checkCount" class="item" v-if='scope.row.roleType==0'>
             <el-button type="primary" size="small" plain class="audit" @click="handleAudit(scope.$index, scope.row)" v-if='scope.row.roleType==0'>审核</el-button>
             </el-badge>
             <el-button type="success" size="small" class="edit" @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.roleType==0'>编辑</el-button>

@@ -112,25 +112,25 @@ export const infoentry = {
             return Promise.resolve(res.data)
         })
     },
-  /**
-   * 辅助检查
-   * @param {*} obj
-   */
-  saveAssist(obj) {
-    return $ajax.post(apiUrl.apiUrl + 'auxCheck/save', obj).then(function(res) {
-      return Promise.resolve(res.data)
-    })
-  },
-  assistInfo(obj) {
-    return $ajax.post(apiUrl.apiUrl + 'auxCheck/info', obj).then(function(res) {
-      return Promise.resolve(res.data)
-    })
-  },
-  updateAssist(obj) {
-    return $ajax.post(apiUrl.apiUrl + 'auxCheck/update', obj).then(function(res) {
-      return Promise.resolve(res.data)
-    })
-  },
+    /**
+     * 辅助检查
+     * @param {*} obj
+     */
+    saveAssist(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'auxCheck/save', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    assistInfo(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'auxCheck/info', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    updateAssist(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'auxCheck/update', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
     /**
      * 内镜检查
      * @param {*} obj
@@ -285,6 +285,21 @@ export const infoentry = {
     },
     submitPatient(obj) {
         return $ajax.post(apiUrl.apiUrl + 'patient/submit', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    downTempalte(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'search/downTempalte?ctype=' + obj.ctype).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    getUploadRecord(obj) {
+        return $ajax.post(apiUrl.apiUrl + 'upload/getUploadRecord', obj).then(function(res) {
+            return Promise.resolve(res.data)
+        })
+    },
+    deleteRecord(obj) {
+        return $ajax.get(apiUrl.apiUrl + 'upload/deleteRecord', { params: obj }).then(function(res) {
             return Promise.resolve(res.data)
         })
     },

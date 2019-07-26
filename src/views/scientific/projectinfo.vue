@@ -68,9 +68,9 @@
     font-size: 20px;
   }
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 </style>
 

@@ -34,9 +34,9 @@
 // .el-date-editor{
 // width: 350px !important;
 // }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 .el-input__prefix {
   right: 5px;
@@ -63,7 +63,7 @@
           <el-form ref="form" :model="therapyform" label-width="150px" label-position="left">
             <el-form-item label="化疗药物："></el-form-item>
             <el-form-item label="化疗药物：">
-              <el-radio-group v-model="therapyform.chemodrugs">
+              <el-radio-group v-model="therapyform.chemodrugs" @change="chemodrugsChange">
                 <el-form-item>
                   <el-radio label="0" :value="0">无化疗</el-radio>
                 </el-form-item>
@@ -140,7 +140,7 @@
                 <el-checkbox label="othertarget" value='othertarget' :disabled="disothertarget">其他</el-checkbox>
               </p>
               <p>
-                <el-input v-model="therapyform.other" placeholder="请输入其他靶点"></el-input>
+                <el-input v-model="therapyform.other" placeholder="请输入其他靶点" :disabled="disothertarget"></el-input>
               </p>
               </el-checkbox-group>
             </el-form-item>
@@ -504,6 +504,13 @@ export default {
     },
   },
   methods: {
+    chemodrugsChange(val){
+      console.log(val)
+      // this.therapyform.drug=null;
+      // if(val!=1){
+      //   this.therapyform.drug=null;
+      // }
+    },
     searchItem(name,type=null) {
       let obj = {
         itemValue: name,

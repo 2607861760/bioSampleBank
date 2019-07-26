@@ -68,9 +68,9 @@
     font-size: 20px;
   }
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 </style>
 
@@ -103,14 +103,15 @@
               <i class="iconfont el-icon-biotag"></i>
             </el-button>
           </el-popover>
-
-          <!-- <el-button type="primary" size="medium" @click='output'>
+          
+          <!-- getPdf output-->
+          <el-button type="primary" size="medium" @click='output'>
             导出
             <i class="iconfont el-icon-biooutput"></i>
-          </el-button> -->
+          </el-button>
         </div>
       </div>
-      <div class="process-main">
+      <div class="process-main" id='pdfDom'>
         <div class="main-title" v-if="checkState.basic">基本信息</div>
         <div class="main-info" v-if="checkState.basic">
           <div>
@@ -1645,6 +1646,8 @@
 <script>
 import {infosearch,dict} from 'api/index.js';
 import {sortRule} from "../../base/js/common.js";
+import html2Canvas from 'html2canvas'
+import JsPDF from 'jspdf'
 export default {
   data() {
     return {
@@ -1799,7 +1802,7 @@ export default {
       progresslist:[],
       followwaylist:[],
       cancerid:0,
-      url:'http://42.123.125.101:82/excel/'
+      url:'http://42.123.125.101:83'
     };
   },
   filters:{

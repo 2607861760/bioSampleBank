@@ -132,7 +132,8 @@
           size="medium"
           @click="addPatient"
         >新建</el-button>
-        <!-- <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button> -->
+        <el-button type="primary" icon="iconfont el-icon-bioadd" size="medium" @click="inputInfo">导入</el-button>
+        <el-button type="success" size="medium" @click="checkInputResult">查看导入结果</el-button>
       </div>
       <div class="btn-right">
         <div>
@@ -214,7 +215,7 @@
     <el-dialog title="导入文件" :visible.sync="inputModel" width="620px">
       <div class="input-inner">
         <div class="input-title">请下载自动导入模板</div>
-        <div class="downfile">
+        <div class="downfile" @click="formworkDown">
           <i class="iconfont el-icon-bioExcel"></i>
         </div>
         <div class="input-title">请上传文件</div>
@@ -225,13 +226,15 @@
           <el-upload
             style="float:left;"
             class="upload-demo"
-            list-type="picture"
-            :limit='2'
+            :limit='1'
             ref="upload"
-            action="/1.0/upload/excel"
+            action="http://42.123.125.101:8091/1.0/upload/excel"
+            :data='{ctype:cancerid}'
             :file-list="fileList"
-            :on-change="handlePreview"
-            :auto-upload="false">
+            :show-file-list='false'
+            :auto-upload='false'
+            :on-success='inputInfoSuccess'
+            :on-change="handlePreview">
             <el-button slot="trigger" size="medium">浏览</el-button>
           </el-upload>
           <span></span>
@@ -239,12 +242,12 @@
             <el-button size="medium" @click="submitUpload">上传文件</el-button>
           </div>
         </div>
-        <div class="choice-file">
+        <!-- <div class="choice-file">
           <span></span>
           <div style="float:right;">
             <el-button size="medium" style="width:98px;" @click="readInfo">查看</el-button>
           </div>
-        </div>
+        </div> -->
       </div>
     </el-dialog>
   </div>
@@ -330,7 +333,9 @@ export default {
       inputModel: false,
       sexlist:{},
       fileList:[],
-      fileLists:''
+      fileLists:'',
+      inputInfoShow:false,
+      inputInfoCheck:false
     };
   },
   filters: {
@@ -355,15 +360,41 @@ export default {
     }
   },
   methods: {
+    formworkDown(){
+      let obj={
+        ctype:this.cancerid
+      }
+      infoentry.downTempalte(obj).then((res)=>{
+        if(res.returnCode==0){
+          var elemIF = document.createElement('iframe');
+                elemIF.src = 'http://42.123.125.101:83'+res.data.filename;
+                elemIF.style.display = 'none';
+                document.body.appendChild(elemIF);
+                // 防止下载两次
+                setTimeout(function() {
+                   document.body.removeChild(elemIF)
+                }, 1000);
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
     submitUpload(){
       this.$refs.upload.submit();
     },
     handlePreview(file,fileList) {
         fileList.map((item=>{
           if(item.status=="ready"){
-            this.fileLists+=item.name+','
+            this.fileLists+=item.name
           }
         }))
+    },
+    inputInfoSuccess(response, file, fileList){
+      if(response.returnCode==0){
+        this.$message.success('上传成功！')
+      }else{
+        this.$message.error(response.msg)
+      }
     },
     search(){
       if(this.ing){
@@ -400,13 +431,30 @@ export default {
       this.$store.state.entryState = 0;
       this.$store.state.tabState = 1;
       this.$store.state.edit = false;
-      this.$router.push("/infoentry/addpatient?type=basicInfo");
+      if(this.inputInfoShow==true){
+        this.inputModel = true;
+      }else if(this.inputInfoCheck==true){
+        this.$router.push("/infoentry/upinfo");
+      }else{
+        this.$router.push("/infoentry/addpatient?type=basicInfo");
+      }
     },
     inputInfo() {
-      this.inputModel = true;
+      this.choiceNum=null;
+      this.fileList.length=0;
+      this.fileLists='';
+      this.inputInfoShow=true;
+      this.choiceCarcinoma=true;
     },
     readInfo() {
       this.$router.push("/infoentry/upinfo");
+    },
+    checkInputResult(){
+      this.choiceNum=null;
+      this.fileList.length=0;
+      this.fileLists='';
+      this.inputInfoCheck=true;
+      this.choiceCarcinoma=true;
     },
     choiceCancer(item, index) {
       this.choiceNum = index;

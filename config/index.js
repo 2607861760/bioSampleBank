@@ -13,8 +13,8 @@ module.exports = {
         proxyTable: {
             '/': {
                 // target: 'http://172.30.1.160:8091',
-                target: 'http://42.123.125.101:8091',
-                // target: 'http://172.30.2.113:8091',
+                // target: 'http://42.123.125.101:8091',
+                target: 'http://172.30.2.113:8091',
                 changeOrigin: true,
             }
         },
@@ -22,7 +22,7 @@ module.exports = {
         // Various Dev Server settings
         host: 'localhost', // can be overwritten by process.env.HOST
         port: 9797, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-        autoOpenBrowser: false,
+        autoOpenBrowser: true,
         errorOverlay: true,
         notifyOnErrors: true,
         poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-

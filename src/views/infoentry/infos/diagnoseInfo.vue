@@ -41,9 +41,9 @@
 // .el-date-editor{
 // width: 350px !important;
 // }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 .el-input__prefix {
   right: 5px;
@@ -105,8 +105,8 @@
             <div v-if="cancerid==3">
               <el-form-item label="乳房位置：">
                 <el-radio-group v-model="basicform.breastPos">
-                  <el-radio label="对称" :value="1"></el-radio>
-                  <el-radio label="不对称" :value="0"></el-radio>
+                  <el-radio :label="1" :value="1">对称</el-radio>
+                  <el-radio :label="0" :value="0">不对称</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="皮肤表皮：">
@@ -132,19 +132,19 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item v-if='basicform.overflow==0'>
-                <el-select v-model="basicform.overflow_pos" placeholder="溢液方式">
+                <el-select v-model="basicform.overflowPos" placeholder="溢液方式">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargeway']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item v-if='basicform.overflow==0'>
-                <el-select v-model="basicform.overflow_range" placeholder="溢液范围">
+                <el-select v-model="basicform.overflowRange" placeholder="溢液范围">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['dischargerange']" :key="index"></el-option>
               </el-select>
               </el-form-item>
               <el-form-item label="乳晕颜色：">
                 <el-radio-group v-model="basicform.areolaColor">
-                  <el-radio label="正常" :value="1"></el-radio>
-                  <el-radio label="异常" :value="0"></el-radio>
+                  <el-radio :label="1" :value="1">正常</el-radio>
+                  <el-radio :label="0" :value="0">异常</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="是否湿疹样改变：">
@@ -371,6 +371,13 @@
                 <el-button size="small" type="primary">选择文件</el-button>
                 </el-upload>
               </el-form-item>
+              <!-- <el-form-item>
+                <el-image
+                style="width: 100px; height: 100px"
+                :src="url"
+                :fit="fit">
+                </el-image>
+              </el-form-item> -->
               <el-form-item label="PET-CT：">
                 <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="basicform.petdate"></el-date-picker>
               </el-form-item>
@@ -652,7 +659,7 @@
               </el-select>
               </el-form-item>
               <el-form-item label="N分期：">
-                <el-select v-model="pathologyform.cn" placeholder="N-临床区域淋巴结转移">
+                <el-select v-model="pathologyform.n" placeholder="N-临床区域淋巴结转移">
                 <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['cn']" :key="index"></el-option>
               </el-select>
                 <el-select v-model="pathologyform.tpn" placeholder="pN-病理区域淋巴结转移">
@@ -686,16 +693,16 @@
                 <el-form-item label="MLH1：">
                   <el-radio-group v-model="pathologyform.mlh1">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -704,16 +711,16 @@
                 <el-form-item label="MLH3：">
                   <el-radio-group v-model="pathologyform.mlh3">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -722,16 +729,16 @@
                 <el-form-item label="MSH2：">
                   <el-radio-group v-model="pathologyform.msh2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -740,16 +747,16 @@
                 <el-form-item label="MSH6：">
                   <el-radio-group v-model="pathologyform.msh6">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -760,16 +767,16 @@
                 <el-form-item label="PMS1：">
                   <el-radio-group v-model="pathologyform.pms1">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -778,16 +785,16 @@
                 <el-form-item label="PMS2：">
                   <el-radio-group v-model="pathologyform.pms2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -796,16 +803,16 @@
                 <el-form-item label="APC：">
                   <el-radio-group v-model="pathologyform.apc">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -814,16 +821,16 @@
                 <el-form-item label="AXIN2：">
                   <el-radio-group v-model="pathologyform.axin2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -834,16 +841,16 @@
                 <el-form-item label="STK11：">
                   <el-radio-group v-model="pathologyform.stk11">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -852,16 +859,16 @@
                 <el-form-item label="EPCAM：">
                   <el-radio-group v-model="pathologyform.epcam">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -870,16 +877,16 @@
                 <el-form-item label="PTEN：">
                   <el-radio-group v-model="pathologyform.pten">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -888,16 +895,16 @@
                 <el-form-item label="SMAD4：">
                   <el-radio-group v-model="pathologyform.smad4">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -908,16 +915,16 @@
                 <el-form-item label="MUTYH：">
                   <el-radio-group v-model="pathologyform.mutyh">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -926,16 +933,16 @@
                 <el-form-item label="BMPR1A：">
                   <el-radio-group v-model="pathologyform.bmpr1a">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -944,36 +951,36 @@
             <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="ER：">
-                  <el-radio-group v-model="pathologyform.ER">
+                  <el-radio-group v-model="pathologyform.er">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="PR：">
-                  <el-radio-group v-model="pathologyform.PR">
+                  <el-radio-group v-model="pathologyform.pr">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -982,36 +989,36 @@
             <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="P53：">
-                  <el-radio-group v-model="pathologyform.P53">
+                  <el-radio-group v-model="pathologyform.p53">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="CK5/6：">
-                  <el-radio-group v-model="pathologyform.CK5">
+                  <el-radio-group v-model="pathologyform.ck56">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1020,36 +1027,36 @@
             <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="E-Card：">
-                  <el-radio-group v-model="pathologyform.ECard">
+                  <el-radio-group v-model="pathologyform.ecard">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="EGFR：">
-                  <el-radio-group v-model="pathologyform.EGFR">
+                  <el-radio-group v-model="pathologyform.egfr">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1058,36 +1065,36 @@
             <div class="immun" v-if='cancerid==3'>
               <div>
                 <el-form-item label="Her-2：">
-                  <el-radio-group v-model="pathologyform.Her2">
+                  <el-radio-group v-model="pathologyform.her2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="Ki-67：">
-                  <el-radio-group v-model="pathologyform.Ki67">
+                  <el-radio-group v-model="pathologyform.ki67">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1181,104 +1188,104 @@
                 <div v-if='cancerid==3'>
                   <el-form-item label="">
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">BRCA1</el-label>
-                      <el-select v-model="moleculeform.BRCA1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">BRCA1</label>
+                      <el-select v-model="moleculeform.brca1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">BRCA2</el-label>
-                      <el-select v-model="moleculeform.BRCA2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">BRCA2</label>
+                      <el-select v-model="moleculeform.brca2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">CHEK2</el-label>
-                      <el-select v-model="moleculeform.CHEK2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">CHEK2</label>
+                      <el-select v-model="moleculeform.chek2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">ATM</el-label>
-                      <el-select v-model="moleculeform.ATM" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">ATM</label>
+                      <el-select v-model="moleculeform.atm" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">PALB2</el-label>
-                      <el-select v-model="moleculeform.PALB2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">PALB2</label>
+                      <el-select v-model="moleculeform.palb2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">BRIP1</el-label>
-                      <el-select v-model="moleculeform.BRIP1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">BRIP1</label>
+                      <el-select v-model="moleculeform.brip1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">TP53</el-label>
-                      <el-select v-model="moleculeform.TP53" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">TP53</label>
+                      <el-select v-model="moleculeform.tp53" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">BARD1</el-label>
-                      <el-select v-model="moleculeform.BARD1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">BARD1</label>
+                      <el-select v-model="moleculeform.bard1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">PTEN</el-label>
-                      <el-select v-model="moleculeform.PTEN" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">PTEN</label>
+                      <el-select v-model="moleculeform.pten" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">STK11</el-label>
-                      <el-select v-model="moleculeform.STK11" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">STK11</label>
+                      <el-select v-model="moleculeform.stk11" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">CDH1</el-label>
-                      <el-select v-model="moleculeform.CDH1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">CDH1</label>
+                      <el-select v-model="moleculeform.cdh1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">RAD50</el-label>
-                      <el-select v-model="moleculeform.RAD50" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">RAD50</label>
+                      <el-select v-model="moleculeform.rad50" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">RAD51C</el-label>
-                      <el-select v-model="moleculeform.RAD51C" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">RAD51C</label>
+                      <el-select v-model="moleculeform.rad51c" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">PMS2</el-label>
-                      <el-select v-model="moleculeform.PMS2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">PMS2</label>
+                      <el-select v-model="moleculeform.pms2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">PMS1</el-label>
-                      <el-select v-model="moleculeform.PMS1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">PMS1</label>
+                      <el-select v-model="moleculeform.pms1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">NBN</el-label>
-                      <el-select v-model="moleculeform.NBN" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">NBN</label>
+                      <el-select v-model="moleculeform.nbn" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">其他</el-label>
-                      <el-select v-model="moleculeform.other" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">其他</label>
+                      <el-select v-model="moleculeform.mlpaOther" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
@@ -1287,54 +1294,53 @@
                 <div v-if='cancerid==2'>
                   <el-form-item label="">
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">MLH1</el-label>
-                      <el-select v-model="moleculeform.MLH1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">MLH1</label>
+                      <el-select v-model="moleculeform.mlh12" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">PMS2</el-label>
-                      <el-select v-model="moleculeform.PMS2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">PMS2</label>
+                      <el-select v-model="moleculeform.pms2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">MSH2</el-label>
-                      <el-select v-model="moleculeform.MSH2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">MSH2</label>
+                      <el-select v-model="moleculeform.msh2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block;">MSH6</el-label>
-                      <el-select v-model="moleculeform.MSH6" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block;">MSH6</label>
+                      <el-select v-model="moleculeform.msh6" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">EPCAM</el-label>
-                      <el-select v-model="moleculeform.EPCAM" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">EPCAM</label>
+                      <el-select v-model="moleculeform.epcam" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">BRCA1</el-label>
-                      <el-select v-model="moleculeform.BRCA1" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">BRCA1</label>
+                      <el-select v-model="moleculeform.brca1" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">BRCA2</el-label>
-                      <el-select v-model="moleculeform.BRCA2" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">BRCA2</label>
+                      <el-select v-model="moleculeform.brca2" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
                     <p style="margin-top:10px;">
-                      <el-label style="min-width: 80px;display:inline-block; ">其他</el-label>
-                      <el-select v-model="moleculeform.other" placeholder="请选择...">
+                      <label style="min-width: 80px;display:inline-block; ">其他</label>
+                      <el-select v-model="moleculeform.mlpaOther" placeholder="请选择...">
                         <el-option :label="item.itemName" :value="item.id" v-for="(item,index) in optionlist['mlparesult']" :key="index"></el-option>
                       </el-select>
                     </p>
-
                   </el-form-item>
                 </div>
             </div>
@@ -1345,7 +1351,6 @@
               </el-radio-group>
             </el-form-item>
             <div v-if="moleculeform.ngsjc=='0'">
-
               <el-form-item>
                 <el-form-item label="NGS平台：">
                   <el-radio-group v-model="moleculeform.ngspt">
@@ -1414,8 +1419,8 @@
             <el-form-item label="其他代表性基因突变结果："></el-form-item>
             <el-form-item label="检测平台：">
               <el-radio-group v-model="moleculeform.testp">
-                <el-radio label="0" :value="0">ARMS</el-radio>
-                <el-radio label="1" :value="1">NGS</el-radio>
+                <el-radio :label="0" :value="0">ARMS</el-radio>
+                <el-radio :label="1" :value="1">NGS</el-radio>
               </el-radio-group>
             </el-form-item>
             <div class="immun" v-if='cancerid==2'>
@@ -1423,16 +1428,16 @@
                 <el-form-item label="KRAS：">
                   <el-radio-group v-model="moleculeform.kras">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1441,16 +1446,16 @@
                 <el-form-item label="NRAS：">
                   <el-radio-group v-model="moleculeform.nras">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1459,16 +1464,16 @@
                 <el-form-item label="BRAF：">
                   <el-radio-group v-model="moleculeform.braf">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1479,34 +1484,34 @@
                 <el-form-item label="PIK3CA：">
                   <el-radio-group v-model="moleculeform.pik3ca">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
               </div>
               <div>
                 <el-form-item label="PTEN：">
-                  <el-radio-group v-model="moleculeform.pten">
+                  <el-radio-group v-model="moleculeform.pten2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1518,16 +1523,16 @@
                 <el-form-item label="MUTYH：">
                   <el-radio-group v-model="moleculeform.mutyh">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1536,16 +1541,16 @@
                 <el-form-item label="MSH2">
                   <el-radio-group v-model="moleculeform.msh2">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1556,16 +1561,16 @@
                 <el-form-item label="MSH6：">
                   <el-radio-group v-model="moleculeform.msh6">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1574,16 +1579,16 @@
                 <el-form-item label="MRE11A：">
                   <el-radio-group v-model="moleculeform.mre11a">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1594,16 +1599,16 @@
                 <el-form-item label="MLH1：">
                   <el-radio-group v-model="moleculeform.mlh1">
                     <p>
-                      <el-radio label="1" :value="1">+</el-radio>
+                      <el-radio :label="1" :value="1">+</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="0" :value="0">-</el-radio>
+                      <el-radio :label="0" :value="0">-</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="2" :value="2">未做</el-radio>
+                      <el-radio :label="2" :value="2">未做</el-radio>
                     </p>
                     <p style="margin-top:5px;">
-                      <el-radio label="3" :value="3">不确定</el-radio>
+                      <el-radio :label="3" :value="3">不确定</el-radio>
                     </p>
                   </el-radio-group>
                 </el-form-item>
@@ -1848,7 +1853,8 @@ export default {
 
     },
     prinaturechange(val){
-      console.log(val)
+        this.mtumloc=null;
+        this.tumloc=null;
     },
     pmhlistchange(name) {
       if (name in this.pmhlist) {
@@ -1857,15 +1863,46 @@ export default {
       return false;
     },
     pmhcheck(val) {
+      this.nowdname=false;
+      // this.pathologyform.dname='';
+      this.nowtargetedDrug=false;
+      // this.pathologyform.targetedDrug='';
+      this.nowotherDrug=false;
+      // this.pathologyform.otherDrug='';
+      this.pmhdname=false;
+      this.pmhtargetedDrug=false;
+      this.pmhotherDrug=false;
       this.nowpmh = val;
     },
     dnamecheck(val) {
+      this.nowtargetedDrug=false;
+      // this.pathologyform.targetedDrug='';
+      this.nowotherDrug=false;
+      // this.pathologyform.otherDrug='';
+      this.pmhtargetedDrug=false;
+      this.pmhotherDrug=false;
+      this.pmhnone=false;
       this.nowdname = val;
+      console.log(val)
     },
     targetedDrugcheck(val) {
+      this.nowdname=false;
+      // this.pathologyform.dname='';
+      this.nowotherDrug=false;
+      // this.pathologyform.otherDrug='';
+      this.pmhdname=false;
+      this.pmhotherDrug=false;
+      this.pmhnone=false;
       this.nowtargetedDrug = val;
     },
     otherDrugcheck(val) {
+      this.nowdname=false;
+      // this.pathologyform.dname='';
+      this.nowtargetedDrug=false;
+      // this.pathologyform.targetedDrug='';
+      this.pmhtargetedDrug=false;
+      this.pmhdname=false;
+      this.pmhnone=false;
       this.nowotherDrug = val;
     },
     handleClick(val) {
@@ -2039,6 +2076,22 @@ export default {
         if(res.returnCode==0){
           if(res.data!=null){
             this.assistform=res.data;
+            if(this.assistform.mammoPath && (this.assistform.mammoPath!=null || this.assistform.mammoPath!='')){
+              let mri=[];
+            mri=this.assistform.mammoPath.split(',');
+            this.mammofile.length=0;
+            mri.map(item=>{
+              this.mammofile.push({url:item})
+            })
+            }
+            if(this.assistform.mriPath && (this.assistform.mriPath!=null || this.assistform.mriPath!='')){
+              let mri=[];
+            mri=this.assistform.mriPath.split(',');
+            this.mrifile.length=0;
+            mri.map(item=>{
+              this.mrifile.push({url:item})
+            })
+            }
           }
         }else{
           this.$message.error(res.msg);
@@ -2145,8 +2198,11 @@ export default {
             if(this.pathologyform.prinature==1){
               this.mtumloc=this.pathologyform.tumloc.split(',');
             }else if(this.pathologyform.prinature==0){
-              this.tumloc=this.pathologyform['tumloc'];
+              this.tumloc=Number(this.pathologyform['tumloc']);
             }
+            this.mtumloc=this.mtumloc.map(item=>{
+              return Number(item)
+            })
             if(this.pathologyform.transferinfo && (this.pathologyform.transferinfo!='' || this.pathologyform.transferinfo!=null)){
               let transferinfolist=this.pathologyform.transferinfo.split(',');
               transferinfolist.map((item,index)=>{
@@ -2155,7 +2211,11 @@ export default {
                 }
                 this.transferinfolist[index]=obj
               })
-              if(this.pathologyform.isscan && (this.pathologyform.isscan!=null || this.pathologyform.isscan!='')){
+              
+            }else{
+              this.transferinfolist.push({})
+            }
+            if(this.pathologyform.isscan && (this.pathologyform.isscan!=null || this.pathologyform.isscan!='')){
                 let isscan=[];
                 isscan=this.pathologyform.isscan.split(',');
                 this.isscanfile.length=0;
@@ -2163,9 +2223,7 @@ export default {
                   this.isscanfile.push({url:item})
                 })
               }
-            }else{
-              this.transferinfolist.push({})
-            }
+              console.log( this.isscanfile)
             if(this.pathologyform.pmh && (this.pathologyform.pmh!='' || this.pathologyform.pmh!=null)){
               this.pmhnone=true;
             }
@@ -2219,6 +2277,11 @@ export default {
         isscan.push(item.url)
       })
       this.pathologyform["isscan"]=String(isscan)
+      if(this.pathologyform.prinature==1){
+        this.pathologyform['tumloc']=String(this.mtumloc);
+      }else if(this.pathologyform.prinature==0){
+         this.pathologyform['tumloc']=this.tumloc;
+      }
       infoentry.updatePathologic(this.pathologyform).then(res => {
         if (res.returnCode == 0) {
           this.$message({

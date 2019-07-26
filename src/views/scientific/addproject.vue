@@ -69,9 +69,9 @@
 .el-textarea {
   width: 350px;
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 .infotable {
   .el-select {
@@ -139,7 +139,7 @@
           <el-input v-model="infoform.purpose" placeholder="请输入" type="textarea" :rows="2"></el-input>
         </el-form-item>
         <el-form-item label="计划入组样本数：" prop="sampleCount">
-          <el-input v-model="infoform.sampleCount" placeholder="请输入">
+          <el-input v-model="infoform.sampleCount" placeholder="请输入" type='number'>
             <template slot="suffix">例</template>
           </el-input>
         </el-form-item>
@@ -150,7 +150,7 @@
           <el-date-picker type="date" placeholder="yyyy/mm/dd" v-model="infoform.endTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="计划经费：" prop="funds">
-          <el-input v-model="infoform.funds" placeholder="请输入">
+          <el-input v-model="infoform.funds" placeholder="请输入" type='number'>
             <template slot="suffix">万</template>
           </el-input>
         </el-form-item>
@@ -183,7 +183,7 @@
           >
             <div class="custom-tree-node" slot-scope="{ node, data }">
               <div class="tree-legic">
-                <el-select v-model="data.logic" placeholder="逻辑关系" v-if='data.disabled || data.logic==null'>
+                <el-select v-model="data.logic" placeholder="逻辑关系">
                   <el-option
                     v-for="item in legiclist"
                     :key="item.id"
@@ -198,7 +198,7 @@
                 <el-button type="text" size="mini" @click="() => append(node,data)">
                   <i class="iconfont el-icon-bioplus"></i>
                 </el-button>
-                <el-select v-model="data.field" filterable
+                <el-select v-model="data.field1" value-key="itemValue" filterable
     remote
     reserve-keyword
     :remote-method="remoteMethod" placeholder="请选择字段"  @focus="fieldfocus()" @change="fieldchange(data)">
@@ -206,7 +206,7 @@
                     v-for="item in zdlists"
                     :key="item.index"
                     :label="item.itemName"
-                    :value="item.itemValue"
+                    :value="item.itemName"
                   ></el-option>
                 </el-select>
 
@@ -249,7 +249,7 @@
               <el-radio :label="item.projectName"></el-radio>
             </p>
           </el-radio-group>
-          <!-- <div class="input-btn" slot="reference">导入</div> -->
+          <div class="input-btn" slot="reference">导入</div>
         </el-popover>
       </div>
       <div class="establish">
@@ -510,12 +510,13 @@ export default {
       data.condition=null;
       data.fieldUnit=null;
       this.zdlist.map(item=>{
-        if(data.field ==item.itemValue){
+        if(data.field1 ==item.itemName){
           data['fieldType']=item.fieldType;
           data['fieldUnit']=item.fieldUnit;
           if(item.fieldType==1){
             data['option']=item.itemList;
           }
+          data['field']=item.itemValue;
         }
       })
     },
@@ -568,11 +569,11 @@ export default {
         if(element.fieldType==1){
           element.value=Number(element.value)
         }
-        this.zdlist.map(item=>{
-          if(element.field==item.itemValue){
-            element.field=item.itemName
-          }
-        })
+        // this.zdlist.map(item=>{
+        //   if(element.field==item.itemValue){
+        //     element.field=item.itemName
+        //   }
+        // })
       });
       return string
     },
@@ -583,6 +584,7 @@ export default {
         userId:this.$store.state.userId,
         list:this.arrTostring(this.treedata)
       }
+      console.log(obj)
       project.submitProStd(obj).then((res)=>{
         if(res.returnCode==0){
           console.log(res)
@@ -648,9 +650,7 @@ export default {
       project.infoProject(obj).then((res)=>{
         if(res.returnCode==0){
             this.treedata=this.stringToarr(res.data.emodel.list);
-            console.log(this.treedata)
             this.inputlist=res.data.emodels;
-            console.log(this.inputlist)
         }
       })
     },

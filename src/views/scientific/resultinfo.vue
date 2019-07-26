@@ -33,9 +33,9 @@
     color: $maincolor;
   }
 }
-.el-button--primary {
-  background-color: $maincolor;
-  border-color: $maincolor;
+.el-button--primary,.el-button--primary:focus, .el-button--primary:hover{
+  background-color: $maincolor !important;
+  border-color: $maincolor !important;
 }
 </style>
 
@@ -55,10 +55,10 @@
           <el-button size="small" plain @click='mysample'>我的样本</el-button>
           <el-button size="small" plain @click="othersample">参与人样本</el-button>
 
-          <!-- <el-button type="primary" size="medium">
+          <el-button type="primary" size="medium">
             导出
             <i class="iconfont el-icon-biooutput"></i>
-          </el-button> -->
+          </el-button>
         </div>
       </div>
       <div class="process-table">
@@ -99,12 +99,12 @@ export default {
     return {
       infoLen: 0,
       tableData: [
-        {
-          belonging: "王二",
-          age: "30",
-          cancer: "结直肠癌",
-          loginnum: "201901032578",
-        }
+        // {
+        //   belonging: "王二",
+        //   age: "30",
+        //   cancer: "结直肠癌",
+        //   loginnum: "201901032578",
+        // }
       ],
       checkNum: 0,
       pageSize:10,
